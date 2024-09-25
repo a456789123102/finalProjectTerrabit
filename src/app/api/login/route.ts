@@ -4,11 +4,10 @@ import { post } from "../const";  // นำเข้า post function ที่�
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    console.log("Request Body:", body);  // Debug ข้อมูล body ที่ส่งเข้ามา
+    console.log("Request Body:", body);  
 
-    // ส่งคำร้องไปยัง Backend Server จริง
-    const res = await post("/api/auth/login", body);  // URL นี้จะถูกส่งไปยัง Backend Server จริงผ่านฟังก์ชัน post
-    console.log("Response from Backend:", res);  // Debug การตอบกลับจาก Backend Server
+    const res = await post("/api/auth/login", body);  
+    console.log("Response from Backend:", res);  
 
     const data = await res.json();
     if (!data.token) {
