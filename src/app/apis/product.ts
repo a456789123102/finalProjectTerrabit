@@ -27,3 +27,19 @@ export const createProduct = async (
     throw new Error('Error creating product');
   }
 };
+//ดึง
+
+export const fetchProducts = async (search: string, categories: number[]) => {
+  try {
+    const res = await axios.get('/api/product/get', {
+      params: {
+        search: search || undefined,
+        category: categories || undefined,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw new Error('Error fetching products');
+  }
+};
