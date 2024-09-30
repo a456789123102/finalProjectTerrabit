@@ -1,19 +1,26 @@
-// src/app/api/product/get/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { get } from "../../const"; // ตรวจสอบเส้นทางที่ถูกต้อง
-
-export const runtime = 'edge'; // เปลี่ยนเป็น edge runtime ตามคำแนะนำ
+import { get } from "../../const";
 
 export async function GET(req: NextRequest) {
   try {
     const token = req.cookies.get("token")?.value;
     const searchParams = req.nextUrl.searchParams;
 
-    // ใช้ URL ที่ถูกต้องในการเรียก API Backend
-    const res = await get('/product', token, {
-      search: searchParams.get('search'),
-      category: searchParams.getAll('category'),
-    });
+    // ดึงค่าพารามิเตอร์ search และ category
+    const search = searchParams.get('search') || undefined;
+    const category = searchParams.get('category') || undefined;
+
+    // ส่งพารามิเตอร์ไปยัง backend เฉพาะเมื่อมีค่า
+    const params: any = {};
+    if (search) {
+      params.search = search;
+    }
+    if (category) {
+      params.category = [parseInt(category)];
+    }
+
+    // ส่งพารามิเตอร์ไปยัง backend จริง
+    const res = await get('/api/product', token, params);
 
     const data = await res.json();
     return NextResponse.json(data); // ส่งข้อมูลกลับเป็น JSON

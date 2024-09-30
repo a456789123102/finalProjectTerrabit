@@ -27,19 +27,39 @@ export const createProduct = async (
     throw new Error('Error creating product');
   }
 };
-//ดึง
+//ดึงหมด
 
-export const fetchProducts = async (search: string, categories: number[]) => {
+export const fetchProducts = async (search?: string, category?: number) => {
   try {
+    // ส่งพารามิเตอร์เฉพาะเมื่อมีค่า
+    const params: any = {};
+    if (search) {
+      params.search = search;
+    }
+    if (category) {
+      params.category = category;
+    }
+
+    // เรียก API พร้อมพารามิเตอร์ (ถ้ามี)
     const res = await axios.get('/api/product/get', {
-      params: {
-        search: search || undefined,
-        category: categories || undefined,
-      },
+      params: params,
     });
+    
     return res.data;
   } catch (error) {
     console.error('Error fetching products:', error);
     throw new Error('Error fetching products');
+  }
+};
+
+
+//ดึงจาก id
+export const getProductById = async (id: number) =>{
+  try {
+    const res = await axios.get(`/api/product/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching product by ID:', error);
+    throw error;
   }
 };

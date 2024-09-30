@@ -25,13 +25,14 @@ export const post = async (
   return res;
 };
 
-export const get = async (
-  url: string,
-  token: string = "",
-  params: any = {}
-): Promise<Response> => {
+export const get = async (url: string, token: string = "", params: any = {}): Promise<Response> => {
   const queryString = new URLSearchParams(params).toString();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}?${queryString}`, {
+  const fullUrl = queryString ? `${process.env.NEXT_PUBLIC_API_URL}${url}?${queryString}` : `${process.env.NEXT_PUBLIC_API_URL}${url}`;
+
+  // ใช้ URL ที่ถูกต้อง
+  console.log("Requesting URL:", fullUrl); // ตรวจสอบ URL ที่กำลังจะส่ง
+
+  const res = await fetch(fullUrl, {
     method: "GET",
     headers: getHeaders(token),
   });
