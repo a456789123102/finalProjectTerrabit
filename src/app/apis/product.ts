@@ -27,8 +27,9 @@ export const createProduct = async (
     throw new Error('Error creating product');
   }
 };
-//ดึงหมด
 
+
+//ดึงหมด
 export const fetchProducts = async (search?: string, category?: number) => {
   try {
     // ส่งพารามิเตอร์เฉพาะเมื่อมีค่า
@@ -44,13 +45,18 @@ export const fetchProducts = async (search?: string, category?: number) => {
     const res = await axios.get('/api/product/get', {
       params: params,
     });
-    
+
+    // ตรวจสอบ data ที่ได้รับจาก API
+    console.log('Fetched Products Data:', res.data); // เพิ่มบรรทัดนี้เพื่อแสดงข้อมูลใน console
+
     return res.data;
+   
   } catch (error) {
     console.error('Error fetching products:', error);
     throw new Error('Error fetching products');
   }
 };
+
 
 
 //ดึงจาก id

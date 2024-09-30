@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+const nextConfig = {
+    images: {
+      domains: ['images.pexels.com'], // เพิ่มโดเมนของรูปภาพที่ต้องการใช้
+    },
+  };
+  
+  export default nextConfig;
