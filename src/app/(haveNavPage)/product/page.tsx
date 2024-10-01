@@ -1,17 +1,18 @@
-'use client'
+'use client';
 import { useState, useEffect } from 'react';
 import { fetchProducts } from '../../apis/product';
-import ProductCard from './components/productCard'; // นำเข้าคอมโพเนนต์ที่สร้างไว้
+import ProductCard from './components/productCard';
+import CategorySelect from './components/categoryCard'; // Assuming correct import path
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(''); // ใช้ string แทน array สำหรับหมวดหมู่เดียว
 
   const fetchProductList = async () => {
     try {
-      const productData = await fetchProducts(search, category ? parseInt(category) : undefined);
+      const productData = await fetchProducts(search, category ? [parseInt(category)] : []); // ส่ง array ที่มีหมวดหมู่เดียว
       setProducts(productData);
       console.log(productData);
     } catch (error) {
@@ -23,7 +24,7 @@ const ProductList = () => {
 
   useEffect(() => {
     fetchProductList();
-  }, []);
+  }, [category, search]); 
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -34,9 +35,10 @@ const ProductList = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Product List</h1>
-      <form onSubmit={handleSearch} className="flex space-x-4 mb-4">
+    <div className="container mx-auto p-4 ">
+      <h1 className="text-2xl font-bold mb-4">All of our proud product</h1>
+     <div className='bg-red-200 p-1 mb-4 '>
+     <form onSubmit={handleSearch} className="flex space-x-4 ">
         <input
           type="text"
           value={search}
@@ -44,23 +46,18 @@ const ProductList = () => {
           placeholder="Search Products"
           className="border border-gray-300 p-2 rounded w-full"
         />
-        <select 
-          value={category} 
-          onChange={(e) => setCategory(e.target.value)} 
-          className="border border-gray-300 p-2 rounded"
-        >
-          <option value="">All Categories</option>
-          <option value="1">Category 1</option>
-          <option value="2">Category 2</option>
-        </select>
+      <div className='min-w-32 min'>
+      <CategorySelect setCategory={setCategory} /> 
+      </div>
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           Search
         </button>
       </form>
+     </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} /> 
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>

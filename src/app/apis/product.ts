@@ -30,34 +30,34 @@ export const createProduct = async (
 
 
 //ดึงหมด
-export const fetchProducts = async (search?: string, category?: number) => {
+export const fetchProducts = async (search?: string, categories?: number[]) => {
   try {
-    // ส่งพารามิเตอร์เฉพาะเมื่อมีค่า
-    const params: any = {};
+    // สร้าง params โดยใช้ URLSearchParams
+    const params = new URLSearchParams();
+
     if (search) {
-      params.search = search;
-    }
-    if (category) {
-      params.category = category;
+      params.append('search', search);
     }
 
-    // เรียก API พร้อมพารามิเตอร์ (ถ้ามี)
+    if (categories && categories.length > 0) {
+      categories.forEach((category) => {
+        params.append('category', category.toString()); // ส่งหมวดหมู่หลายค่าโดยไม่มี []
+      });
+    }
+
     const res = await axios.get('/api/product/get', {
       params: params,
     });
 
-    // ตรวจสอบ data ที่ได้รับจาก API
-    console.log('Fetched Products Data:', res.data); // เพิ่มบรรทัดนี้เพื่อแสดงข้อมูลใน console
+    // ตรวจสอบข้อมูลที่ได้จาก API
+    console.log('Fetched Products Data:', res.data);
 
     return res.data;
-   
   } catch (error) {
     console.error('Error fetching products:', error);
     throw new Error('Error fetching products');
   }
 };
-
-
 
 //ดึงจาก id
 export const getProductById = async (id: number) =>{

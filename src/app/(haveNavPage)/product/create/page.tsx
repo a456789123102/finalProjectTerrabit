@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { createProduct } from '../../../apis/product'; 
 import Text from '../../../components/text';
+import CategorySelect from '../components/categoryCard';
+import { useRouter } from 'next/navigation';
 
 
 const CreateProductPage = () => {
@@ -9,28 +11,30 @@ const CreateProductPage = () => {
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [description, setDescription] = useState('');
-  const [categories, setCategories] = useState(''); // รอรับค่าหมวดหมู่จาก input เป็น string
+  const [categories, setCategories] = useState([]); // รอรับค่าหมวดหมู่จาก input เป็น string
   const [message, setMessage] = useState('');
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // ตรวจสอบว่าข้อมูลครบถ้วน
-    if (!name || !price || !quantity || !description || !categories) {
+    if (!name || !price || !quantity || !description || categories.length === 0) {
       setMessage('Please fill in all fields');
       return;
     }
 
     try {
-      const categoriesArray = categories.split(',').map((cat) => parseInt(cat.trim()));
-      const response = await createProduct(name, price, quantity, description, categoriesArray);
-    
+     
+      const response = await createProduct(name, price, quantity, description, categories);
+    router.push('/product')
       setMessage(response.message);
     } catch (error) {
       setMessage('Error creating product');
       console.error(error);
     }
   };
+
 
   return (
     <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE]'>
@@ -78,13 +82,8 @@ const CreateProductPage = () => {
         </div>
 
         <div>
-          <label>Categories (comma separated IDs):</label>
-          <input
-            type="text"
-            value={categories}
-            onChange={(e) => setCategories(e.target.value)}
-            required
-          />
+          <label>Categories </label>
+          <CategorySelect setCategory={setCategories} isMulti={true} /> 
         </div>
 
         <button type="submit">Create Product</button>
