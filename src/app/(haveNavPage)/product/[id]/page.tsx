@@ -31,11 +31,11 @@ const ProductDetail = () => {
   return (
     <div>
       {product ? (
-        <>
-          <h1>{product.name}</h1>
-          <p>{product.description}</p>
-          <p>{product.price}</p>
-        </>
+        <div>
+          <div>{product.name}</div>
+          <div>{product.description}</div>
+          <div>{product.price}</div>
+        </div>
       ) : (
         <p>Product not found</p>
       )}

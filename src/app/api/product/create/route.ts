@@ -8,6 +8,7 @@ export const config = {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
+        console.log("BODY =" + body);
         const token = req.cookies.get("token")?.value;
 
         const res = await post('/api/product/create', body, token);

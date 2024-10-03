@@ -30,19 +30,19 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   return (
     <div
-      className="border rounded-lg p-4 shadow-lg cursor-pointer hover:bg-gray-100 flex flex-col justify-between"
+      className="border rounded-lg p-4 shadow-lg cursor-pointer hover:bg-gray-100 flex flex-col justify-between gap-3"
       onClick={handleProductClick}
     >
       <div className="text-lg font-semibold mb-2 bg-gray-200">{product.name}</div>
 
-<div className="w-full h-auto rounded-lg shadow-lg min-h-[300] min-w-[300] bg-green-300">
+<div className="w-full h-auto rounded-lg shadow-lg  bg-green-300">
 <Image
-        src={productImage}
-        alt="Cover Image"
-        width={300}
-        height={300}
-       
-      />
+  className="min-h-[200px] min-w-[200px] max-h-[250px] object-cover "
+  src={productImage}
+  alt="Cover Image"
+  width={300}
+  height={300}
+/>
 </div>
 <div className=''> 
   <p className="text-gray-700 mb-1">Price: ${product.price}</p>

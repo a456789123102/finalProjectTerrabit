@@ -17,13 +17,18 @@ export const post = async (
   body: any,
   token: string = ""
 ): Promise<Response> => {
+  const isFormData = body instanceof FormData; // เช็คว่า body เป็น FormData หรือไม่
+  const headers = getHeaders(token, isFormData); // เรียกใช้ getHeaders
+
   const res = await fetch(API_URL + url, {
     method: "POST",
-    headers: getHeaders(token),
-    body: JSON.stringify(body),
+    headers: headers,
+    body: isFormData ? body : JSON.stringify(body), // ถ้าเป็น FormData ไม่ต้องแปลงเป็น JSON
   });
+
   return res;
 };
+
 
 export const get = async (url: string, token: string = "", params: any = {}): Promise<Response> => {
   const queryString = new URLSearchParams(params).toString();

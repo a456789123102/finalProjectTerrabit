@@ -8,7 +8,7 @@ export const createProduct = async (
   categories: number[]
 ) => {
   try {
-
+    console.log({ name, price, quantity, description, categories });
     const res = await axios.post('/api/product/create', {
       name,
       price,
@@ -25,6 +25,22 @@ export const createProduct = async (
       console.error('Unknown error:', error);
     }
     throw new Error('Error creating product');
+  }
+};
+
+
+//upload image
+export const uploadProductImage = async (formData: FormData) => {
+  try {
+    const res = await axios.post('/api/product/uploadImage', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
   }
 };
 

@@ -1,99 +1,40 @@
-'use client'
-import { useState } from 'react';
-import { createProduct } from '../../../apis/product'; 
-import Text from '../../../components/text';
-import CategorySelect from '../components/categoryCard';
-import { useRouter } from 'next/navigation';
-
+'use client';
+import { createProduct } from '../../../apis/product';
+import ProductForm from '../components/productForm';
 
 const CreateProductPage = () => {
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
-  const [description, setDescription] = useState('');
-  const [categories, setCategories] = useState([]); // รอรับค่าหมวดหมู่จาก input เป็น string
-  const [message, setMessage] = useState('');
-
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!name || !price || !quantity || !description || categories.length === 0) {
-      setMessage('Please fill in all fields');
-      return;
-    }
-
+  const handleSubmit = async (productData: any) => {
     try {
-     
-      const response = await createProduct(name, price, quantity, description, categories);
-    router.push('/product')
-      setMessage(response.message);
+      // Log product data before sending
+      console.log('Product data being sent:', productData);
+      
+      const response = await createProduct(
+        productData.name,
+        productData.price,
+        productData.quantity,
+        productData.description,
+        productData.categories
+      );
+
+      // ตรวจสอบ response ที่ได้
+      console.log('Product created response:', response);
+
+      // ส่งข้อความกลับไปที่ frontend ให้แสดงข้อความสำเร็จ
+      return response;
     } catch (error) {
-      setMessage('Error creating product');
-      console.error(error);
+      console.error('Error creating product:', error);
     }
   };
 
-
   return (
     <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE]'>
-        <div className='bg-[#5C8374] p-5 flex justify-center flex-col items-center'>
-        <Text >
-      <h1>Create New Product</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Product Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Price:</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(parseFloat(e.target.value))}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Quantity:</label>
-          <input
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value))}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Description:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          ></textarea>
-        </div>
-
-        <div>
-          <label>Categories </label>
-          <CategorySelect setCategory={setCategories} isMulti={true} /> 
-        </div>
-
-        <button type="submit">Create Product</button>
-      </form>
-
-      {message && <p>{message}</p>}
-    </Text>
-    </div>
+      <div className='bg-[#5C8374] p-5 flex justify-center flex-col items-center'>
+        <h1>Create New Product</h1>
+        <ProductForm onSubmit={handleSubmit} /> 
+      </div>
     </div>
   );
 };
 
 export default CreateProductPage;
+
