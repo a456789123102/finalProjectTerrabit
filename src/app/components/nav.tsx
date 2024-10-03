@@ -19,7 +19,7 @@ function Nav() {
           setUser(data); 
         })
         .catch(() => {
-          router.push("/login"); 
+          //router.push("/login"); 
         });
     }
   }, [setUser, username, router]); 
