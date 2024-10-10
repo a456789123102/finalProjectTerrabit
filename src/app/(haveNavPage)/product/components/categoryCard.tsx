@@ -37,7 +37,7 @@ const CategorySelect = ({ setCategory, isMulti = false }) => {
   };
 
   return (
-    <>
+    <div className='text-sm'>
       <Select
         classNamePrefix="select"
         options={categories}
@@ -49,7 +49,7 @@ const CategorySelect = ({ setCategory, isMulti = false }) => {
         placeholder="Select Category"
         isLoading={isLoading}
       />
-    </>
+    </div>
   );
 };
 

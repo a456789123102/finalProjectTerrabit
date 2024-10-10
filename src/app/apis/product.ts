@@ -76,9 +76,13 @@ export const fetchProducts = async (search?: string, categories?: number[]) => {
 };
 
 //ดึงจาก id
-export const getProductById = async (id: number) =>{
+export const getProductById = async (id: number) => {
   try {
     const res = await axios.get(`/api/product/${id}`);
+    
+    // Log ข้อมูลที่ได้รับจาก Backend
+    console.log('Response from Backend:', res.data);  // ตรวจสอบข้อมูลที่ได้จาก Backend
+    
     return res.data;
   } catch (error) {
     console.error('Error fetching product by ID:', error);

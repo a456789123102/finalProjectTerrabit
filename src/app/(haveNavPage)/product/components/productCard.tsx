@@ -10,7 +10,7 @@ type Product = {
   price: number;
   quantity: number;
   description: string;
-  Image: { imageUrl: string }[]; // แก้ให้สอดคล้องกับข้อมูลจริง
+  Image: { imageUrl: string }[]; 
 };
 
 // คอมโพเนนต์สำหรับแสดงสินค้าต่อชิ้น
@@ -30,10 +30,10 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   return (
     <div
-      className="border rounded-lg p-4 shadow-lg cursor-pointer hover:bg-gray-100 flex flex-col justify-between gap-3"
+      className="border rounded-lg p-4 shadow-lg cursor-pointer hover:bg-gray-100 flex flex-col justify-between gap-3  bg-white"
       onClick={handleProductClick}
     >
-      <div className="text-lg font-semibold mb-2 bg-gray-200">{product.name}</div>
+      <div className="text-lg font-semibold mb-2">{product.name}</div>
 
 <div className="w-full h-auto rounded-lg shadow-lg  bg-green-300">
 <Image
