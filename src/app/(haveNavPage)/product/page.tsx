@@ -2,14 +2,18 @@
 import { useState, useEffect } from 'react';
 import { fetchProducts } from '../../apis/product';
 import ProductCard from './components/productCard';
-import CategorySelect from './components/categoryCard'; // Assuming correct import path
+import CategorySelect from './components/categoryCard'; 
 import Text from '@/app/components/text';
 
+
 const ProductList = () => {
+
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState(''); // ใช้ string แทน array สำหรับหมวดหมู่เดียว
+
 
   const fetchProductList = async () => {
     try {
@@ -36,7 +40,7 @@ const ProductList = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="container mx-auto p-4 ">
+    <div className="container mx-auto p-4 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">All of our proud product</h1>
      <Text className=' p-1 mb-4 '>
      <form  onSubmit={handleSearch} className="flex space-x-4 ">

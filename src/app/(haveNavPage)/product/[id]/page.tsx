@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation'; 
+import { useParams } from 'next/navigation';
 import { getProductById } from '../../../apis/product';
 import Image from 'next/image';
 
@@ -9,8 +9,8 @@ type Product = {
   price: number;
   quantity: number;
   description: string;
-  ProductCategory: Category[]; 
-  Image: ProductImage[];  
+  ProductCategory: Category[];
+  Image: ProductImage[];
 };
 
 type Category = {
@@ -25,7 +25,7 @@ type ProductImage = {
 };
 
 const ProductDetail = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -39,6 +39,7 @@ const ProductDetail = () => {
       const fetchProduct = async () => {
         try {
           const productData = await getProductById(Number(id));
+          console.log('Product Data:', productData);  // พิมพ์ข้อมูลที่ได้รับมาจาก API
           setProduct(productData);
         } catch (error) {
           console.error(error);
@@ -71,7 +72,7 @@ const ProductDetail = () => {
               product.Image.map((img, index) => (
                 <Image
                   key={index}
-                  src={img.imageUrl}
+                  src={img.imageUrl}  // ใช้ imageUrl ที่อยู่ในฟิลด์ Image
                   alt={img.name}
                   width={200}
                   height={200}

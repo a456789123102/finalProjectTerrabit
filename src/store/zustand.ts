@@ -17,14 +17,20 @@ type UserStore = {
 
 export const useUserStore = create(
     persist<UserStore>(
-        (set, get) => ({
-            id: 0,
-            username: '',
-            isAdmin: false,
-            setUser: (user) => set(user),
-            clearUser: () => set({id: 0, username: '',isAdmin: false}),
-        }),{
-            name: 'user-state',
-        }
+      (set) => ({
+        id: 0,
+        username: '',
+        isAdmin: false,
+        setUser: (user) => set({
+          id: user?.id || 0,
+          username: user?.username || '',
+          isAdmin: user?.isAdmin || false
+        }),
+        clearUser: () => set({ id: 0, username: '', isAdmin: false }),
+      }), {
+        name: 'user-state',
+      }
     )
-);
+  );
+  
+ 

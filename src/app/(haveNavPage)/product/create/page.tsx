@@ -1,8 +1,21 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { createProduct } from '../../../apis/product';
 import ProductForm from '../components/productForm';
+import { useUserStore } from '@/store/zustand';
+
+
 
 const CreateProductPage = () => {
+
+  const { isAdmin } = useUserStore(); 
+
+  useEffect(() =>{
+if (!isAdmin) {
+  console.log('CREATE PRODUCT SHOULD NOT SHOW');
+}
+  },[isAdmin])
+
   const handleSubmit = async (productData: any) => {
     try {
       // Log product data before sending
@@ -16,7 +29,6 @@ const CreateProductPage = () => {
         productData.categories
       );
 
-      // ตรวจสอบ response ที่ได้
       console.log('Product created response:', response);
 
       // ส่งข้อความกลับไปที่ frontend ให้แสดงข้อความสำเร็จ
@@ -30,11 +42,14 @@ const CreateProductPage = () => {
     <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE]'>
       <div className='bg-[#5C8374] p-5 flex justify-center flex-col items-center'>
         <h1>Create New Product</h1>
-        <ProductForm onSubmit={handleSubmit} /> 
+        {isAdmin ? (
+          <ProductForm onSubmit={handleSubmit} mode = 'create'/> 
+        ) : (
+          <div className='text-red-800'>You do not have permission to create products.</div>
+        )}
       </div>
     </div>
   );
 };
 
 export default CreateProductPage;
-

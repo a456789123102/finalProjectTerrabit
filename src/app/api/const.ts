@@ -43,3 +43,34 @@ export const get = async (url: string, token: string = "", params: any = {}): Pr
   });
   return res;
 };
+
+export const patch = async (
+  url: string,
+  body: any,
+  token: string = ""
+): Promise<Response> => {
+  const headers = getHeaders(token);  // ใช้ getHeaders ในการสร้าง headers
+
+  console.log("Sending token:", token);  // ตรวจสอบ token ที่จะถูกส่ง
+  
+  const fullUrl = `${API_URL}${url}`;
+  console.log("Full URL:", fullUrl);  // ตรวจสอบ URL ที่จะส่งคำขอ
+
+  const res = await fetch(fullUrl, {
+    method: "PATCH",
+    headers: headers,
+    body: JSON.stringify(body),  // แปลง body เป็น JSON ก่อนส่ง
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    console.error("Error response from server:", errorData);
+    throw new Error(`Error: ${res.status} ${res.statusText}`);
+  }
+
+  // อ่านข้อมูล response body
+  const data = await res.json();
+  console.log("Response data:", data);
+  
+  return data; // คืนค่า data โดยตรงแทน res
+};

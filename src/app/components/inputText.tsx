@@ -1,6 +1,7 @@
 import React from 'react';
 import Text from './text'; 
 
+
 type InputTextProps = {
     label: string,
     type?: "text" | "password",

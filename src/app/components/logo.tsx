@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import Text from "./text";
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/zustand'; 
+import AdminMenu from './adminMenu';
 
 function Logo() {
   const router = useRouter();
@@ -23,9 +24,10 @@ function Logo() {
       <div className='text-yellow-500 hover:text-yellow-300 cursor-pointer' onClick={handleClick}>
         Terrabit pixel Studio
       </div>
-      {isAdmin && (  // แสดง Admin Menu ถ้า isAdmin เป็น true
-        <div className='text-red-400'>
-          Admin Menu
+      {isAdmin && (  
+        <div className='flex items-center space-x-4'>
+           {/* ข้อความ Admin Menu */}
+          <AdminMenu /> {/* แสดงเมนู Dropdown */}
         </div>
       )}
     </Text>
