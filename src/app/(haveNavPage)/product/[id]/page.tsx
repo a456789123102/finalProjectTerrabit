@@ -28,6 +28,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Component สำหรับแสดงหมวดหมู่สินค้า
   const CategoryItem = ({ name }: { name: string }) => {
@@ -50,7 +51,12 @@ const ProductDetail = () => {
 
       fetchProduct();
     }
-  }, [id]);
+  }, [id,refreshKey]);
+
+  const handleRefresh = () => {
+    setLoading(true);
+    setRefreshKey(prevKey => prevKey + 1); // เปลี่ยนค่า refreshKey เพื่อ trigger useEffect
+  };
 
   if (loading) return <p>Loading...</p>;
 
@@ -78,12 +84,13 @@ const ProductDetail = () => {
                   height={200}
                   className="object-cover rounded-lg border border-gray-300"
                 />
+                
               ))
             ) : (
               <p>No image available</p>
             )}
           </div>
-
+          <button onClick={handleRefresh} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Refresh</button>
         </div>
       ) : (
         <p>Product not found</p>

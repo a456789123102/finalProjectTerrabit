@@ -21,7 +21,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   const productImage =
     product.Image && product.Image.length > 0
       ? product.Image[0].imageUrl // ดึง imageUrl จาก Image[0]
-      : 'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'; // ถ้าไม่มีรูปภาพให้ใช้ default image
+      : 'https://lovedrinks.com/cdn-cgi/imagedelivery/lPz29URYX3W9lk2JWbxsjA/lovedrinks.com/2023/08/No-Image-Placeholder.svg_.png/w=9999'; // ถ้าไม่มีรูปภาพให้ใช้ default image
 
   const handleProductClick = () => {
     // เมื่อคลิกสินค้า นำไปที่ /product/:id

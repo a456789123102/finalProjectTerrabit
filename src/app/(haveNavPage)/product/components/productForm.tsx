@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import { useEffect, useState } from 'react';
 import CategorySelect from '../components/categoryCard';
 import { getProductById } from '@/app/apis/product';
@@ -28,10 +28,13 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
         setQuantity(product.quantity);
         setDescription(product.description);
 
-        if (product.ProductCategory) {
-          setCategories(product.ProductCategory.map((cat: any) => cat.categoryId));
+        // ตรวจสอบว่ามี ProductCategory และมีข้อมูลอยู่หรือไม่
+        if (product.ProductCategory && Array.isArray(product.ProductCategory)) {
+          const categoryIds = product.ProductCategory.map((cat: any) => cat.categoryId);
+          console.log(`Category IDs fetched: ${categoryIds}`);
+          setCategories(categoryIds);
         } else {
-          setCategories([]); // Default to empty if no categories
+          setCategories([]); // กำหนดเป็นค่าเริ่มต้นถ้าไม่มีข้อมูล
         }
       } catch (error) {
         setMessage('Error fetching product data');
@@ -119,8 +122,8 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
       </div>
 
       <div>
-        <div>Categories</div>
-        <CategorySelect setCategory={setCategories} isMulti={true} />
+        <div>Categories Select</div>
+        <CategorySelect setCategory={setCategories} isMulti={true} selectedCategories={categories} />
       </div>
 
       <button type='submit' className='bg-[#1B4242] text-white px-4 py-2 rounded hover:bg-[#387478] hover:text-amber-400'>
