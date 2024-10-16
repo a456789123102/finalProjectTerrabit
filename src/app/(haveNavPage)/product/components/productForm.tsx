@@ -1,5 +1,6 @@
-'use client'
-import { useEffect, useState } from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import CategorySelect from '../components/categoryCard';
 import { getProductById } from '@/app/apis/product';
 
@@ -11,34 +12,37 @@ interface ProductFormProps {
 
 const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   const [name, setName] = useState('');
-  const [price, setPrice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+  const [price, setPrice] = useState<number | ''>('');
+  const [quantity, setQuantity] = useState<number | ''>('');
   const [description, setDescription] = useState('');
   const [categories, setCategories] = useState<number[]>([]);
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(mode === 'edit');
 
   const fetchProductData = async () => {
     if (mode === 'edit' && productId) {
+      setIsLoading(true);
       try {
         const product = await getProductById(productId);
         console.log("Fetched product:", product);
 
-        setName(product.name);
-        setPrice(product.price);
-        setQuantity(product.quantity);
-        setDescription(product.description);
+        setName(product.name || '');
+        setPrice(product.price || '');
+        setQuantity(product.quantity || '');
+        setDescription(product.description || '');
 
-        // ตรวจสอบว่ามี ProductCategory และมีข้อมูลอยู่หรือไม่
         if (product.ProductCategory && Array.isArray(product.ProductCategory)) {
           const categoryIds = product.ProductCategory.map((cat: any) => cat.categoryId);
           console.log(`Category IDs fetched: ${categoryIds}`);
           setCategories(categoryIds);
         } else {
-          setCategories([]); // กำหนดเป็นค่าเริ่มต้นถ้าไม่มีข้อมูล
+          setCategories([]);
         }
       } catch (error) {
         setMessage('Error fetching product data');
         console.error('Error fetching product data:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -50,13 +54,24 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !price || !quantity || !description || categories.length === 0) {
+    if (isLoading) {
+      setMessage('Please wait while the data is loading...');
+      return;
+    }
+
+    if (!name || price === '' || quantity === '' || !description || !Array.isArray(categories) || categories.length === 0) {
       setMessage('Please fill in all fields');
       return;
     }
 
     try {
-      const productData = { name, price, quantity, description, categories };
+      const productData = { 
+        name, 
+        price: Number(price), 
+        quantity: Number(quantity), 
+        description, 
+        categories 
+      };
       const response = await onSubmit(productData);
 
       setMessage(
@@ -65,16 +80,23 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
           : `Product updated: ${response.product.name}`
       );
 
-      // ดึงข้อมูลใหม่หลังจากอัปเดตเสร็จ
       if (mode === 'edit') {
         await fetchProductData();
       }
 
     } catch (error) {
       setMessage('Error saving product');
-      console.error('Error creating product:', error);
+      console.error('Error creating/updating product:', error);
     }
   };
+
+  const handleCategoryChange = (newCategories: number[]) => {
+    setCategories(newCategories);
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit} className='flex flex-col gap-2 w-72 p-2'>
@@ -95,7 +117,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
           className='px-2 rounded py-1'
           type='number'
           value={price}
-          onChange={(e) => setPrice(parseFloat(e.target.value))}
+          onChange={(e) => setPrice(e.target.value ? Number(e.target.value) : '')}
           required
         />
       </div>
@@ -106,7 +128,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
           className='px-2 rounded py-1'
           type='number'
           value={quantity}
-          onChange={(e) => setQuantity(parseInt(e.target.value))}
+          onChange={(e) => setQuantity(e.target.value ? Number(e.target.value) : '')}
           required
         />
       </div>
@@ -123,7 +145,11 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
 
       <div>
         <div>Categories Select</div>
-        <CategorySelect setCategory={setCategories} isMulti={true} selectedCategories={categories} />
+        <CategorySelect 
+          setCategory={handleCategoryChange} 
+          isMulti={true} 
+          selectedCategories={categories} 
+        />
       </div>
 
       <button type='submit' className='bg-[#1B4242] text-white px-4 py-2 rounded hover:bg-[#387478] hover:text-amber-400'>

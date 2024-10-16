@@ -9,8 +9,12 @@ type Product = {
   name: string;
   price: number;
   quantity: number;
-  description: string;
-  Image: { imageUrl: string }[]; 
+  ProductCategory: { categoryId: number; category: { name: string } }[];
+  Image: { imageUrl: string }[];
+};
+const CategoryItem = ({ name, categoryId, onClick }: { name: string; categoryId: number; onClick: (id: number) => void }) => {
+  return <div className='px-2 py-1  ml-2 bg-blue-300 hover:bg-blue-400 flex justify-center rounded-md text-xs cursor-pointer'   onClick={() => onClick(categoryId)}
+  >{name}</div>;
 };
 
 // คอมโพเนนต์สำหรับแสดงสินค้าต่อชิ้น
@@ -24,32 +28,47 @@ const ProductCard = ({ product }: { product: Product }) => {
       : 'https://lovedrinks.com/cdn-cgi/imagedelivery/lPz29URYX3W9lk2JWbxsjA/lovedrinks.com/2023/08/No-Image-Placeholder.svg_.png/w=9999'; // ถ้าไม่มีรูปภาพให้ใช้ default image
 
   const handleProductClick = () => {
-    // เมื่อคลิกสินค้า นำไปที่ /product/:id
     router.push(`/product/${product.id}`);
+  };
+  const handleCatClick = (categoryId: number) => {
+    router.push(`/product/category/${categoryId}`); // นำทางไปยังเส้นทางของ category ตาม categoryId
   };
 
   return (
     <div
-      className="border rounded-lg p-4 shadow-lg cursor-pointer hover:bg-gray-100 flex flex-col justify-between gap-3  bg-white"
-      onClick={handleProductClick}
+      className="border rounded-lg p-4 shadow-lg  hover:bg-gray-100 flex flex-col justify-between gap-3  bg-white"
+
     >
       <div className="text-lg font-semibold mb-2">{product.name}</div>
 
-<div className="w-full h-auto rounded-lg shadow-lg  bg-green-300">
-<Image
-  className="min-h-[200px] min-w-[200px] max-h-[250px] object-cover "
-  src={productImage}
-  alt="Cover Image"
-  width={300}
-  height={300}
-/>
-</div>
-<div className=''> 
-  <p className="text-gray-700 mb-1">Price: ${product.price}</p>
-      <p className="text-gray-700 mb-1">Quantity: {product.quantity}</p>
-      <p className="text-gray-600 text-sm">{product.description}</p></div>
+      <div className="w-full h-auto rounded-lg shadow-lg  bg-green-300">
+        <Image
+          className="min-h-[200px] min-w-[200px] max-h-[250px] object-cover cursor-pointer"
+          src={productImage}
+          alt="Cover Image"
+          width={300}
+          height={300}
+          onClick={handleProductClick}
+        />
+      </div>
+      <div className=''>
+        <div className="text-gray-700 mb-1">Price: ${product.price}</div>
+        <div className="text-gray-700 mb-1">Quantity: {product.quantity}</div>
+        <div className="flex flex-row">
+          {/* แสดงชื่อ categories พร้อม handleCatClick */}
+          {product.ProductCategory &&
+            product.ProductCategory.map((productCategory) => (
+              <CategoryItem
+                key={productCategory.categoryId}
+                name={productCategory.category.name}
+                categoryId={productCategory.categoryId}
+                onClick={handleCatClick} // ส่ง handleCatClick เข้าไปใน CategoryItem
+              />
+            ))}
+        </div>
+      </div>
 
-     
+
     </div>
   );
 };

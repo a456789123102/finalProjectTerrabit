@@ -3,6 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL; // ตรวจสอบว่�
 const getHeaders = (token: string) => {
   const headers: any = {
     "Content-Type": "application/json",
+"cache":"no-store",
   };
 
   if (token) {
@@ -40,6 +41,7 @@ export const get = async (url: string, token: string = "", params: any = {}): Pr
   const res = await fetch(fullUrl, {
     method: "GET",
     headers: getHeaders(token),
+    next: { revalidate: 0 },
   });
   return res;
 };

@@ -5,7 +5,6 @@ import { getAllcategory } from '@/app/apis/category';
 const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [defaultSelectedOptions, setDefaultSelectedOptions] = useState([]);
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -17,11 +16,6 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
           label: cat.name,
         }));
         setCategories(formattedCategories);
-        console.log(`Fetched categories:`, formattedCategories);
-        console.log(`Categories:`, categories);
-        // Set default selected options based on selectedCategories
-        const defaultOptions = formattedCategories.filter(category => selectedCategories.includes(category.value));
-        setDefaultSelectedOptions(defaultOptions);
       } catch (error) {
         console.error('Error fetching categories:', error);
       } finally {
@@ -31,23 +25,13 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
     fetchCategories();
   }, []);
 
-  // Update default selected options when selectedCategories or categories change
-  useEffect(() => {
-    const defaultOptions = categories.filter(category => selectedCategories.includes(category.value));
-    setDefaultSelectedOptions(defaultOptions);
-    console.log(`defaultOptions:`, defaultOptions);
-  }, [categories, selectedCategories]);
-
   const handleChange = (selectedOption) => {
-    if (isMulti) {
-      const selectedValues = selectedOption ? selectedOption.map(option => option.value) : [];
-      setCategory(selectedValues);
-      console.log(`Selected values:`, selectedValues);
-    } else {
-      setCategory(selectedOption ? selectedOption.value : '');
-    }
+    const selectedValues = isMulti
+      ? selectedOption ? selectedOption.map(option => option.value) : []
+      : selectedOption ? selectedOption.value : '';
+    setCategory(selectedValues);
   };
-  console.log(`Selected Categories:`, selectedCategories);
+
   return (
     <div className='text-sm'>
       <Select
@@ -60,7 +44,7 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
         onChange={handleChange}
         placeholder="Select Category"
         isLoading={isLoading}
-        defaultValue={selectedCategories.map(id => ({ value: id, label: categories.find(cat => cat.value === id)?.label }))} // สร้าง defaultValue ใหม่
+        defaultValue={selectedCategories.map(id => ({ value: id, label: categories.find(cat => cat.value === id)?.label }))}
       />
     </div>
   );
