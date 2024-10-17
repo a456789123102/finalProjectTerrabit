@@ -118,3 +118,15 @@ export const updateProduct = async (
     throw error;
   }
 };
+
+//ดึงจากไอดีใน params
+export const fetchProductFromCatId = async(id: number) => {
+  try {
+    const res = await axios.get(`/api/product/category/${id}`);
+    console.log("Response from Backend:", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching product by category ID:", error);
+    throw error;
+  }
+}
