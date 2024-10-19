@@ -29,7 +29,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
         setName(product.name || '');
         setPrice(product.price || '');
         setQuantity(product.quantity || '');
-        setDescription(product.description || '');
+        setDescription(product.descripti``on || '');
 
         if (product.ProductCategory && Array.isArray(product.ProductCategory)) {
           const categoryIds = product.ProductCategory.map((cat: any) => cat.categoryId);

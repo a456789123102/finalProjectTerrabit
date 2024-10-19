@@ -14,7 +14,7 @@ function Nav() {
         <div className='hover:underline cursor-pointer hover:text-yellow-200'>Games</div>
         <Link href={`/product`} className='hover:underline cursor-pointer hover:text-yellow-200'>Products</Link>
         <div className='hover:underline cursor-pointer hover:text-yellow-200'>News</div>
-        <div className='hover:underline cursor-pointer hover:text-yellow-200'>Careers</div>
+        <Link  href={`/careers`} className='hover:underline cursor-pointer hover:text-yellow-200'>Careers</Link>
         <div className='hover:underline cursor-pointer hover:text-yellow-200'>Services</div>
       </div>
       <div className='flex flex-row items-center '>
