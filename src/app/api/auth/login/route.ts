@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { post } from "../const";  // นำเข้า post function ที่ใช้เรียก Backend Server จริง
+import { post } from "../../const";  // นำเข้า post function ที่ใช้เรียก Backend Server จริง
 
 export async function POST(req: NextRequest) {
   try {

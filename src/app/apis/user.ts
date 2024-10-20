@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const me = async () => {
     try {
-        const res = await axios.get('/api/users/me',{
+        const res = await axios.get('/api/user/me',{
 headers: {
     'Authorization': `Bearer ${document.cookie.replace('token=','')}`
 },

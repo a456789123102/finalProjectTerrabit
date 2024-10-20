@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { post } from "../const"; 
+import { post } from "../../const"; 
 
 export async function POST(req: NextRequest) {
     try {

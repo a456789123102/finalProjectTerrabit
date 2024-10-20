@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import Text from "./text";
 import { useRouter } from 'next/navigation';
-import { useUserStore } from '@/store/zustand'; 
+import { useUserStore } from '@/store/zustand';
 import AdminMenu from './adminMenu';
 
 function Logo() {
@@ -20,14 +20,13 @@ function Logo() {
   };
 
   return (
-    <Text className='flex flex-row justify-between w-screen h-8 px-5 bg-[#040D12]'>
+    <Text className='flex flex-row justify-between w-screen h-8 px-5 bg-[#040D12] z-50'>
       <div className='text-yellow-500 hover:text-yellow-300 cursor-pointer' onClick={handleClick}>
         Terrabit pixel Studio
       </div>
-      {isAdmin && (  
+      {isAdmin && (
         <div className='flex items-center space-x-4'>
-           {/* ข้อความ Admin Menu */}
-          <AdminMenu /> {/* แสดงเมนู Dropdown */}
+          <AdminMenu />
         </div>
       )}
     </Text>
