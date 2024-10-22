@@ -36,7 +36,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   return (
     <div
-      className="border rounded-lg p-4 shadow-lg  hover:bg-gray-100 flex flex-col justify-between gap-3  bg-white"
+      className="border rounded-lg p-4 shadow-lg  hover:bg-[#ECDFCC] flex flex-col justify-between gap-3  bg-white"
 
     >
       <div className="text-lg font-semibold mb-2">{product.name}</div>

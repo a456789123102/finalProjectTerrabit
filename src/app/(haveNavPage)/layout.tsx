@@ -3,7 +3,7 @@ import Nav from '../components/nav'
 import { PropsWithChildren } from 'react'
 function Layout({ children }: PropsWithChildren) {
     return (
-      <div className="bg-[#DAD3BE]">
+      <div className="bg-white">
         <Nav />  {/* Nav จะอยู่ภายใต้ Logo */}
         <div className="pt-3">
           {children}  {/* Content ของแต่ละหน้า */}

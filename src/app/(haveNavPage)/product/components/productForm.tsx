@@ -29,7 +29,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
         setName(product.name || '');
         setPrice(product.price || '');
         setQuantity(product.quantity || '');
-        setDescription(product.descripti``on || '');
+        setDescription(product.description || '');
 
         if (product.ProductCategory && Array.isArray(product.ProductCategory)) {
           const categoryIds = product.ProductCategory.map((cat: any) => cat.categoryId);
@@ -99,7 +99,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-2 w-72 p-2'>
+    <form onSubmit={handleSubmit} className='flex flex-col gap-2 min-w-96 p-2'>
       <div className='flex flex-col item-center'>
         <div>Product Name:</div>
         <input
@@ -136,7 +136,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
       <div className='flex flex-col item-center'>
         <div>Description:</div>
         <textarea
-          className='text-sm p-1 text-[13px] rounded'
+          className='text-sm p-1 text-[13px] rounded min-h-52'
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required

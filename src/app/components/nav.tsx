@@ -11,7 +11,7 @@ function Nav() {
   useEffect(() => {
     const handleScroll = () => {
       // เมื่อเลื่อนเมาส์เกิน 100px ให้ทำการ fixed navbar
-      if (window.scrollY > 100) {
+      if (window.scrollY > 30) {
         setIsFixed(true);
       } else {
         setIsFixed(false);
@@ -28,7 +28,7 @@ function Nav() {
   }, []);
 
   return (
-    <Text className={`flex flex-row justify-between bg-[#183D3D] h-8 px-5 text-yellow-400 ${isFixed ? 'fixed top-8 w-full z-40' : 'relative'}`}>
+    <Text className={`flex flex-row justify-between bg-black bg-opacity-80 h-8 px-5 text-yellow-400 transition-all duration-300 ${isFixed ? 'fixed top-0 w-full z-40' : 'relative'}`}>
       <div className='flex flex-row gap-7'>
         <div className='hover:underline cursor-pointer hover:text-yellow-200'>Games</div>
         <Link href={`/product`} className='hover:underline cursor-pointer hover:text-yellow-200'>Products</Link>

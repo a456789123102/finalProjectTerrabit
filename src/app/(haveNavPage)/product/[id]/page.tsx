@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getProductById } from '../../../apis/product';
-import {getReviewsById} from '../.././../apis/review';
+import { getReviewsById } from '../.././../apis/review';
 import Image from 'next/image';
 import Link from 'next/link';
+import StarRating from '@/app/components/starRating';
 
 
 type Product = {
@@ -69,14 +70,15 @@ const ProductDetail = () => {
       const fetchReviews = async () => {
         try {
           const reviewData = await getReviewsById(Number(id));
-          console.log('Review Data:', reviewData);  
+          console.log('Review Data:', reviewData);
           serReviews(reviewData);
         } catch (error) {
           console.error(error);
         }
       };
       fetchReviews();
-  }},[id]);
+    }
+  }, [id]);
 
   const handleRefresh = () => {
     setLoading(true);
@@ -86,79 +88,87 @@ const ProductDetail = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-<div className='h-screen flex flex-col items-center justify-center '>
-  {product ? (
-    <div className='flex flex-col items-center justify-center w-4/6'>
-      <div className='p-4 gap-3 bg-[#e2f1f1] flex flex-row w-full'> {/* เปลี่ยน w-4/6 เป็น w-full */}
-        <div className="grid grid-cols-2 grid-rows-2 gap-2">
-          {product.Image && product.Image.length > 0 ? (
-            product.Image.map((img, index) => (
-              <Image
-                key={index}
-                src={img.imageUrl}
-                alt={img.name}
-                width={200}
-                height={200}
-                className="object-cover rounded-lg border border-gray-300"
-              />
-            ))
-          ) : (
-            <p>No image available</p>
-          )}
-        </div>
-        <div className='flex flex-col justify-evenly'>
-          <div>{product.name}</div>
-          <div>Price : {product.price}</div>
-          <div>Quantity : {product.quantity}</div>
-          <div>
-            {product.ProductCategory && product.ProductCategory.map((productCategory) => (
-              <CategoryItem key={productCategory.categoryId} name={productCategory.category.name} />
-            ))}
+    <div className='flex flex-col items-center justify-center bg-[#2E2E2E] text-white p-8 font-BebasNeue'>
+      {product ? (
+        <div className='flex flex-col items-center justify-center w-4/6'>
+          <div className='flex flex-col md:flex-row items-start justify-between w-full max-w-6xl'> {/* เปลี่ยน w-4/6 เป็น w-full */}
+            {/* Left: Image Gallery */}
+          <div className='flex flex-col gap-4'>
+            {product.Image && product.Image.length > 0 ? (
+              product.Image.map((img, index) => (
+                <div key={index} className={`border border-gray-700 ${index === 0 ? 'w-full' : 'w-24 h-24'} rounded-md`}>
+                  <Image
+                    src={img.imageUrl}
+                    alt={img.name}
+                    layout="responsive"
+                    width={300} 
+                    height={400}
+                    className="object-cover rounded-md"
+                  />
+                </div>
+              ))
+            ) : (
+              <p>No image available</p>
+            )}
           </div>
-          <div className=''>
-            <button onClick={handleRefresh} className="mt-4 px-4 py-2 mr-4 bg-green-500 text-white rounded hover:bg-fuchsia-400">
-              Refresh
+          {/* Right: Product Details */}
+            <div className='flex flex-col ml-8'>
+            <div className="text-4xl font-bold uppercase tracking-wider mb-6">{product.name}</div>
+            <div className="text-3xl text-gray-400 mb-2 line-through">$425.00</div>
+            <div className="text-4xl font-semibold mb-6">${product.price}</div>
+              <div className='text-xl'>Left : {product.quantity}</div>
+              <div className='flex items-center gap-4 mb-6'>
+              <span className='text-xl'>Quantity:</span>
+              <button className="px-4 py-2 bg-gray-800 text-white rounded-lg">-</button>
+              <span className='text-xl'>{product.quantity}</span>
+              <button className="px-4 py-2 bg-gray-800 text-white rounded-lg">+</button>
+              
+            </div>
+              <div>
+                {product.ProductCategory && product.ProductCategory.map((productCategory) => (
+                  <CategoryItem key={productCategory.categoryId} name={productCategory.category.name} />
+                ))}
+              </div>
+              <div className=''>
+              <button className="bg-[#1C1C1C] text-white py-4 px-8 mb-6 rounded-lg text-xl hover:bg-gray-700 w-full">
+              ADD TO CART
             </button>
-            <Link href={`/product/${id}/edit`} className='mt-4 px-4 py-2 bg-purple-500 text-white rounded hover:bg-green-400'>
-              Edit
-            </Link>
+                <Link href={`/product/${id}/edit`} className='mt-4 px-4 py-2 bg-purple-500 text-white rounded hover:bg-green-400'>
+                  Edit
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className='my-1 bg-[#ECDFCC] min-w-full p-5'>
+            <div className="text-2xl">Description</div>
+            <div>{product.description}</div>
+          </div>
+          <div className='my-1 bg-[#ECDFCC] min-w-full p-3 '>
+            <div>
+              <div className="text-2xl">Reviews(pending)</div>
+              <div className='p-3 '>
+                {reviews.map((review: Review) => (
+                  <div key={review.id} className='p-3 my-2 bg-white border'>
+                    <div className='font-semibold'>{review.user.username}</div>
+                    <div className='flex flex-row'>
+                      <StarRating rating={review.rating} />
+                    </div>
+                    <div className='text-slate-800'>{review.comments}</div>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+            {/* Reviews */}
+          </div>
+          <div className='my-1 bg-[#ECDFCC] min-w-full p-3'>
+            <div className="text-2xl">Related Products (pending)</div>
           </div>
         </div>
-      </div>
-      <div className='my-1 bg-[#E2F1E7] min-w-full p-5'>
-        <div className="text-2xl">Description</div>
-        <div>{product.description}</div>
-      </div>
-      <div className='my-1 bg-[#E2F1E7] min-w-full p-3 '>
-        <div>
-        <div className="text-2xl">Reviews(pending)</div>
-<div className='p-3 '>
-  {reviews.map((review:Review) => (
-    <div key={review.id} className='p-3 my-2 bg-[#8779c7]'>
-      <div>{review.user.username}</div>
-      <div>{review.rating}</div>
-      <div>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4 text-yellow-500">
-    <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692.462l1.41 3.393 3.664.293a.75.75 0 0 1 .428 1.317l-2.791 2.39.853 3.575a.75.75 0 0 1-1.12.814L7.998 12.08l-3.135 1.915a.75.75 0 0 1-1.12-.814l.852-3.574-2.79-2.39a.75.75 0 0 1 .427-1.318l3.663-.293 1.41-3.393A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
-  </svg>
-</div>
-
-      <div>{review.comments}</div>
+      ) : (
+        <p>Product not found</p>
+      )}
     </div>
-  ))}
-</div>
-
-        </div>
-        {/* Reviews */}
-      </div>
-      <div className='my-1 bg-[#E2F1E7] min-w-full p-3'>
-        <div className="text-2xl">Related Products (pending)</div>
-      </div>
-    </div>
-  ) : (
-    <p>Product not found</p>
-  )}
-</div>
   );
 };
 

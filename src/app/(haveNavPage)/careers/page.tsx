@@ -63,7 +63,7 @@ const CareerPage = () => {
                 <div> {careerDetails.description}</div>
               </div>
               <div>
-                <div className='bg-orange-300 w-32 flex justify-center p-2 rounded-md shadow-md cursor-pointer hover:bg-orange-500 m-2'>APPLY NOW</div>
+                <div className='bg-[#3C3D37] w-32 flex justify-center p-2 rounded-md shadow-md cursor-pointer hover:bg-[#181C14] m-2 text-white'>APPLY NOW</div>
                 <div className='text-xs'>
                   When you click on the APPLY NOW button, your default email client will pop up.
                   ※If your email app does not activate, please send an email to career@kojimaproductions.jp with your desired position in the subject line and submit any required documents.

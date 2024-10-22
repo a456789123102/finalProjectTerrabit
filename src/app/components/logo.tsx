@@ -20,7 +20,7 @@ function Logo() {
   };
 
   return (
-    <Text className='flex flex-row justify-between w-screen h-8 px-5 bg-[#040D12] z-50'>
+    <Text className='flex flex-row justify-between w-screen h-8 px-5 bg-[#181C14] '>
       <div className='text-yellow-500 hover:text-yellow-300 cursor-pointer' onClick={handleClick}>
         Terrabit pixel Studio
       </div>

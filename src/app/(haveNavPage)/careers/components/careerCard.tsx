@@ -13,7 +13,7 @@ type career = {
 const CareerCards = ({ career, onClick, isSelected }: { career: career, onClick: () => void, isSelected: boolean }) => { 
   return (
     <div 
-      className={`border rounded-lg p-4 shadow-lg hover:bg-gray-100 flex flex-col justify-between gap-3 bg-white mb-2 cursor-pointer ${isSelected ? 'bg-yellow-200' : ''}`}  // ใช้ class 'bg-yellow-200' เมื่อถูกเลือก
+      className={`border rounded-lg p-4 shadow-lg hover:bg-gray-100 flex flex-col justify-between gap-3 bg-white mb-2 cursor-pointer ${isSelected ? 'bg-[#ECDFCC]' : ''}`}  // ใช้ class 'bg-yellow-200' เมื่อถูกเลือก
       onClick={onClick}  // เพิ่ม onClick ที่นี่
     >
       <div>
