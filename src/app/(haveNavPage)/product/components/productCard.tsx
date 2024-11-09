@@ -8,6 +8,8 @@ type Product = {
   id: number;
   name: string;
   price: number;
+  finalPrice: number;
+  discount: number;
   quantity: number;
   ProductCategory: { categoryId: number; category: { name: string } }[];
   Image: { imageUrl: string }[];
@@ -51,8 +53,15 @@ const ProductCard = ({ product }: { product: Product }) => {
           onClick={handleProductClick}
         />
       </div>
-      <div className=''>
-        <div className="text-gray-700 mb-1">Price: ${product.price}</div>
+      <div>
+      <div className="flex flex-row items-end"> 
+  <div>Price: {product.finalPrice} THB</div>
+  {product.discount !== 0 && product.discount !== null && (
+    <div className="text-red-700 mb-1 text-[12px] ml-2 bg-red-300 p-[2px] rounded-sm relative top-2">
+      -{product.discount * 100}%
+    </div>
+  )}
+</div>
         <div className="text-gray-700 mb-1">Quantity: {product.quantity}</div>
         <div className="flex flex-row">
           {/* แสดงชื่อ categories พร้อม handleCatClick */}

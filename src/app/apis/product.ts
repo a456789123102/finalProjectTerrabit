@@ -3,6 +3,7 @@ import axios from "axios";
 export const createProduct = async (
   name: string,
   price: number,
+  discount:number,
   quantity: number,
   description: string,
   categories: number[]
@@ -13,6 +14,7 @@ export const createProduct = async (
       {
         name,
         price,
+        discount,
         quantity,
         description,
         categories,
@@ -95,6 +97,7 @@ export const updateProduct = async (
   id: number,
   name: string,
   price: number,
+  discount:number,
   quantity: number,
   description: string,
   categories: number[]
@@ -105,6 +108,7 @@ export const updateProduct = async (
       {
         name,
         price,
+        discount,
         quantity,
         description,
         categories,

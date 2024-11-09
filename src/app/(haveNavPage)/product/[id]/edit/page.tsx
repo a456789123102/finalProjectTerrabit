@@ -26,6 +26,7 @@ const EditProductPage = () => {
         productId,  // ส่ง id ของสินค้าไปใน request
         productData.name,
         productData.price,
+        productData.discount,
         productData.quantity,
         productData.description,
         productData.categories
@@ -41,9 +42,9 @@ const EditProductPage = () => {
   
 
   return (
-    <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE]'>
-      <div className='bg-[#5C8374] p-5 flex justify-center flex-col items-center'>
-        <h1>Edit Product</h1>
+    <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE] '>
+      <div className=' p-5 flex justify-center flex-col items-center w-1/3 h-screen'>
+     
         {isAdmin ? (
           <ProductForm onSubmit={handleSubmit} productId={productId} mode='edit' /> 
         ) : (

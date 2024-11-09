@@ -13,6 +13,7 @@ interface ProductFormProps {
 const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState<number | ''>('');
+  const [discount, setDiscount] = useState<number | ''>(''); // Discount in percentage
   const [quantity, setQuantity] = useState<number | ''>('');
   const [description, setDescription] = useState('');
   const [categories, setCategories] = useState<number[]>([]);
@@ -28,19 +29,18 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
 
         setName(product.name || '');
         setPrice(product.price || '');
+        setDiscount((product.discount || '')*100);
         setQuantity(product.quantity || '');
         setDescription(product.description || '');
 
         if (product.ProductCategory && Array.isArray(product.ProductCategory)) {
           const categoryIds = product.ProductCategory.map((cat: any) => cat.categoryId);
-          console.log(`Category IDs fetched: ${categoryIds}`);
           setCategories(categoryIds);
         } else {
           setCategories([]);
         }
       } catch (error) {
         setMessage('Error fetching product data');
-        console.error('Error fetching product data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -59,15 +59,22 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
       return;
     }
 
-    if (!name || price === '' || quantity === '' || !description || !Array.isArray(categories) || categories.length === 0) {
+    if (!name || price === '' || quantity === '' || !description || !categories.length) {
       setMessage('Please fill in all fields');
       return;
     }
+
+    const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setDescription(e.target.value);
+      e.target.style.height = "auto"; // รีเซ็ตความสูงก่อน
+      e.target.style.height = `${e.target.scrollHeight}px`; // ตั้งค่าความสูงตามเนื้อหา
+    };
 
     try {
       const productData = { 
         name, 
         price: Number(price), 
+        discount: Number(discount) /100, // Convert to decimal
         quantity: Number(quantity), 
         description, 
         categories 
@@ -83,10 +90,8 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
       if (mode === 'edit') {
         await fetchProductData();
       }
-
     } catch (error) {
       setMessage('Error saving product');
-      console.error('Error creating/updating product:', error);
     }
   };
 
@@ -95,67 +100,81 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="text-center text-lg font-semibold">Loading...</div>;
   }
 
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-2 min-w-96 p-2'>
-      <div className='flex flex-col item-center'>
-        <div>Product Name:</div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6 mx-auto bg-white rounded-lg shadow-md w-full ">
+      <h2 className="text-xl font-bold text-center text-gray-800 mb-4">
+        {mode === 'create' ? 'Create New Product' : 'Edit Product'}
+      </h2>
+
+      <div className="flex flex-col">
+        <label className="font-medium text-gray-600">Product Name:</label>
         <input
-          className='px-2 rounded py-1'
-          type='text'
+          className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
         />
       </div>
 
-      <div className='flex flex-col item-center'>
-        <div>Price:</div>
+      <div className="flex flex-col">
+        <label className="font-medium text-gray-600">Price:</label>
         <input
-          className='px-2 rounded py-1'
-          type='number'
+          className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value ? Number(e.target.value) : '')}
           required
         />
       </div>
 
-      <div className='flex flex-col item-center'>
-        <div>Quantity:</div>
+      <div className="flex flex-col">
+        <label className="font-medium text-gray-600">Discount (%):</label>
         <input
-          className='px-2 rounded py-1'
-          type='number'
+          className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          type="number"
+          min="0"
+          max="100"
+          value={discount}
+          onChange={(e) => setDiscount(e.target.value ? Number(e.target.value) : '')}
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="font-medium text-gray-600">Quantity:</label>
+        <input
+          className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          type="number"
           value={quantity}
           onChange={(e) => setQuantity(e.target.value ? Number(e.target.value) : '')}
           required
         />
       </div>
 
-      <div className='flex flex-col item-center'>
-        <div>Description:</div>
+      <div className="flex flex-col">
+        <label className="font-medium text-gray-600">Description:</label>
         <textarea
-          className='text-sm p-1 text-[13px] rounded min-h-52'
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        ></textarea>
+  className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300 resize-y min-h-60"
+  value={description}
+  onChange={(e) => setDescription(e.target.value)}
+  rows={4} // จำนวนแถวเริ่มต้น
+  required
+></textarea>
       </div>
 
-      <div>
-        <div>Categories Select</div>
-        <CategorySelect 
-          setCategory={handleCategoryChange} 
-          isMulti={true} 
-          selectedCategories={categories} 
-        />
+      <div className="flex flex-col">
+        <label className="font-medium text-gray-600">Categories:</label>
+        <CategorySelect setCategory={handleCategoryChange} isMulti={true} selectedCategories={categories} />
       </div>
 
-      <button type='submit' className='bg-[#1B4242] text-white px-4 py-2 rounded hover:bg-[#387478] hover:text-amber-400'>
+      <button type="submit" className="bg-blue-600 text-white font-semibold px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
         {mode === 'create' ? 'Create Product' : 'Update Product'}
       </button>
-      {message && <p>{message}</p>}
+
+      {message && <p className="text-center mt-4 font-medium text-blue-600">{message}</p>}
     </form>
   );
 };

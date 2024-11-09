@@ -4,7 +4,9 @@ import axios from "axios";
 export const login = async (username: string, password: string) => {
     try {
         const response = await axios.post('/api/auth/login', { username, password });
+        console.log("login success:",response);
         return response.data;
+        
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response) {

@@ -40,8 +40,7 @@ if (!isAdmin) {
 
   return (
     <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE]'>
-      <div className='bg-[#5C8374] p-5 flex justify-center flex-col items-center'>
-        <h1>Create New Product</h1>
+      <div className=' p-5 flex justify-center flex-col items-center w-1/3'>
         {isAdmin ? (
           <ProductForm onSubmit={handleSubmit} mode = 'create'/> 
         ) : (

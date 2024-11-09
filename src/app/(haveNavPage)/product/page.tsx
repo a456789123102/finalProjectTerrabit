@@ -39,7 +39,7 @@ const ProductList = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 min-h-screen">
+    <div className="container mx-auto p-4 min-h-screen bg-white">
       <h1 className="text-2xl font-bold mb-4">Our products</h1>
       <Text className='p-1 mb-4'>
         <form onSubmit={handleSearch} className="flex space-x-4">

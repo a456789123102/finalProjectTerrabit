@@ -88,7 +88,7 @@ const ProductDetail = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className='flex flex-col items-center justify-center bg-[#2E2E2E] text-white p-8 font-BebasNeue'>
+    <div className='flex flex-col items-center justify-center  text-white p-8 font-BebasNeue '>
       {product ? (
         <div className='flex flex-col items-center justify-center w-4/6'>
           <div className='flex flex-col md:flex-row items-start justify-between w-full max-w-6xl'> {/* เปลี่ยน w-4/6 เป็น w-full */}
