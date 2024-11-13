@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { createProduct } from '../../../apis/product';
 import ProductForm from '../components/productForm';
 import { useUserStore } from '@/store/zustand';
@@ -24,6 +24,7 @@ if (!isAdmin) {
       const response = await createProduct(
         productData.name,
         productData.price,
+        productData.discount,
         productData.quantity,
         productData.description,
         productData.categories

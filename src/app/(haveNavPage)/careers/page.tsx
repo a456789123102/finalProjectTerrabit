@@ -2,6 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getAllCareer, getOneCareerById } from '../../apis/career';
 import CareerCards from './components/careerCard';
+import Text from '@/app/components/text';
 
 const CareerPage = () => {
   const [careers, setCareers] = useState([]);
@@ -39,7 +40,7 @@ const CareerPage = () => {
   }, [fetchCareerList]);  // เรียกใช้ฟังก์ชันนี้ใน useEffect
 
   return (
-    <div className='m-6 flex flex-row justify-center'>
+    <Text className='m-6 flex flex-row justify-center '>
       <div className='w-1/5 mr-4'>
         {careers.map((career) => (
           <CareerCards
@@ -102,7 +103,7 @@ const CareerPage = () => {
           )}
         </div>
       </div>
-    </div>
+    </Text>
   );
 }
 

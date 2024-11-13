@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import CategorySelect from '../components/categoryCard';
 import { getProductById } from '@/app/apis/product';
+import { useRouter } from 'next/navigation';
 
 interface ProductFormProps {
   onSubmit: (productData: any) => Promise<void>;
@@ -19,6 +20,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   const [categories, setCategories] = useState<number[]>([]);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(mode === 'edit');
+  const router = useRouter();
 
   const fetchProductData = async () => {
     if (mode === 'edit' && productId) {
@@ -62,7 +64,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
     if (!name || price === '' || quantity === '' || !description || !categories.length) {
       setMessage('Please fill in all fields');
       return;
-    }
+  }
 
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setDescription(e.target.value);
@@ -90,6 +92,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
       if (mode === 'edit') {
         await fetchProductData();
       }
+      router.push('/product');
     } catch (error) {
       setMessage('Error saving product');
     }
