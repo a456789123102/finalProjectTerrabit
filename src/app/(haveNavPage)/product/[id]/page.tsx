@@ -171,15 +171,16 @@ const ProductDetail = () => {
             </div>
             {/* Reviews */}
           </div>
-          <div className='my-2 bg-[#1C1C1C] text-white min-w-full p-3'>
+          <div className='my-2 bg-[#1C1C1C] min-w-full p-5'>
             <div className="text-2xl">
-              <div>Related Product</div>
+              <div className='my-2 pb-2'>Related Product</div>
+<div className='flex justify-between items-center '>
 <RelatedProductSlide
  category={product.ProductCategory.map(cat => cat.categoryId)}
  name={product.name}
  productId={product.id}
 />
-
+</div>
             </div>
           </div>
         </div>

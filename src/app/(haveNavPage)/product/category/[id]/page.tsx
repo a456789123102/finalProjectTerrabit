@@ -23,13 +23,14 @@ const CategoryProductPage = () => {
     }, [id]); 
     
     return (
-        <div className=' min-w-full min h-screen'>pageasdasdasdasda
+      <div className='flex flex-col justify-center items-center text-white p-8 '>
+        <div className='min-h-screen min-w-full flex items-start  max-w-4/6 flex-col'>
             <Text className="text-2xl font-bold mb-4">All of Our FPS</Text>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
+        </div>
         </div>
         </div>
     )

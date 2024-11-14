@@ -25,7 +25,8 @@ const handleClick = (id) => {
 }
 
   return (
-    <div className='min-h-screen min-w-full flex items-start justify-center'>
+    <div className='flex flex-col items-center justify-center  text-white p-8'>
+    <div className='min-h-screen min-w-full flex items-start justify-center max-w-4/6'>
 <div className='w-10/12 bg-slate-200 mt-6'>
 <div className='flex flex-row p-5'>
   {categories.map((category, index) => (
@@ -34,6 +35,7 @@ const handleClick = (id) => {
   ))}
 </div>
 </div>
+    </div>
     </div>
   )
 }
