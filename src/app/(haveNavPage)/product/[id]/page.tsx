@@ -10,6 +10,7 @@ import RelatedProductSlide from "../components/RelatedProductSlide"
 
 
 type Product = {
+  id: number,
   name: string;
   price: number;
   finalPrice: number;
@@ -96,52 +97,52 @@ const ProductDetail = () => {
         <div className='flex flex-col items-center justify-center w-4/6'>
           <div className='flex flex-col md:flex-row items-start justify-between w-full max-w-6xl'> {/* เปลี่ยน w-4/6 เป็น w-full */}
             {/* Left: Image Gallery */}
-          <div className='flex flex-col gap-4'>
-            {product.Image && product.Image.length > 0 ? (
-              product.Image.map((img, index) => (
-                <div key={index} className={`border border-gray-700 ${index === 0 ? 'w-full' : 'w-24 h-24'} rounded-md`}>
-                  <Image
-                    src={img.imageUrl}
-                    alt={img.name}
-                    layout="responsive"
-                    width={300} 
-                    height={400}
-                    className="object-cover rounded-md"
-                  />
-                </div>
-              ))
-            ) : (
-              <p>No image available</p>
-            )}
-          </div>
-          {/* Right: Product Details */}
+            <div className='flex flex-col gap-4'>
+              {product.Image && product.Image.length > 0 ? (
+                product.Image.map((img, index) => (
+                  <div key={index} className={`border border-gray-700 ${index === 0 ? 'w-full' : 'w-24 h-24'} rounded-md`}>
+                    <Image
+                      src={img.imageUrl}
+                      alt={img.name}
+                      layout="responsive"
+                      width={300}
+                      height={400}
+                      className="object-cover rounded-md"
+                    />
+                  </div>
+                ))
+              ) : (
+                <p>No image available</p>
+              )}
+            </div>
+            {/* Right: Product Details */}
             <div className='flex flex-col ml-8'>
-            <div className="text-4xl font-bold uppercase tracking-wider mb-6">{product.name}</div>
-            <div>
-            {product.discount !== 0 && product.discount !== null && (<div className='flex flex-row '> <div className="text-3xl text-gray-400 mb-2 line-through">
-              ฿ {product.price}</div>
-              <div className='ml-2 text-red-400'>-{product.discount*100}%</div>
-              </div>)}
-           </div>
-            <div className="text-4xl font-semibold mb-6">
-            ฿ {product.finalPrice}</div>
+              <div className="text-4xl font-bold uppercase tracking-wider mb-6">{product.name}</div>
+              <div>
+                {product.discount !== 0 && product.discount !== null && (<div className='flex flex-row '> <div className="text-3xl text-gray-400 mb-2 line-through">
+                  ฿ {product.price}</div>
+                  <div className='ml-2 text-red-400'>-{product.discount * 100}%</div>
+                </div>)}
+              </div>
+              <div className="text-4xl font-semibold mb-6">
+                ฿ {product.finalPrice}</div>
               <div className='text-xl'>Left : {product.quantity}</div>
               <div className='flex items-center gap-4 mb-6'>
-              <span className='text-xl'>Quantity:</span>
-              <button className="px-4 py-2 bg-gray-800 text-white rounded-lg">-</button>
-              <span className='text-xl'>{product.quantity}</span>
-              <button className="px-4 py-2 bg-gray-800 text-white rounded-lg">+</button>
-              
-            </div>
+                <span className='text-xl'>Quantity:</span>
+                <button className="px-4 py-2 bg-gray-800 text-white rounded-lg">-</button>
+                <span className='text-xl'>{product.quantity}</span>
+                <button className="px-4 py-2 bg-gray-800 text-white rounded-lg">+</button>
+
+              </div>
               <div>
                 {product.ProductCategory && product.ProductCategory.map((productCategory) => (
                   <CategoryItem key={productCategory.categoryId} name={productCategory.category.name} />
                 ))}
               </div>
               <div className=''>
-              <button className="bg-[#1C1C1C] text-white py-4 px-8 mb-6 rounded-lg text-xl hover:bg-gray-700 w-full">
-              ADD TO CART
-            </button>
+                <button className="bg-[#1C1C1C] text-white py-4 px-8 mb-6 rounded-lg text-xl hover:bg-gray-700 w-full">
+                  ADD TO CART
+                </button>
                 <Link href={`/product/${id}/edit`} className='mt-4 px-4 py-2 bg-purple-500 text-white rounded hover:bg-green-400'>
                   Edit
                 </Link>
@@ -173,8 +174,11 @@ const ProductDetail = () => {
           <div className='my-2 bg-[#1C1C1C] text-white min-w-full p-3'>
             <div className="text-2xl">
               <div>Related Product</div>
-              <div><RelatedProductSlide category={product.ProductCategory[0]?.categoryId} />
-</div>
+<RelatedProductSlide
+ category={product.ProductCategory.map(cat => cat.categoryId)}
+ name={product.name}
+ productId={product.id}
+/>
 
             </div>
           </div>

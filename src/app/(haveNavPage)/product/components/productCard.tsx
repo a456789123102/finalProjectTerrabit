@@ -15,7 +15,7 @@ type Product = {
   Image: { imageUrl: string }[];
 };
 const CategoryItem = ({ name, categoryId, onClick }: { name: string; categoryId: number; onClick: (id: number) => void }) => {
-  return <div className='px-2 py-1  ml-2 bg-blue-300 hover:bg-blue-400 flex justify-center rounded-md text-xs cursor-pointer'   onClick={() => onClick(categoryId)}
+  return <div className='px-2 py-1  ml-2 bg-blue-300 hover:bg-blue-400 flex justify-center rounded-md text-[0.6rem] cursor-pointer '   onClick={() => onClick(categoryId)}
   >{name}</div>;
 };
 
@@ -63,18 +63,18 @@ const ProductCard = ({ product }: { product: Product }) => {
   )}
 </div>
         <div className="text-gray-700 mb-1">Quantity: {product.quantity}</div>
-        <div className="flex flex-row">
-          {/* แสดงชื่อ categories พร้อม handleCatClick */}
-          {product.ProductCategory &&
-            product.ProductCategory.map((productCategory) => (
-              <CategoryItem
-                key={productCategory.categoryId}
-                name={productCategory.category.name}
-                categoryId={productCategory.categoryId}
-                onClick={handleCatClick} // ส่ง handleCatClick เข้าไปใน CategoryItem
-              />
-            ))}
-        </div>
+        <div className="flex flex-wrap gap-2 max-w-[220px]">
+  {/* แสดงชื่อ categories พร้อม handleCatClick */}
+  {product.ProductCategory &&
+    product.ProductCategory.map((productCategory) => (
+      <CategoryItem
+        key={productCategory.categoryId}
+        name={productCategory.category.name}
+        categoryId={productCategory.categoryId}
+        onClick={handleCatClick} // ส่ง handleCatClick เข้าไปใน CategoryItem
+      />
+    ))}
+</div>
       </div>
 
 

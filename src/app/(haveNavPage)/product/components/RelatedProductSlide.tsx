@@ -1,32 +1,32 @@
-"use client";
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import React from "react";
-import { fetchProducts } from "@/app/apis/product";
+import React, { useEffect, useState } from 'react'
+import { fetchProducts } from '../../../apis/product'
 
-function RelatedProductSlide({ category }) {
-  const [product, setProduct] = useState([]);
 
+function RelatedProductSlide({ category, name, productId }) {
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const fetchProductList = async () => {
     try {
-      const productData = await fetchProducts(category); // ส่ง array ของ category ไปที่ fetchProducts
-      setProduct(productData);
-      console.log(productData);
+      const products = await fetchProducts(null, category);
+      const sameCategoryProducts = products.filter((product) => product.id !== productId);
+      setRelatedProducts(sameCategoryProducts);
+console.log({massage:'success to fetch related Product'},sameCategoryProducts);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error('Error fetching Related products:', error);
     }
-  };
-
-  useEffect(() => {
-    if (category) { // ตรวจสอบแค่ category มีค่า ไม่จำเป็นต้องใช้ length
+  }
+ useEffect(() => {
+    if (category && name) {
       fetchProductList();
     }
-  }, [category]);
+  }, [category, name]);
 
   return (
-    <div className="related-product-slide">
-      {product.map((e) => (
-        <div key={e.id}>{e.name}</div>
+    <div>
+      <h2>Related Products</h2>
+      {relatedProducts.map((product) => (
+        <div key={product.id}>
+          <p>{product.name}</p>
+        </div>
       ))}
     </div>
   );
