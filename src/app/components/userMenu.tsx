@@ -1,31 +1,32 @@
 'use client'
 import { useUserStore } from "@/store/zustand";
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 import { useRouter } from 'next/navigation'; // Import useRouter สำหรับการนำทาง
-import {me} from '../apis/user'
+import { me } from '../apis/user'
 import { useEffect } from "react";
 import { logout } from "../apis/auth";
+import Link from "next/link";
 
 export default function UserMenu() {
-  const router = useRouter(); 
-  const { username, setUser, clearUser } = useUserStore(); 
+  const router = useRouter();
+  const { username, setUser, clearUser } = useUserStore();
 
   useEffect(() => {
-    if (!username) { 
-      me() 
+    if (!username) {
+      me()
         .then((data) => {
-          setUser(data); 
+          setUser(data);
         })
         .catch(() => {
           //router.push("/login"); 
         });
     }
-  }, [setUser, username, router]); 
+  }, [setUser, username, router]);
 
   const handleLogout = async () => {
-    await logout(); 
-    clearUser(); 
-    router.push("/login"); 
+    await logout();
+    clearUser();
+    router.push("/login");
   };
 
 
@@ -48,7 +49,7 @@ export default function UserMenu() {
     {
       key: "Logout",
       label: "Logout",
-      onClick : handleLogout
+      onClick: handleLogout
     }
   ];
 
@@ -58,11 +59,15 @@ export default function UserMenu() {
 
   return (
     username ? (
-      <div className="text-yellow-600 hover:bg-orange-100 cursor-pointer">
-        <Dropdown>
+      <div className="flex flex-row justify-center items-center w-full text-yellow-600 ">
+        <Dropdown >
           <DropdownTrigger>
-            <Button variant="bordered">
-              User Menu
+            <Button variant="bordered" className=" hover:bg-orange-100 cursor-pointer justify-center items-center ">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7" >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+              </svg>
+
+
             </Button>
           </DropdownTrigger>
           <DropdownMenu
@@ -81,10 +86,16 @@ export default function UserMenu() {
             ))}
           </DropdownMenu>
         </Dropdown>
+        <div className=" hover:bg-orange-100 cursor-pointer w-full flex justify-center items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+
+        </div>
       </div>
     ) : (
-      <div>Please login</div>
+      <Link href={'/login'}>Please login</Link>
     )
   );
-  
+
 }

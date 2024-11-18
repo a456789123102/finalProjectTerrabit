@@ -41,8 +41,8 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   return (
-    <div className="border rounded-lg p-4 shadow-lg hover:bg-[#ECDFCC] flex flex-col gap-2 bg-white h-full">
-      <div className="text-xl font-semibold mb-2 text-black">{product.name}</div>
+    <div className="border p-4  hover:bg-[#ECDFCC] flex flex-col gap-2 bg-white h-full">
+      <div className="text-[17px] font-semibold mb-2 text-black py-2 h-14 flex items-center justify-center">{product.name}</div>
 
       <div className="w-full h-[250px] overflow-hidden rounded-lg shadow-lg">
         <Image

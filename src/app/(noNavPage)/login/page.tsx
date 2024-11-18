@@ -5,6 +5,7 @@ import InputText from '../../components/inputText';
 import { login } from '@/app/apis/auth';
 import { useRouter } from "next/navigation";
 import { useUserStore } from '@/store/zustand';
+import Link from 'next/link';
 
 function Login() {
   const router = useRouter();
@@ -31,17 +32,22 @@ function Login() {
   }, [id, router]); // ใช้ id เป็น dependency เพื่อรอให้ id เปลี่ยนแปลงหลังจาก login
 
   return (
-    <div>
-      <Text className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE]'>
-        <div className='bg-[#5C8374] p-5 flex justify-center flex-col items-center'>
-          <div>
-            <div className='justify-center flex py-3'>Login</div>
+    <div className='w-full h-screen flex flex-col items-center justify-center '>
+      <Text className='bg-white p-5 px-16 flex justify-center flex-col items-center w-1/4'>
+        <div className='w-full'>
+          <div className='w-full'>
+            <div className='justify-center flex py-3 text-4xl  font-bold'>LOGIN</div>
             <InputText label='Username' value={username} onChange={setUsername} />
             <InputText label='Password' value={password} onChange={setPassword} />
           </div>
-          <button className='justify-center flex py-3 bg-yellow-200 w-28 my-4' onClick={handleLogin}>
-            Login
+          <button className='text-white justify-center flex py-3 my-4 bg-[#2E2E2E] hover:bg-[#111111] w-full' onClick={handleLogin}>
+            Sign in
           </button>
+          <div className='text-sm space-y-1 flex flex-col items-center font-bold text-[#2E2E2E] '>
+            <Link href={'/product'} className='hover:text-[#111111] hover:underline cursor-pointer'>Return to Store</Link>
+            <Link href={'/register'} className='hover:text-[#111111] hover:underline cursor-pointer'>create account</Link>
+            <div className='hover:text-[#111111] hover:underline cursor-pointer'>Forgot your password?</div>
+          </div>
         </div>
       </Text>
     </div>

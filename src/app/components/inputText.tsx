@@ -11,10 +11,10 @@ type InputTextProps = {
 
 function InputText({ label, type = "text", value, onChange }: InputTextProps) {
   return (
-    <div className='flex flex-col my-1'>
+    <div className='flex flex-col my-1 '>
       <Text className='mb-1 text-sm'>{label}</Text>
       <input
-        className='bg-slate-200 mb-1'
+        className='bg-white mb-1 border-gray-700 border h-9 px-4 hover:border-yellow-500'
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)} 
