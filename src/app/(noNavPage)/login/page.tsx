@@ -3,22 +3,29 @@ import { useEffect, useState } from 'react';
 import Text from '../../components/text';
 import InputText from '../../components/inputText';
 import { login } from '@/app/apis/auth';
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useUserStore } from '@/store/zustand';
 import Link from 'next/link';
 
 function Login() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { id, setUser } = useUserStore(); // ดึง setUser มาด้วยเพื่อเก็บข้อมูลผู้ใช้
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const redirect = searchParams.get("redirect");
 
   // เมื่อผู้ใช้ login สำเร็จ ให้เก็บข้อมูลผู้ใช้ลงใน zustand store และ redirect ไปที่หน้าแรก
   const handleLogin = async () => {
     try {
       const userData = await login(username, password); // สมมติว่า login API จะส่งข้อมูลผู้ใช้กลับมา
       setUser({ id: userData.id, username: userData.username }); // เก็บข้อมูลผู้ใช้ใน store
-      router.push("/"); // หลังจาก login สำเร็จ redirect ไปหน้าแรก
+
+      if (redirect) {
+        router.push(redirect); // redirect ไปยังหน้าที่ระบุ
+      } else {
+        router.push("/"); // ถ้าไม่มี redirect, ไปหน้าแรก
+      }
     } catch (error) {
       console.error('Login error:', error);
     }

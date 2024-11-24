@@ -1,4 +1,5 @@
 'use client'
+import { useUserStore } from "@/store/zustand";
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getProductById } from '../../../apis/product';
@@ -7,6 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import StarRating from '@/app/components/starRating';
 import RelatedProductSlide from "../components/RelatedProductSlide"
+import {createCart} from "@/app/apis/carts"
+import { useRouter } from 'next/navigation';
 
 
 type Product = {
@@ -39,17 +42,49 @@ interface Review {
   };
   comments: string;
 }
+
 const ProductDetail = () => {
+  const { username} = useUserStore();
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const [refreshKey, setRefreshKey] = useState(0);
   const [reviews, serReviews] = useState([]);
+  const [AddQuantity, setAddQuantity] = useState(1);
+  const router = useRouter();
 
-
-  const CategoryItem = ({ name }: { name: string }) => {
-    return <div>{name}</div>;
+  const CategoryItem = ({ name, id }: { name: string; id: number }) => {
+    return <Link href={`/product/category/${id}`} className='p-2 mx-2 bg-lime-950 justify-center hover:text-amber-300 hover:underline'>{name}</Link>;
   };
+  const handleIncreaseClick = () => {
+    if(AddQuantity < product.quantity){
+      setAddQuantity(AddQuantity + 1);
+    }
+  };
+  const handleDecreaseClick = () => {
+    if (AddQuantity > 1) {
+      setAddQuantity(AddQuantity - 1);
+    }
+  };
+
+  const handleAddToCart = async () =>{
+    if (!username) {
+      alert("You must be logged in to add to cart");
+      const currentPath = encodeURIComponent(window.location.pathname);
+      router.push(`/login?redirect=${currentPath}`);
+      return;
+    }
+    if (!product || !product.id || !product.finalPrice || AddQuantity <= 0) {
+      alert("Product details are incomplete or quantity is invalid");
+      return; 
+    }
+    try {
+      await createCart(product.id, AddQuantity, product.finalPrice * AddQuantity);
+      router.push(`/cart/myCart`)
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    alert("Failed to add to cart. Please try again later.");
+    }
+  }
 
   useEffect(() => {
     if (id) {
@@ -67,7 +102,7 @@ const ProductDetail = () => {
 
       fetchProduct();
     }
-  }, [id, refreshKey]);
+  }, [id]);
 
   useEffect(() => {
     if (id) {
@@ -83,11 +118,6 @@ const ProductDetail = () => {
       fetchReviews();
     }
   }, [id]);
-
-  const handleRefresh = () => {
-    setLoading(true);
-    setRefreshKey(prevKey => prevKey + 1); // เปลี่ยนค่า refreshKey เพื่อ trigger useEffect
-  };
 
   if (loading) return <p>Loading...</p>;
 
@@ -129,18 +159,20 @@ const ProductDetail = () => {
               <div className='text-xl'>Left : {product.quantity}</div>
               <div className='flex items-center gap-4 mb-6'>
                 <span className='text-xl'>Quantity:</span>
-                <button className="px-4 py-2 bg-gray-800 text-white rounded-lg">-</button>
-                <span className='text-xl'>{product.quantity}</span>
-                <button className="px-4 py-2 bg-gray-800 text-white rounded-lg">+</button>
+                <div className='bg-white text-black text-[0.8rem]'>
+                  <button className="px-4 py-2 border" onClick={handleDecreaseClick}>-</button>
+                  <span className='text-xl px-4 py-2'>{AddQuantity}</span>
+                  <button className="px-4 py-2  border"onClick={handleIncreaseClick}>+</button>
+                </div>
 
               </div>
-              <div>
+              <div className='pb-5'>
                 {product.ProductCategory && product.ProductCategory.map((productCategory) => (
-                  <CategoryItem key={productCategory.categoryId} name={productCategory.category.name} />
+                  <CategoryItem key={productCategory.categoryId} name={productCategory.category.name} id={productCategory.categoryId} />
                 ))}
               </div>
               <div className=''>
-                <button className="bg-[#1C1C1C] text-white py-4 px-8 mb-6 rounded-lg text-xl hover:bg-gray-700 w-full">
+                <button className="bg-[#1C1C1C] text-white py-4 px-8 mb-6 rounded-lg text-xl hover:bg-gray-700 w-full" onClick={handleAddToCart}>
                   ADD TO CART
                 </button>
                 <Link href={`/product/${id}/edit`} className='mt-4 px-4 py-2 bg-purple-500 text-white rounded hover:bg-green-400'>
@@ -174,13 +206,13 @@ const ProductDetail = () => {
           <div className='my-2 bg-[#1C1C1C] min-w-full p-5'>
             <div className="text-2xl">
               <div className='my-2 pb-2'>Related Product</div>
-<div className='flex justify-between items-center '>
-<RelatedProductSlide
- category={product.ProductCategory.map(cat => cat.categoryId)}
- name={product.name}
- productId={product.id}
-/>
-</div>
+              <div className='flex justify-between items-center '>
+                <RelatedProductSlide
+                  category={product.ProductCategory.map(cat => cat.categoryId)}
+                  name={product.name}
+                  productId={product.id}
+                />
+              </div>
             </div>
           </div>
         </div>
