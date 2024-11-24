@@ -66,7 +66,7 @@ const ProductDetail = () => {
     }
   };
 
-  const handleAddToCart = async () =>{
+  const handleAddToCart = async () =>{ 
     if (!username) {
       alert("You must be logged in to add to cart");
       const currentPath = encodeURIComponent(window.location.pathname);
