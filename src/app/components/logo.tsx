@@ -4,6 +4,7 @@ import Text from "./text";
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/zustand';
 import AdminMenu from './adminMenu';
+import UserMenu from './userMenu';
 
 function Logo() {
   const router = useRouter();
@@ -27,6 +28,7 @@ function Logo() {
       {isAdmin && (
         <div className='flex items-center space-x-4'>
           <AdminMenu />
+          <UserMenu/>
         </div>
       )}
     </Text>

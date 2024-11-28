@@ -35,17 +35,17 @@ export default function UserMenu() {
     {
       key: "profile",
       label: "My Profile",
-      path: "/me" // เส้นทางเมื่อคลิก "My Profile"
+      path: "/user/account/profile" // เส้นทางเมื่อคลิก "My Profile"
     },
     {
-      key: "Create Product",
-      label: "Create Product",
-      path: "/product/create" // เส้นทางเมื่อคลิก "Copy link"
+      key: "My Purchase",
+      label: "My Purchase",
+      path: "/user/purchase" // เส้นทางเมื่อคลิก "Copy link"
     },
     {
-      key: "edit",
-      label: "Edit file",
-      path: "/edit-file" // เส้นทางเมื่อคลิก "Edit file"
+      key: "Notification",
+      label: "Notification",
+      path: "/notification" // เส้นทางเมื่อคลิก "Edit file"
     },
     {
       key: "Logout",
@@ -60,26 +60,25 @@ export default function UserMenu() {
 
   return (
     username ? (
-      <div className="flex flex-row justify-center items-center w-full text-yellow-600 ">
+      <div className="flex flex-row items-center text-yellow-600 h-full justify-end">
+        <div>Welcome! {username}</div>
         <Dropdown >
           <DropdownTrigger>
-            <Button variant="bordered" className=" hover:bg-orange-100 cursor-pointer justify-center items-center ">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-7">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
-              </svg>
-
-
+            <Button variant="bordered">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className=" size-6 hover:size-7  hover:bg-orange-100 cursor-pointer w-full flex justify-center items-center">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
             </Button>
           </DropdownTrigger>
           <DropdownMenu
             aria-label="Dynamic Actions"
             items={items}
-            className="bg-[#040D12] text-yellow-600  shadow-md rounded-lg"
+            className="bg-white text-yellow-600  shadow-md py-2"
           >
             {items.map((item) => (
               <DropdownItem
                 key={item.key}
-                className="hover:bg-orange-100"
+                className="hover:bg-orange-100 py-1"
                 onClick={() => item.onClick ? item.onClick() : handleAction(item.path)}
               >
                 {item.label}
@@ -87,12 +86,7 @@ export default function UserMenu() {
             ))}
           </DropdownMenu>
         </Dropdown>
-        <div className=" hover:bg-orange-100 cursor-pointer w-full flex justify-center items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-          </svg>
-
-        </div>
+        
       </div>
     ) : (
       <Link href={'/login'}>Please login</Link>
