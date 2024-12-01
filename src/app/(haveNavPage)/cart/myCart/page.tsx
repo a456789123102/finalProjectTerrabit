@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import ProductCart from "../components/productCart";
 import { myCarts } from '@/app/apis/carts';
-import useCartStore from '@/store/cartStore';
+import {useCartStore} from '@/store/cartStore';
+
 
 function MyCart() {
   const [products, setProducts] = useState([]);
@@ -25,6 +26,8 @@ function MyCart() {
       setCartItemCount(0); // กรณีเกิดข้อผิดพลาดในการดึงข้อมูล
     }
   };
+
+
 
 
   useEffect(() => {

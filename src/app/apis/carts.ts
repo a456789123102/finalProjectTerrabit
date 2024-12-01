@@ -26,3 +26,25 @@ export const myCarts = async () => {
     throw error;
   }
 };
+
+export const updateCart = async (
+  productId: number,
+  quantity: number
+) => {
+  try {
+    const res = await axios.put(`/api/cart/update/${productId}`,{quantity});
+    return res.data;
+  } catch (error) {
+    console.error("Error updating cart:",error);
+  }
+}
+
+export const deleteCart = async (productId: number) => {
+  try {
+    const res = await axios.delete(`/api/cart/delete/${productId}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error deleting cart:", error);
+    throw error;
+  }
+}

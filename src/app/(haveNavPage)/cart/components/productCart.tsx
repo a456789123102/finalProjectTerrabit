@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { deleteCart } from '@/app/apis/carts';
 
 type Cart = {
   id: number;
@@ -22,17 +23,13 @@ function ProductCart({ cart }: { cart: Cart }) {
       ? cart.product.Image[0].imageUrl
       : 'https://lovedrinks.com/cdn-cgi/imagedelivery/lPz29URYX3W9lk2JWbxsjA/lovedrinks.com/2023/08/No-Image-Placeholder.svg_.png/w=9999';
 
-      const updateQuantity = async (newQuantity: number) => {
-        if (newQuantity <= 0) {
-            console.error('Quantity must be greater than 0');
-            return;
-        }
+      const handleDeleteCart = async (cartId) => {
         try {
-            
+          await deleteCart(cartId);  // ส่ง cartId ไปยัง deleteCart
         } catch (error) {
-            
+          console.error("Error deleting cart:", error);
         }
-      }
+      };
 
   return (
     <div className='bg-slate-50 mt-5 w-full h-20 flex flex-row p-2 text-[0.8rem]'>
@@ -66,7 +63,7 @@ function ProductCart({ cart }: { cart: Cart }) {
         </div>
         <div className='flex flex-col'>
           <div>
-            <div>Delete</div>
+            <div onClick={() => handleDeleteCart(cart.id)}>Delete</div>
             <div>Related</div>
           </div>
         </div>

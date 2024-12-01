@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Text from './text';
 import Link from 'next/link';
-import useCartStore from '@/store/cartStore';
+import {useCartStore} from '@/store/cartStore';
 
 const menuItems = [
   { name: 'Games', href: null },

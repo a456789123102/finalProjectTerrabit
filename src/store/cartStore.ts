@@ -5,4 +5,4 @@ const useCartStore = create((set) => ({
   setCartItemCount: (count: number) => set({ cartItemCount: count }), // ฟังก์ชันสำหรับอัพเดทจำนวนสินค้า
 }));
 
-export default useCartStore;
+export { useCartStore };

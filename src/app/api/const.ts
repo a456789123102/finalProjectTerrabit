@@ -52,8 +52,6 @@ export const patch = async (
   token: string = ""
 ): Promise<Response> => {
   const headers = getHeaders(token);  // ใช้ getHeaders ในการสร้าง headers
-
-  console.log("Sending token:", token);  // ตรวจสอบ token ที่จะถูกส่ง
   
   const fullUrl = `${API_URL}${url}`;
   console.log("Full URL:", fullUrl);  // ตรวจสอบ URL ที่จะส่งคำขอ
@@ -76,3 +74,28 @@ export const patch = async (
   
   return data; // คืนค่า data โดยตรงแทน res
 };
+
+export const deleteRequest = async (
+  url: string,
+  body: any = null,
+  token: string = ""
+):  Promise<Response> => {
+  const headers = getHeaders(token);
+  const bodyContent = body? JSON.stringify(body): undefined;
+  const fullUrl = `${API_URL}${url}`;
+  console.log("Deleting URL:", fullUrl);  
+
+  const res = await fetch(fullUrl,{
+    method: "DELETE",
+    headers: headers,
+    body: bodyContent,
+  });
+  if(!res.ok){
+    const errorData = await res.json();
+    console.error("Error response from server:", errorData);
+    throw new Error(`Error: ${res.status} ${res.statusText}`);
+  }
+  const data = res.json();
+  return data;
+
+}
