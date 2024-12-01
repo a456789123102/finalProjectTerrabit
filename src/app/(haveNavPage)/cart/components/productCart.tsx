@@ -1,44 +1,78 @@
-import React from 'react'
+import React, { useState } from 'react';
+import Image from 'next/image';
 
 type Cart = {
-id: number;
-userId: number;
-productId: number;
-quantity:number;
-}
+  id: number;
+  userId: number;
+  productId: number;
+  quantity: number;
+  product: {
+    Image: { imageUrl: string }[];
+    name: string;
+    price: number;
+    finalPrice: number;
+  };
+};
 
-function productCart({ cart}:{cart:Cart}) {
-        return (
-        <div className='bg-slate-50 mt-5 w-full h-20 flex flex-row p-2 text-[0.8rem]'>
-            <div className='w-1/2 pl-5 flex border'>
-                <div className='pr-2 items-center flex'>AAA</div>
-                <div className='items-start'>{cart.product.name}</div>
-            </div>
-            <div className='flex flex-row w-1/2 justify-around items-center'>
-                <div className='flex  gap-2'>
-                    <div className='line-through'>฿{cart.product.price}</div>
-                    <div>฿{cart.product.finalPrice}</div>
-                </div>
-                <div className='bg-white text-black '>
-                    <button className="px-2 py-1 border" >-</button>
-                    <span className=' px-3 py-1'>{cart.quantity}</span>
-                    <button className="px-2 py-1  border">+</button>
-                </div>
-                <div>฿{cart.product?.finalPrice && cart.quantity
-        ? `฿${cart.product.finalPrice * cart.quantity}`
-        : "Price not available"}</div>
-                <div className='flex flex-col'>
-                    <div>
-                        <div>Delete</div>
-                        <div>Related</div>
-                    </div>
+function ProductCart({ cart }: { cart: Cart }) {
+  const [AddQuantity, setAddQuantity] = useState(cart.quantity);
 
-                </div>
+  const productImage =
+    cart.product.Image && cart.product.Image.length > 0
+      ? cart.product.Image[0].imageUrl
+      : 'https://lovedrinks.com/cdn-cgi/imagedelivery/lPz29URYX3W9lk2JWbxsjA/lovedrinks.com/2023/08/No-Image-Placeholder.svg_.png/w=9999';
 
-            </div>
+      const updateQuantity = async (newQuantity: number) => {
+        if (newQuantity <= 0) {
+            console.error('Quantity must be greater than 0');
+            return;
+        }
+        try {
+            
+        } catch (error) {
+            
+        }
+      }
 
+  return (
+    <div className='bg-slate-50 mt-5 w-full h-20 flex flex-row p-2 text-[0.8rem]'>
+      <div className='w-1/2 pl-5 flex border'>
+        <Image
+          className="object-cover cursor-pointer w-11 h-full"
+          src={productImage}
+         
+          alt={cart.product.name}
+          width={300}
+          height={250}
+          loading="lazy"  // เพิ่ม lazy loading
+          onError={() => console.error('Failed to load image')}  // ตรวจจับข้อผิดพลาด
+        />
+        <div className='items-start'>{cart.product.name}</div>
+      </div>
+      <div className='flex flex-row w-1/2 justify-around items-center'>
+        <div className='flex gap-2'>
+          <div className='line-through'>฿{cart.product.price}</div>
+          <div>฿{cart.product.finalPrice}</div>
         </div>
-    )
+        <div className='bg-white text-black'>
+          <button className="px-2 py-1 border">-</button>
+          <span className=' px-3 py-1'>{cart.quantity}</span>
+          <button className="px-2 py-1  border">+</button>
+        </div>
+        <div>
+          ฿{cart.product?.finalPrice && cart.quantity
+            ? `฿${cart.product.finalPrice * cart.quantity}`
+            : "Price not available"}
+        </div>
+        <div className='flex flex-col'>
+          <div>
+            <div>Delete</div>
+            <div>Related</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default productCart
+export default ProductCart;

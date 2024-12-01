@@ -1,10 +1,21 @@
 import axios from "axios";
-
+import {me} from "./user"
+import { useUserStore } from "@/store/zustand";
+import { myCarts } from "./carts";
+import { useCartStore } from "@/store/cartStore";
 //login function
 export const login = async (username: string, password: string) => {
     try {
         const response = await axios.post('/api/auth/login', { username, password });
         console.log("login success:",response);
+        //set zustand user
+        const userData = await me(); 
+        const { setUser } = useUserStore.getState(); 
+        setUser(userData);
+        //set zustand cartItemNumber
+        const cartItemCount = await myCarts();
+        const { setCartItemCount } = useCartStore.getState();
+        setCartItemCount(cartItemCount.length);
         return response.data;
         
     } catch (error) {

@@ -1,37 +1,48 @@
 'use client';
+
 import React, { useEffect } from 'react';
-import Text from "./text";
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/zustand';
 import AdminMenu from './adminMenu';
 import UserMenu from './userMenu';
+import { me } from '../apis/user'; // API ที่ใช้ดึงข้อมูลผู้ใช้
+import Link from 'next/link';
 
 function Logo() {
   const router = useRouter();
-  const { isAdmin } = useUserStore();  // เช็คสถานะ isAdmin
+  const { username, isAdmin, setUser } = useUserStore();  // เช็คสถานะ username และ isAdmin
 
   useEffect(() => {
-    if (!isAdmin) {
-      console.log('Admin Menu should disappear');
+    if (!username) {
+      // ถ้าไม่มี username ใน store ให้ลองดึงข้อมูลจาก API หรือทำการ redirect ไปหน้า login
+      me()
+        .then((data) => {
+          setUser(data);  // เซ็ตข้อมูลผู้ใช้
+        })
+        .catch(() => {
+          router.push("/login");  // ถ้าผิดพลาดก็ให้ไปที่หน้า login
+        });
     }
-  }, [isAdmin]);
+  }, [username, setUser, router]);  // ตรวจสอบเมื่อ username เปลี่ยน
 
   const handleClick = () => {
     router.push('/');
   };
 
   return (
-    <Text className='flex flex-row justify-between w-screen h-8 px-5 bg-[#181C14] '>
+    <div className='flex flex-row justify-between w-screen h-8 px-5 bg-[#181C14]'>
       <div className='text-yellow-500 hover:text-yellow-300 cursor-pointer' onClick={handleClick}>
         Terrabit pixel Studio
       </div>
-      {isAdmin && (
+      {username ? (
         <div className='flex items-center space-x-4'>
-          <AdminMenu />
-          <UserMenu/>
+          <UserMenu /> {/* แสดง UserMenu ถ้ามี username */}
+          {isAdmin && <AdminMenu />} {/* แสดง AdminMenu ถ้าเป็น admin */}
         </div>
+      ) : (
+        <Link href="/login" className="text-yellow-500">Please login</Link>
       )}
-    </Text>
+    </div>
   );
 }
 
