@@ -77,25 +77,33 @@ export const patch = async (
 
 export const deleteRequest = async (
   url: string,
-  body: any = null,
   token: string = ""
-):  Promise<Response> => {
+): Promise<any> => {
   const headers = getHeaders(token);
-  const bodyContent = body? JSON.stringify(body): undefined;
   const fullUrl = `${API_URL}${url}`;
-  console.log("Deleting URL:", fullUrl);  
+  console.log("Deleting URL:", fullUrl);
 
-  const res = await fetch(fullUrl,{
+  const res = await fetch(fullUrl, {
     method: "DELETE",
-    headers: headers,
-    body: bodyContent,
+    headers: headers
   });
-  if(!res.ok){
-    const errorData = await res.json();
-    console.error("Error response from server:", errorData);
-    throw new Error(`Error: ${res.status} ${res.statusText}`);
-  }
-  const data = res.json();
-  return data;
 
+  if (!res.ok) {
+    const text = await res.text();  // อ่านข้อมูลเป็น text ก่อน
+    console.error("Error response from server:", text);
+    throw new Error(`Error: ${res.status} ${res.statusText} - Response: ${text}`);
+  }
+
+  let data;
+  try {
+    data = await res.json();  // แปลง response เป็น JSON
+  } catch (error) {
+    console.error("Failed to parse JSON response:", error);
+    throw new Error('Response is not valid JSON');
+  }
+
+  console.log("Response data:", data);
+  return data;
 }
+
+

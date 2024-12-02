@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { deleteCart } from '@/app/apis/carts';
 
 type Cart = {
   id: number;
@@ -15,7 +14,7 @@ type Cart = {
   };
 };
 
-function ProductCart({ cart }: { cart: Cart }) {
+function ProductCart({ cart, onDelete }: { cart: Cart; onDelete: () => void }) {
   const [AddQuantity, setAddQuantity] = useState(cart.quantity);
 
   const productImage =
@@ -23,26 +22,17 @@ function ProductCart({ cart }: { cart: Cart }) {
       ? cart.product.Image[0].imageUrl
       : 'https://lovedrinks.com/cdn-cgi/imagedelivery/lPz29URYX3W9lk2JWbxsjA/lovedrinks.com/2023/08/No-Image-Placeholder.svg_.png/w=9999';
 
-      const handleDeleteCart = async (cartId) => {
-        try {
-          await deleteCart(cartId);  // ส่ง cartId ไปยัง deleteCart
-        } catch (error) {
-          console.error("Error deleting cart:", error);
-        }
-      };
-
   return (
     <div className='bg-slate-50 mt-5 w-full h-20 flex flex-row p-2 text-[0.8rem]'>
       <div className='w-1/2 pl-5 flex border'>
         <Image
           className="object-cover cursor-pointer w-11 h-full"
           src={productImage}
-         
           alt={cart.product.name}
           width={300}
           height={250}
-          loading="lazy"  // เพิ่ม lazy loading
-          onError={() => console.error('Failed to load image')}  // ตรวจจับข้อผิดพลาด
+          loading="lazy"
+          onError={() => console.error('Failed to load image')}
         />
         <div className='items-start'>{cart.product.name}</div>
       </div>
@@ -63,7 +53,7 @@ function ProductCart({ cart }: { cart: Cart }) {
         </div>
         <div className='flex flex-col'>
           <div>
-            <div onClick={() => handleDeleteCart(cart.id)}>Delete</div>
+            <div onClick={onDelete} className='cursor-pointer hover:underline hover:text-red-600'>Delete</div>
             <div>Related</div>
           </div>
         </div>

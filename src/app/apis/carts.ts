@@ -39,12 +39,17 @@ export const updateCart = async (
   }
 }
 
-export const deleteCart = async (productId: number) => {
+export const deleteCart = async (cartId: number) => {
   try {
-    const res = await axios.delete(`/api/cart/delete/${productId}`);
+    const res = await axios.delete(`/api/cart/delete/${cartId}`);
     return res.data;
   } catch (error) {
-    console.error("Error deleting cart:", error);
-    throw error;
+    // ตรวจสอบ error ที่ได้รับจาก axios
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error deleting cart:", error.response?.data || error.message);
+    } else {
+      console.error("Unexpected error deleting cart:", error);
+    }
+    throw error;  // โยน error ต่อไป
   }
 }
