@@ -7,6 +7,7 @@ import AdminMenu from './adminMenu';
 import UserMenu from './userMenu';
 import { me } from '../apis/user'; // API ที่ใช้ดึงข้อมูลผู้ใช้
 import Link from 'next/link';
+import Text from './text';
 
 function Logo() {
   const router = useRouter();
@@ -30,10 +31,10 @@ function Logo() {
   };
 
   return (
-    <div className='flex flex-row justify-between w-screen h-8 px-5 bg-[#181C14]'>
-      <div className='text-yellow-500 hover:text-yellow-300 cursor-pointer' onClick={handleClick}>
+    <Text className='flex flex-row justify-between w-screen h-8 px-5 bg-[#181C14]'>
+      <Link href={'/'} className='text-yellow-500 hover:text-yellow-300 cursor-pointer' onClick={handleClick}>
         Terrabit pixel Studio
-      </div>
+      </Link>
       {username ? (
         <div className='flex items-center space-x-4'>
           <UserMenu /> {/* แสดง UserMenu ถ้ามี username */}
@@ -42,7 +43,7 @@ function Logo() {
       ) : (
         <Link href="/login" className="text-yellow-500">Please login</Link>
       )}
-    </div>
+    </Text>
   );
 }
 

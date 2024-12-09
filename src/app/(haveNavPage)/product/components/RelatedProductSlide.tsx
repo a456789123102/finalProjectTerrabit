@@ -53,7 +53,7 @@ function RelatedProductSlide({ category, name, productId }) {
   return (
     <div className="flex flex-row h-full">
       {relatedProducts.map((product) => (
-        <div key={product.id} className="mx-2 w-1/4">
+        <div key={product.id} className="mx-2 w-1/4  min-w-[250px]">
           <ProductCard product={product} />
         </div>
       ))}

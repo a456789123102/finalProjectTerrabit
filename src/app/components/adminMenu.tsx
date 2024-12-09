@@ -1,10 +1,11 @@
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
-import { useRouter } from 'next/navigation'; // Import useRouter สำหรับการนำทาง
+import { useRouter } from 'next/navigation'; 
+import { useState } from "react";
 
 export default function AdminMenu() {
-  const router = useRouter(); // ใช้ useRouter สำหรับการนำทาง
+  const router = useRouter(); 
+  const [isOpen, setIsOpen] = useState(false);
 
-  // เพิ่ม path สำหรับแต่ละ item
   const items = [
     {
       key: "allWebData",
@@ -14,41 +15,56 @@ export default function AdminMenu() {
     {
       key: "createProduct",
       label: "Create Product",
-      path: "/product/create" // เส้นทางเมื่อคลิก "Copy link"
+      path: "/product/create" 
     },
     {
       key: "addProductImage",
       label: "Add Product Image",
-      path: "/product/create/image" // เส้นทางเมื่อคลิก "Edit file"
+      path: "/product/create/image" 
     },
     {
         key: "CreateCategory",
         label: "Create Category",
-        path: "/product/category/create" // เส้นทางเมื่อคลิก "Edit file"
+        path: "/product/category/create"
       },
     {
       key: "delete",
       label: "Delete file",
-      path: "/delete-file" // เส้นทางเมื่อคลิก "Delete file"
+      path: "/delete-file" 
     }
   ];
 
   const handleAction = (path: string) => {
-    router.push(path); // ใช้ path ที่กำหนดในแต่ละ item เพื่อนำทาง
+    router.push(path); 
   };
+
+  
 
   return (
     <div className="text-yellow-600 hover:bg-orange-100 cursor-pointer">
-      <Dropdown>
+      <Dropdown isOpen={isOpen}>
         <DropdownTrigger>
-          <Button variant="bordered">
+          <Button variant="bordered"
+          onMouseEnter={() => {
+            setIsOpen(true);
+          }}
+          onMouseLeave={() => {
+            setIsOpen(false);
+          }}
+          >
             Admin Menu
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           disabledKeys={["addProductImage", "delete"]}
           aria-label="Dynamic Actions"
-          className="bg-[#040D12] text-yellow-600  shadow-md rounded-lg" // เพิ่มคลาสหรือสไตล์สำหรับพื้นหลัง
+          className="bg-[#040D12] text-yellow-600  shadow-md "
+          onMouseEnter={() => {
+            setIsOpen(true);
+          }}
+          onMouseLeave={() => {
+            setIsOpen(false);
+          }}
         >
           {items.map((item) => (
             <DropdownItem

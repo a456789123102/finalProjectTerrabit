@@ -10,34 +10,31 @@ import Link from 'next/link';
 function Login() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { id, setUser } = useUserStore(); // ดึง setUser มาด้วยเพื่อเก็บข้อมูลผู้ใช้
+  const { id, setUser } = useUserStore(); 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const redirect = searchParams.get("redirect");
 
-  // เมื่อผู้ใช้ login สำเร็จ ให้เก็บข้อมูลผู้ใช้ลงใน zustand store และ redirect ไปที่หน้าแรก
+
   const handleLogin = async () => {
     try {
-      const userData = await login(username, password); // สมมติว่า login API จะส่งข้อมูลผู้ใช้กลับมา
-      setUser({ id: userData.id, username: userData.username }); // เก็บข้อมูลผู้ใช้ใน store
-
+      const userData = await login(username, password);
+      setUser({ id: userData.id, username: userData.username }); 
       if (redirect) {
-        router.push(redirect); // redirect ไปยังหน้าที่ระบุ
+        router.push(redirect); 
       } else {
-        router.push("/"); // ถ้าไม่มี redirect, ไปหน้าแรก
+        router.push("/"); 
       }
     } catch (error) {
       console.error('Login error:', error);
     }
   };
 
-  // ตรวจสอบถ้ามี id ใน store (หมายถึงผู้ใช้ได้ login แล้ว) ก็ redirect ไปหน้าแรก
   useEffect(() => {
     if (id) {
-      router.push("/"); // ถ้า login แล้ว, redirect ไปหน้าแรก
+      router.push("/"); 
     }
-  }, [id, router]); // ใช้ id เป็น dependency เพื่อรอให้ id เปลี่ยนแปลงหลังจาก login
-
+  }, [id, router]);
   return (
     <div className='w-full h-screen flex flex-col items-center justify-center '>
       <Text className='bg-white p-5 px-16 flex justify-center flex-col items-center w-1/4'>
