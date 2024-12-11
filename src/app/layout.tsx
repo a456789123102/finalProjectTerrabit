@@ -28,8 +28,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-[#2E2E2E]">
-        <Logo />  {/* Logo จะแสดงบนสุดในทุกหน้า */}
-        {children}  {/* children จะถูกแทนที่ด้วย layout ภายใน */}
+        <Logo />  
+        {children} 
       </body>
     </html>
   );
