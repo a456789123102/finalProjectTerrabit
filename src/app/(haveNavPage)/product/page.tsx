@@ -10,20 +10,26 @@ const ProductList = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
-
+  const [pagination, setPagination] = useState({
+    page: 1, 
+    pageSize: 15, 
+    totalPages: 1, 
+    totalProducts: 0,
+  });
 
   const fetchProductList = useCallback(async () => {
     setLoading(true);
     try {
-      const productData = await fetchProducts(search, category ? [parseInt(category)] : []);
-      setProducts(productData);
-      console.log(productData)
+      const productData = await fetchProducts(search, category ? [parseInt(category)] : [], pagination.page);
+      setProducts(productData.products);
+      setPagination(productData.pagination);
+      console.log(productData);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
     }
-  }, [search, category]);
+  }, [search, category, pagination.page]); // เพิ่ม `pagination.page` เข้าไปใน dependency
 
   useEffect(() => {
     fetchProductList();
@@ -31,17 +37,31 @@ const ProductList = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setPagination((prev) => ({ ...prev, page: 1 })); // รีเซ็ตหน้ากลับไปหน้า 1 เมื่อทำการค้นหา
     fetchProductList();
   };
 
   const handleCategoryChange = (selectedCategory) => {
     setCategory(selectedCategory);
+    setPagination((prev) => ({ ...prev, page: 1 })); // รีเซ็ตหน้ากลับไปหน้า 1 เมื่อเปลี่ยน category
+  };
+
+  const handleNextPage = () => {
+    if (pagination.page < pagination.totalPages) {
+      setPagination((prev) => ({ ...prev, page: prev.page + 1 }));
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (pagination.page > 1) {
+      setPagination((prev) => ({ ...prev, page: prev.page - 1 }));
+    }
   };
 
   return (
     <div className="container mx-auto p-4 min-h-screen bg-white">
       <h1 className="text-2xl font-bold mb-4">Our products</h1>
-      <Text className='p-1 mb-4'>
+      <Text className="p-1 mb-4">
         <form onSubmit={handleSearch} className="flex space-x-4">
           <input
             type="text"
@@ -50,14 +70,17 @@ const ProductList = () => {
             placeholder="ค้นหาสินค้า"
             className="border border-gray-300 p-2 rounded w-full"
           />
-          <div className='min-w-32 min-h-12'>
+          <div className="min-w-32 min-h-12">
             <CategorySelect 
               setCategory={handleCategoryChange} 
               selectedCategory={category}
               isMulti={false}
             /> 
           </div>
-          <button type="submit" className="bg-[#1B4242] text-white px-4 py-2 rounded hover:bg-[#387478] hover:text-amber-400">
+          <button 
+            type="submit" 
+            className="bg-[#1B4242] text-white px-4 py-2 rounded hover:bg-[#387478] hover:text-amber-400"
+          >
             ค้นหา
           </button>
         </form>
@@ -72,6 +95,30 @@ const ProductList = () => {
           ))}
         </div>
       )}
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center items-center flex-col">
+        <div className="flex flex-row gap-4">
+          <button 
+            onClick={handlePrevPage} 
+            disabled={pagination.page === 1} 
+            className="bg-[#1B4242] p-2 shadow-md text-amber-300 cursor-pointer"
+          >
+            Previous
+          </button>
+          <span className="">
+            Page {pagination.page} / {pagination.totalPages}
+          </span>
+          <button 
+            onClick={handleNextPage} 
+            disabled={pagination.page === pagination.totalPages} 
+            className="bg-[#1B4242] p-2 shadow-md text-amber-300 cursor-pointer"
+          >
+            Next
+          </button>
+        </div>
+        <p className=" mt-4">{pagination.totalProducts} products found.</p>
+      </div>
     </div>
   );
 };

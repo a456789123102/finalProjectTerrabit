@@ -26,7 +26,7 @@ export const post = async (
     headers: headers,
     body: isFormData ? body : JSON.stringify(body), 
   });
-
+console.log(`full url: ${API_URL + url}`);
   return res;
 };
 

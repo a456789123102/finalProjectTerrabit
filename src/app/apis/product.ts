@@ -48,7 +48,7 @@ export const uploadProductImage = async (formData: FormData) => {
 };
 
 //ดึงหมด
-export const fetchProducts = async (search?: string, categories?: number[]) => {
+export const fetchProducts = async (search?: string, categories?: number[],page?:string) => {
   try {
     // สร้าง params โดยใช้ URLSearchParams
     const params = new URLSearchParams();
@@ -61,6 +61,9 @@ export const fetchProducts = async (search?: string, categories?: number[]) => {
       categories.forEach((category) => {
         params.append("category", category.toString()); // ส่งหมวดหมู่หลายค่าโดยไม่มี []
       });
+    }
+    if (page) {
+      params.append("page", page);
     }
 
     const res = await axios.get("/api/product/get", {
