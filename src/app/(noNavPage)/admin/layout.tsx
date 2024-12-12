@@ -54,12 +54,13 @@ function LayoutWithTheme({
   const { theme, themeColors } = useTheme();
   return (
     <div className={`relative min-h-screen `}
+    style={{ color: themeColors.text}}
     >
       <AdminNavbar toggleSidebar={toggleSidebar} isScrollDown={isScrollDown} />
       <div className={`flex flex-row`}>
         <AdminSidebar isSidebarVisible={isSidebarVisible} isScrollDown={isScrollDown} />
         <div
-          className={` ${isSidebarVisible ? 'w-5/6 ml-[16.6%]' : 'w-full'} ${isScrollDown ? 'mt-12' : 'mt-0'} ${themeColors.text}`}
+          className={` ${isSidebarVisible ? 'w-5/6 ml-[16.6%]' : 'w-full'} ${isScrollDown ? 'mt-12' : 'mt-0'} `}
         >
           {children}
         </div>

@@ -19,22 +19,22 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider = ({children}: {children: ReactNode}) => {
     const [theme, setTheme] = useState<Theme>('light');
     const toggleTheme = () => {
-        console.log('theme toggle')
+        console.log('theme toggle '+ theme);
         setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
       };
 
       const themeColors = theme === 'light' ? {
-        primary: '#FFFFFF',       // สีพื้นหลังหลัก สำหรับ theme light
-        secondary: '#F0F0F0',     // สีรอง สำหรับ theme light
-        tertiary: '#E0E0E0',       // สีเพิ่มเติม สำหรับ theme light
-        text: '#000000',           // สีข้อความ สำหรับ theme light
-        navbar: '#CCCCCC',         // สีแถบ navbar สำหรับ theme light
+        primary: '#F1F5F9',     // Light background color
+        secondary: '#E2E8F0',   // Light secondary color
+        tertiary: '#CBD5E1',     // Light tertiary color
+        text: '#000000',         // Black text color
+        navbar: '#F8FAFC',         // สีแถบ navbar สำหรับ theme light
       } : {
-        primary: '#333333',       // สีพื้นหลังหลัก สำหรับ theme dark
-        secondary: '#444444',     // สีรอง สำหรับ theme dark
-        tertiary: '#555555',       // สีเพิ่มเติม สำหรับ theme dark
-        text: 'text-[#E0E0E0]',           // สีข้อความ สำหรับ theme dark
-        navbar: '#222222',         // สีแถบ navbar สำหรับ theme dark
+        primary: '#1F2937',       // Gray 800
+        secondary: '#374151',     // Gray 700
+        tertiary: '#4B5563',       // Gray 600
+        text: '#FFFFFF',           // ขาว
+        navbar: '#111827',         // Gray 900
       };
 
       return(
