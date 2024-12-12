@@ -18,7 +18,6 @@ export const createProduct = async (
         quantity,
         description,
         categories,
-      },
       {}
     );
     return res.data;
