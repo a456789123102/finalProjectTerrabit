@@ -16,7 +16,6 @@ const menuItems = [
 function Nav() {
   const [isFixed, setIsFixed] = useState(false);
   const cartItemCount = useCartStore((state) => state.cartItemCount);
-  console.log(`cartItemCount:${cartItemCount}`)
 
   useEffect(() => {
     const handleScroll = () => {
