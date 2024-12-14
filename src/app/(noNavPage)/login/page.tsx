@@ -37,7 +37,7 @@ function Login() {
   }, [id, router]);
   return (
     <div className='w-full h-screen flex flex-col items-center justify-center '>
-      <Text className='bg-white p-5 px-16 flex justify-center flex-col items-center w-1/4'>
+      <Text className='bg-white p-5 px-16 flex justify-center flex-col items-center max-w-1/4'>
         <div className='w-full'>
           <div className='w-full'>
             <div className='justify-center flex py-3 text-4xl  font-bold'>LOGIN</div>

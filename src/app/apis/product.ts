@@ -3,23 +3,20 @@ import axios from "axios";
 export const createProduct = async (
   name: string,
   price: number,
-  discount:number,
+  discount: number,
   quantity: number,
   description: string,
   categories: number[]
 ) => {
   try {
-    const res = await axios.post(
-      "/api/product/create",
-      {
-        name,
-        price,
-        discount,
-        quantity,
-        description,
-        categories,
-      {}
-    );
+    const res = await axios.post("/api/product/create", {
+      name,
+      price,
+      discount,
+      quantity,
+      description,
+      categories,
+    });
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
