@@ -12,7 +12,7 @@ const ProductList = () => {
   const [category, setCategory] = useState('');
   const [pagination, setPagination] = useState({
     page: 1, 
-    pageSize: 15, 
+    pageSize: 5, 
     totalPages: 1, 
     totalProducts: 0,
   });
@@ -20,7 +20,16 @@ const ProductList = () => {
   const fetchProductList = useCallback(async () => {
     setLoading(true);
     try {
-      const productData = await fetchProducts(search, category ? [parseInt(category)] : [], pagination.page);
+      console.log("Sending pagination:", {
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+      });
+      const productData = await fetchProducts(
+        search,
+        category? [parseInt(category)] : [],
+        pagination.page.toString(), // แปลงเป็น string
+        pagination.pageSize.toString() // แปลงเป็น string
+      );
       setProducts(productData.products);
       setPagination(productData.pagination);
       console.log(productData);
@@ -29,7 +38,7 @@ const ProductList = () => {
     } finally {
       setLoading(false);
     }
-  }, [search, category, pagination.page]); // เพิ่ม `pagination.page` เข้าไปใน dependency
+  }, [search, category, pagination.page, pagination.pageSize]);
 
   useEffect(() => {
     fetchProductList();

@@ -10,6 +10,7 @@ export async function GET(req: NextRequest) {
     const search = searchParams.get('search') || undefined;
     const category = searchParams.get('category') || undefined;
     const page = searchParams.get('page') || undefined;
+    const pageSize = searchParams.get('pageSize') || undefined;
 
     // ส่งพารามิเตอร์ไปยัง backend เฉพาะเมื่อมีค่า
     const params: any = {};
@@ -20,6 +21,9 @@ export async function GET(req: NextRequest) {
       params.category = [parseInt(category)];
     }if(page){
       params.page = parseInt(page);
+    }
+    if(pageSize){
+      params.pageSize = parseInt(pageSize);
     }
 
     // ส่งพารามิเตอร์ไปยัง backend จริง

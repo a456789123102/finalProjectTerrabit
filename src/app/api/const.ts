@@ -32,11 +32,12 @@ console.log(`full url: ${API_URL + url}`);
 
 
 export const get = async (url: string, token: string = "", params: any = {}): Promise<Response> => {
+  console.log("Params before creating queryString:", params); // เพิ่ม log เพื่อตรวจสอบ params
+
   const queryString = new URLSearchParams(params).toString();
   const fullUrl = queryString ? `${process.env.NEXT_PUBLIC_API_URL}${url}?${queryString}` : `${process.env.NEXT_PUBLIC_API_URL}${url}`;
 
-  // ใช้ URL ที่ถูกต้อง
-  console.log("Requesting URL:", fullUrl); // ตรวจสอบ URL ที่กำลังจะส่ง
+  console.log("Requesting URL:", fullUrl); // ตรวจสอบ URL ที่สร้างขึ้น
 
   const res = await fetch(fullUrl, {
     method: "GET",
@@ -45,6 +46,7 @@ export const get = async (url: string, token: string = "", params: any = {}): Pr
   });
   return res;
 };
+
 
 export const patch = async (
   url: string,

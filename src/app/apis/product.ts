@@ -44,11 +44,11 @@ export const uploadProductImage = async (formData: FormData) => {
 };
 
 //ดึงหมด
-export const fetchProducts = async (search?: string, categories?: number[],page?:string) => {
+export const fetchProducts = async (search?: string, categories?: number[],page?:string,pageSize?:string) => {
   try {
     // สร้าง params โดยใช้ URLSearchParams
     const params = new URLSearchParams();
-
+console.log(`search: ${search}, categories: ${categories}, page: ${page},pagesize ${pageSize}`)
     if (search) {
       params.append("search", search);
     }
@@ -61,13 +61,15 @@ export const fetchProducts = async (search?: string, categories?: number[],page?
     if (page) {
       params.append("page", page);
     }
+    if (pageSize) {
+      params.append("pageSize", pageSize);
+      console.log(`pagesize add: ${pageSize}`);
+    }
+
 
     const res = await axios.get("/api/product/get", {
       params: params,
     });
-
-    // ตรวจสอบข้อมูลที่ได้จาก API
-    console.log("Fetched Products Data:", res.data);
 
     return res.data;
   } catch (error) {
