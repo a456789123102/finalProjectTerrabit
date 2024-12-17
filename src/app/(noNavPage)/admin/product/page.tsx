@@ -38,10 +38,20 @@ function ProductTable() {
     }
   };
 
-  // เรียก fetchProductLists เมื่อ searchQuery, category, pagination เปลี่ยนแปลง
   useEffect(() => {
     fetchProductLists();
   }, [searchQuery, category, pagination.page, pagination.pageSize]);
+
+  const handlePrevPage = () =>{
+    if (pagination.page > 1) {
+      setPagination((prev) => ({...prev, page: prev.page - 1 }));
+    }
+  }
+  const handleNextPage = () => {
+    if (pagination.page < pagination.totalPages) {
+      setPagination((prev) => ({ ...prev, page: prev.page + 1 }));
+    }
+  };
 
   // จัดการการค้นหา
   const handleSearchQuery = (e) => {
@@ -102,7 +112,7 @@ function ProductTable() {
       className="min-h-screen p-7 flex flex-col justify-start items-center"
       style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}
     >
-      <div className=" flex justify-end w-full">
+      <div className=" flex justify-end w-full" style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}>
         {/* dorpdownmenu */}
         <FilterTableDropdown
         columnKeys={columnKeys}
@@ -126,16 +136,17 @@ function ProductTable() {
       </div>
       <div className="mt-4 flex gap-2">
         <button
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
+onClick={handlePrevPage} 
+disabled={pagination.page === 1} 
           className="p-2 bg-blue-500 text-white rounded"
+          
         >
           Previous
         </button>
         <div>  Page {pagination.page} / {pagination.totalPages}</div>
         <button
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
+  onClick={handleNextPage} 
+  disabled={pagination.page === pagination.totalPages} 
           className="p-2 bg-blue-500 text-white rounded"
         >
           Next

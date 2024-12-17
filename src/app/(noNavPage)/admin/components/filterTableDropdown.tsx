@@ -1,24 +1,31 @@
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 import React from "react";
+import { useTheme } from '@/app/context/themeContext';
 
 export default function FilterTableDropdown({ columnKeys, handleColumnToggle, columnKeysFiltered }) {
+      const { theme, themeColors } = useTheme();
+      const hoverColors = themeColors.primary
+      console.log(hoverColors)
   return (
-    <div className="flex flex-row items-center text-yellow-600 h-full justify-end">
-      <Dropdown>
+    <div className="flex flex-row items-center h-full justify-end" >
+      <Dropdown style={{ backgroundColor: themeColors.tertiary}} >
         <DropdownTrigger>
           <Button variant="bordered">
-            <div>Dropdown</div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 hover:text-amber-400">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+</svg>
+
           </Button>
         </DropdownTrigger>
-        <DropdownMenu aria-label="Dynamic Actions">
+        <DropdownMenu aria-label="Dynamic Actions" className="border">
           {columnKeys.map((key) => (
-            <DropdownItem key={key}>
-              <label className="flex items-center">
+            <DropdownItem key={key} className={`hover:text-base border-b py-1 text-sm`}>
+              <label className="flex items-center ">
                 <input
                   type="checkbox"
                   checked={columnKeysFiltered.includes(key)}
                   onChange={() => handleColumnToggle(key)}
-                  className="mr-2"
+                  className="mr-2 "
                 />
                 {key.charAt(0).toUpperCase() + key.slice(1)}
               </label>
