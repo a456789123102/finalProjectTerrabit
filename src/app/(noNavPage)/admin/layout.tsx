@@ -60,10 +60,12 @@ function LayoutWithTheme({
       <div className={`flex flex-row`}>
         <AdminSidebar isSidebarVisible={isSidebarVisible} isScrollDown={isScrollDown} />
         <div
-          className={` ${isSidebarVisible ? 'w-5/6 ml-[16.6%]' : 'w-full'} ${isScrollDown ? 'mt-12' : 'mt-0'} `}
-        >
-          {children}
-        </div>
+  className={`transition-all duration-300 ${
+    isSidebarVisible ? 'w-[calc(100%-16.6%)] ml-[16.6%]' : 'w-full'
+  } ${isScrollDown ? 'mt-12' : 'mt-0'} `}
+>
+  {children}
+</div>
       </div>
     </div>
   );
