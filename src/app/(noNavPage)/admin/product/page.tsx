@@ -5,6 +5,7 @@ import { useTheme } from '@/app/context/themeContext';
 import DataTable from "../components/dataTable";
 import { getCoreRowModel, getPaginationRowModel, getSortedRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
 import FilterTableDropdown from "../components/filterTableDropdown";
+import Swal from 'sweetalert2'
 function ProductTable() {
   const { theme, themeColors } = useTheme();
   const [products, setProducts] = useState([]);
@@ -18,7 +19,7 @@ function ProductTable() {
     totalProducts: 0,
   });
   const [columnKeysFiltered, setColumnKeysFiltered] = useState([
-    'id', 'name', 'price', 'discount', 'finalPrice', 'quantity', 'ProductCategory'
+    'id', 'name', 'price', 'discount', 'finalPrice', 'quantity', 'ProductCategory',"Actions"
   ]);
 
   // ฟังก์ชันสำหรับดึงข้อมูลผลิตภัณฑ์
@@ -32,7 +33,6 @@ function ProductTable() {
       );
       setProducts(productData.products);
       setPagination(productData.pagination);
-      console.log("Success fetching product lists:", productData.products);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -53,7 +53,6 @@ function ProductTable() {
     }
   };
 
-  // จัดการการค้นหา
   const handleSearchQuery = (e) => {
     e.preventDefault();
     setSearchQuery(tempSearchQuery);
@@ -61,15 +60,40 @@ function ProductTable() {
   };
 
   const handleDelete = async (id: number) => {
-    console.log("Delete product with id:", id);
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to delete this product?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      background: themeColors.primary, 
+      color: themeColors.text,  
+    });
+    console.log(result); 
+  
+    if (result.isConfirmed) {
+      try {
+        // เรียก API หรือลบข้อมูลที่เกี่ยวข้อง
+        console.log(`Deleting product with id: ${id}`);
+        // Example: await deleteProductAPI(id);
+        Swal.fire('Deleted!', 'Your product has been deleted.', 'success');
+      } catch (error) {
+        console.error("Error deleting product:", error);
+        Swal.fire('Error!', 'Failed to delete the product.', 'error');
+      }
+    } else {
+      console.log("Delete action cancelled.");
+    }
   };
+  
 
   // Memoize column keys
   const columnKeys = useMemo(() => {
     if (!products.length) return [];
-    return Object.keys(products[0]);
+    return [...Object.keys(products[0]), "Actions"]; // เพิ่มคอลัมน์ Delete
   }, [products]);
-  console.log(`columnKeys = ${columnKeys}`);
+
   // Memoize column definitions
   const columns = useMemo(() => {
     return columnKeysFiltered.map((key) => ({
@@ -79,8 +103,22 @@ function ProductTable() {
         if (key === 'ProductCategory' && Array.isArray(value)) {
           return <span>{value.map((categoryItem) => categoryItem.category?.name).join(', ')}</span>;
         }
+        if (key === 'discount' ) {
+          return <span>{(value * 100)}%</span>;
+        }
         if (key === 'Image' && Array.isArray(value)) {
           return <div>{value.map((imageItem, i) => <span key={i}>{imageItem.imageUrl}</span>)}</div>;
+        }
+        if (key === "Actions") {
+          // เพิ่มปุ่ม Delete
+          return (
+            <button
+              onClick={() => handleDelete(row.original.id)}
+              className="bg-red-500 text-white px-2 py-1 rounded"
+            >
+              Delete
+            </button>
+          );
         }
         return value;
       },
