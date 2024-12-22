@@ -37,7 +37,7 @@ export const get = async (url: string, token: string = "", params: any = {}): Pr
   const queryString = new URLSearchParams(params).toString();
   const fullUrl = queryString ? `${process.env.NEXT_PUBLIC_API_URL}${url}?${queryString}` : `${process.env.NEXT_PUBLIC_API_URL}${url}`;
 
-  console.log("Requesting URL:", fullUrl); // ตรวจสอบ URL ที่สร้างขึ้น
+  console.log("Requesting Full URL:", fullUrl); // ตรวจสอบ URL ที่สร้างขึ้น
 
   const res = await fetch(fullUrl, {
     method: "GET",
