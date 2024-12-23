@@ -7,21 +7,35 @@ export async function GET(
 ) {
   try {
     const { status } = params;
-    console.log(`status from params: ${status}`);
+    console.log(`Received status: ${status}`);
 
     const token = req.cookies.get("token")?.value;
     if (!token) {
       return NextResponse.json({ error: "Token not found" }, { status: 401 });
     }
 
-    const data = await get(`/api/order/${status}/myOrder`, token);
+    // เรียกใช้ `get` และรับ Response ตรง ๆ
+    const res = await get(`/api/order/${status}/myOrder`, token);
 
-    // Debug Response ก่อนส่งกลับไปยัง Frontend
-    console.log("Data fetched from external API:", JSON.stringify(data, null, 2));
+    // ตรวจสอบว่า Response สำเร็จหรือไม่
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Error response from external API:", errorData);
+      return NextResponse.json(
+        { error: errorData.message || "Failed to fetch data" },
+        { status: res.status }
+      );
+    }
 
-    return NextResponse.json({ orders: data }); // ยังคงส่งข้อมูลในรูปแบบ `{ orders: [...] }`
+    // แปลง Response เป็น JSON
+    const data = await res.json();
+    console.log("Data fetched from external API:", data);
+
+    // ส่งข้อมูล JSON กลับไปยัง Frontend
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Server error:", error);
     return NextResponse.json({ error: "Failed to get my order" }, { status: 500 });
   }
 }
+
