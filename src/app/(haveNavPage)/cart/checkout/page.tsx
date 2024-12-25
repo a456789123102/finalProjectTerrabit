@@ -21,7 +21,7 @@ function Orders() {
   }, [status]);
 
   return (
-    <div>
+    <div className=" bg-white p-4">
       <h1>Payment Status</h1>
       <div>
         <button onClick={() => setStatus("pending")}>Pending</button>

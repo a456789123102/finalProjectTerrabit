@@ -14,28 +14,19 @@ export async function GET(
       return NextResponse.json({ error: "Token not found" }, { status: 401 });
     }
 
-    // เรียกใช้ `get` และรับ Response ตรง ๆ
     const res = await get(`/api/order/${status}/myOrder`, token);
 
-    // ตรวจสอบว่า Response สำเร็จหรือไม่
     if (!res.ok) {
       const errorData = await res.json();
-      console.error("Error response from external API:", errorData);
       return NextResponse.json(
         { error: errorData.message || "Failed to fetch data" },
         { status: res.status }
       );
     }
-
-    // แปลง Response เป็น JSON
     const data = await res.json();
-    console.log("Data fetched from external API:", data);
-
-    // ส่งข้อมูล JSON กลับไปยัง Frontend
     return NextResponse.json(data);
   } catch (error) {
     console.error("Server error:", error);
     return NextResponse.json({ error: "Failed to get my order" }, { status: 500 });
   }
 }
-

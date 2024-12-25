@@ -48,7 +48,6 @@ export const fetchProducts = async (search?: string, categories?: number[],page?
   try {
     // สร้าง params โดยใช้ URLSearchParams
     const params = new URLSearchParams();
-console.log(`search: ${search}, categories: ${categories}, page: ${page},pagesize ${pageSize}`)
     if (search) {
       params.append("search", search);
     }

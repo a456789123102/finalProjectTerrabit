@@ -11,3 +11,23 @@ export const myOrder = async (status: string) => {
   }
 };
 
+
+export const getAllOrders = async (status?: Array<string>) => {
+  try {
+    // ตรวจสอบและแปลง status เป็น query string
+    const queryString = status?.length
+      ? `status=${status.map((s) => encodeURIComponent(s)).join(",")}`
+      : "";
+console.log(`queryString: ${queryString}`);
+    // รวม query string กับ URL
+    const url = queryString ? `/api/order/get?${queryString}` : "/api/order/get";
+
+    // ส่ง request ไปยัง API
+    const res = await axios.get(url);
+    return res.data; // ส่งข้อมูล JSON กลับ
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    throw error;
+  }
+};
+
