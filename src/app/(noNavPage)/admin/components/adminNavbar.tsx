@@ -11,9 +11,9 @@ function AdminNavbar({ toggleSidebar, isScrollDown }: AdminNavbarProps) {
   const { theme, toggleTheme, themeColors } = useTheme();
 
   return (
-    <div>
+    <div style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}>
       <div
-        className={`h-12 flex flex-row items-center border mx-[3px] w-full ${isScrollDown ? 'top-0 z-40 fixed' : 'top-8'}`}
+        className={`h-12 flex flex-row items-center border w-full ${isScrollDown ? 'top-0 z-40 fixed' : 'top-8'}`}
         style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}  
       >
         <div>

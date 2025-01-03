@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { fetchProducts } from '@/app/apis/product';
 import { useTheme } from '@/app/context/themeContext';
+import PaginationControls from '../components/PaginationControls';
 import DataTable from "../components/dataTable";
 import {
   getCoreRowModel,
@@ -65,6 +66,14 @@ function ProductTable() {
     e.preventDefault();
     setSearchQuery(tempSearchQuery);
     setPagination(prev => ({ ...prev, page: 1 }));
+  };
+
+  const handlePageSizeChange = (newPageSize:number) => {
+    setPagination((prev) => ({
+      ...prev,
+      pageSize: newPageSize,
+      page: 1, // Reset to first page when pageSize changes
+    }));
   };
 
   const handleDelete = async (id) => {
@@ -165,22 +174,13 @@ function ProductTable() {
         <div className="p-1">{pagination.totalProducts} products found.</div>
         <DataTable table={table}  />
       </div>
-      <div className="mt-4 flex gap-2">
-        <button
-          onClick={handlePrevPage}
-          disabled={pagination.page === 1}
-          className="p-2 bg-blue-500 text-white rounded"
-        >
-          Previous
-        </button>
-        <div>Page {pagination.page} / {pagination.totalPages}</div>
-        <button
-          onClick={handleNextPage}
-          disabled={pagination.page === pagination.totalPages}
-          className="p-2 bg-blue-500 text-white rounded"
-        >
-          Next
-        </button>
+      <div className="min-w-full">
+      <PaginationControls
+        pagination={pagination}
+        handlePrevPage={handlePrevPage}
+        handleNextPage={handleNextPage}
+        handlePageSizeChange={handlePageSizeChange}
+      />
       </div>
     </div>
   );
