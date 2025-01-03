@@ -7,7 +7,7 @@ export default function FilterTableDropdown({ columnKeys, handleColumnToggle, co
       const hoverColors = themeColors.primary
       console.log(hoverColors)
   return (
-    <div className="flex flex-row items-center h-full justify-end" >
+    <div className="flex flex-row items-center h-full p-1" >
       <Dropdown style={{ backgroundColor: themeColors.tertiary}} >
         <DropdownTrigger>
           <Button variant="bordered">

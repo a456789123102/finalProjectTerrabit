@@ -1,21 +1,18 @@
 'use client';
-import React, { useState, useEffect, useMemo } from "react";
-import { fetchProducts } from '@/app/apis/product';
+import React, { useState, useMemo } from "react";
 import { useTheme } from '@/app/context/themeContext';
 import PaginationControls from '../components/PaginationControls';
 import DataTable from "../components/dataTable";
+import SearchAndFilterBar from "../components/SearchAndFilterBar";
+import useFetchProducts from "../hooks/products/useFetchProducts";
 import {
   getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import FilterTableDropdown from "../components/filterTableDropdown";
 import Swal from 'sweetalert2';
 
 function ProductTable() {
   const { themeColors } = useTheme();
-  const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [tempSearchQuery, setTempSearchQuery] = useState("");
   const [category, setCategory] = useState('');
@@ -28,27 +25,8 @@ function ProductTable() {
   const [columnKeysFiltered, setColumnKeysFiltered] = useState([
     'id', 'name', 'price', 'discount', 'finalPrice', 'quantity', 'ProductCategory', "Actions"
   ]);
-  const [sorting, setSorting] = useState([]); // ไม่มีการระบุ type
 
-  // ดึงข้อมูลผลิตภัณฑ์
-  const fetchProductLists = async () => {
-    try {
-      const productData = await fetchProducts(
-        searchQuery,
-        category ? [parseInt(category)] : [],
-        pagination.page.toString(),
-        pagination.pageSize.toString()
-      );
-      setProducts(productData.products);
-      setPagination(productData.pagination);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProductLists();
-  }, [searchQuery, category, pagination.page, pagination.pageSize]);
+  const products = useFetchProducts(searchQuery, category, pagination, setPagination);
 
   const handlePrevPage = () => {
     if (pagination.page > 1) {
@@ -79,7 +57,7 @@ function ProductTable() {
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you want to delete this product?',
+      text: `Do you want to delete product ID: ${id} ?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
@@ -150,28 +128,20 @@ function ProductTable() {
 
   return (
     <div
-      className="min-h-screen p-7 flex flex-col justify-start items-center"
+      className="min-h-screen p-7 flex flex-col justify-start items-center gap-5"
       style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}
     >
-      <div className="flex justify-end w-full">
-        <FilterTableDropdown
-          columnKeys={columnKeys}
-          handleColumnToggle={handleColumnToggle}
-          columnKeysFiltered={columnKeysFiltered}
-        />
-        <div className="my-4 flex flex-row">
-          <input
-            type="text"
-            value={tempSearchQuery}
-            onChange={(e) => setTempSearchQuery(e.target.value)}
-            placeholder="Search products..."
-            className="p-2 border rounded text-black"
-          />
-          <div onClick={handleSearchQuery} className="ml-4 p-1 border">Search</div>
-        </div>
-      </div>
+<SearchAndFilterBar
+  tempSearchQuery={tempSearchQuery}
+  setTempSearchQuery={setTempSearchQuery}
+  handleSearchQuery={handleSearchQuery}
+  columnKeys={columnKeys}
+  columnKeysFiltered={columnKeysFiltered}
+  handleColumnToggle={handleColumnToggle} 
+  totalProduct={pagination.totalProducts}
+  fromSearch ={searchQuery}
+/>
       <div className="w-full">
-        <div className="p-1">{pagination.totalProducts} products found.</div>
         <DataTable table={table}  />
       </div>
       <div className="min-w-full">
