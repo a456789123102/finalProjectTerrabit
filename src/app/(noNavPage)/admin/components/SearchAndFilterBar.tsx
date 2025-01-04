@@ -41,7 +41,7 @@ function SearchAndFilterBar({
         placeholder="Search products..."
         className="p-2 border rounded text-black"
       />
-      <div onClick={handleSearchQuery} className="ml-4 p-1 border cursor-pointer hover:text-yellow-600 px-2 mx-2 ">
+      <div onClick={handleSearchQuery} className="px-4 py-2 border cursor-pointer hover:text-yellow-600 ml-2 mr-4 ">
         Search
       </div>
     </div>

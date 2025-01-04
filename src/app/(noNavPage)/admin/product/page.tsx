@@ -10,6 +10,7 @@ import {
   useReactTable
 } from "@tanstack/react-table";
 import Swal from 'sweetalert2';
+import Link from 'next/link';
 
 function ProductTable() {
   const { themeColors } = useTheme();
@@ -46,7 +47,7 @@ function ProductTable() {
     setPagination(prev => ({ ...prev, page: 1 }));
   };
 
-  const handlePageSizeChange = (newPageSize:number) => {
+  const handlePageSizeChange = (newPageSize: number) => {
     setPagination((prev) => ({
       ...prev,
       pageSize: newPageSize,
@@ -96,19 +97,22 @@ function ProductTable() {
         }
         if (key === "Actions") {
           return (
-            <button
-              onClick={() => handleDelete(row.original.id)}
-              className="bg-red-500 text-white px-2 py-1 rounded"
-            >
-              Delete
-            </button>
+            <div className="flex flex-row  justify-center gap-1">
+              <button
+                onClick={() => handleDelete(row.original.id)}
+                className="bg-red-500 text-white px-2 py-1"
+              >
+                Delete
+              </button>
+<Link href={`/admin/product/${row.original.id}/edit`} className="bg-purple-500 text-white px-2 py-1">Edit</Link>
+            </div>
           );
         }
         return value;
       },
       // ลบ enableSorting
     }));
-  }, [columnKeysFiltered]);  
+  }, [columnKeysFiltered]);
 
   const table = useReactTable({
     data: products,
@@ -131,26 +135,54 @@ function ProductTable() {
       className="min-h-screen p-7 flex flex-col justify-start items-center gap-5"
       style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}
     >
-<SearchAndFilterBar
-  tempSearchQuery={tempSearchQuery}
-  setTempSearchQuery={setTempSearchQuery}
-  handleSearchQuery={handleSearchQuery}
-  columnKeys={columnKeys}
-  columnKeysFiltered={columnKeysFiltered}
-  handleColumnToggle={handleColumnToggle} 
-  totalProduct={pagination.totalProducts}
-  fromSearch ={searchQuery}
-/>
-      <div className="w-full">
-        <DataTable table={table}  />
+      <div className="w-full flex justify-between items-center border p-4">
+        <div className="flex-1">
+          <SearchAndFilterBar
+            tempSearchQuery={tempSearchQuery}
+            setTempSearchQuery={setTempSearchQuery}
+            handleSearchQuery={handleSearchQuery}
+            columnKeys={columnKeys}
+            columnKeysFiltered={columnKeysFiltered}
+            handleColumnToggle={handleColumnToggle}
+            totalProduct={pagination.totalProducts}
+            fromSearch={searchQuery}
+          />
+        </div>
+        <Link
+          className="  px-4 py-2 hover:text-yellow-600 border"
+          href={`/admin/product/create`}
+          style={{ backgroundColor: themeColors.tertiary }}
+        >
+          <div className="flex flex-row items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className="w-5 h-5 mr-1"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+
+            <div>Create Product</div>
+          </div>
+        </Link>
+      </div>
+      <div className="w-full"  >
+        <DataTable table={table} />
       </div>
       <div className="min-w-full">
-      <PaginationControls
-        pagination={pagination}
-        handlePrevPage={handlePrevPage}
-        handleNextPage={handleNextPage}
-        handlePageSizeChange={handlePageSizeChange}
-      />
+        <PaginationControls
+          pagination={pagination}
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+          handlePageSizeChange={handlePageSizeChange}
+        />
       </div>
     </div>
   );

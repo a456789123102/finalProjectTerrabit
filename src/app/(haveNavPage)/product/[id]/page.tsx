@@ -175,9 +175,6 @@ const ProductDetail = () => {
                 <button className="bg-[#1C1C1C] text-white py-4 px-8 mb-6 rounded-lg text-xl hover:bg-gray-700 w-full" onClick={handleAddToCart}>
                   ADD TO CART
                 </button>
-                <Link href={`/product/${id}/edit`} className='mt-4 px-4 py-2 bg-purple-500 text-white rounded hover:bg-green-400'>
-                  Edit
-                </Link>
               </div>
             </div>
           </div>

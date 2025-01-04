@@ -1,6 +1,6 @@
 'use client';
 import { useEffect} from 'react';
-import { createProduct } from '../../../apis/product';
+import { createProduct } from '@/app/apis/product';
 import ProductForm from '../components/productForm';
 import { useUserStore } from '@/store/zustand';
 

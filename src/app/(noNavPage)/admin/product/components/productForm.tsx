@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import CategorySelect from '../components/categoryCard';
+import CategorySelect from '../../../../(haveNavPage)/product/components/categoryCard';
 import { getProductById } from '@/app/apis/product';
 import { useRouter } from 'next/navigation';
 
