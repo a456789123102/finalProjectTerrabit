@@ -5,6 +5,7 @@ import { getAllcategory } from '@/app/apis/category';
 const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [defaultOptions, setDefaultOptions] = useState([]);
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -16,6 +17,15 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
           label: cat.name,
         }));
         setCategories(formattedCategories);
+
+        // ตั้งค่า default options หลังจาก categories ถูกโหลด
+        if (selectedCategories.length > 0) {
+          const mappedSelected = selectedCategories.map((id) => {
+            const category = formattedCategories.find((cat) => cat.value === id);
+            return category ? { value: category.value, label: category.label } : null;
+          }).filter(Boolean); // กรองค่าที่เป็น null ออก
+          setDefaultOptions(mappedSelected);
+        }
       } catch (error) {
         console.error('Error fetching categories:', error);
       } finally {
@@ -38,13 +48,12 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
         classNamePrefix="select"
         options={categories}
         isMulti={isMulti}
-        isDisabled={false}
+        isDisabled={isLoading}
         isClearable={true}
         isSearchable={true}
         onChange={handleChange}
-        placeholder="Select Category"
-        isLoading={isLoading}
-        defaultValue={selectedCategories.map(id => ({ value: id, label: categories.find(cat => cat.value === id)?.label }))}
+        placeholder={isLoading ? "Loading categories..." : "Select Category"}
+        value={defaultOptions} // ใช้ value แทน defaultValue
       />
     </div>
   );

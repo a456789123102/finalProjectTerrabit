@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 
 const EditProductPage = () => {
   const { isAdmin } = useUserStore(); 
-  const { id } = useParams();  // ดึง id ของสินค้า
+  const { id } = useParams();  
   
   const productId = parseInt(id, 10); 
   console.log("Product ID from URL params:", productId);
@@ -43,7 +43,7 @@ const EditProductPage = () => {
 
   return (
     <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE] '>
-      <div className=' p-5 flex justify-center flex-col items-center w-1/3 h-screen'>
+      <div className=' p-5 flex justify-center flex-col items-center w-2/3 min-w-72 h-screen'>
      
         {isAdmin ? (
           <ProductForm onSubmit={handleSubmit} productId={productId} mode='edit' /> 

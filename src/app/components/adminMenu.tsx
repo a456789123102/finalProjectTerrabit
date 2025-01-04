@@ -8,14 +8,14 @@ export default function AdminMenu() {
 
   const items = [
     {
-      key: "allWebData",
+      key: "Dashboards",
       label: "All web Data",
-      path: "/dashboard" 
+      path: "/admin/dashboard" 
     },
     {
-      key: "createProduct",
-      label: "Create Product",
-      path: "/product/create" 
+      key: "Products",
+      label: "",
+      path: "admin/product" 
     },
     {
       key: "addProductImage",
@@ -27,11 +27,7 @@ export default function AdminMenu() {
         label: "Create Category",
         path: "/product/category/create"
       },
-    {
-      key: "delete",
-      label: "Delete file",
-      path: "/delete-file" 
-    }
+
   ];
 
   const handleAction = (path: string) => {
