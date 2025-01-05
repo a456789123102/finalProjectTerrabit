@@ -1,22 +1,20 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const createProduct = async (formData: FormData) => {
   try {
-    console.log("FormData entries before sending:");
-    console.log(Array.from(formData.entries())); // Debug ข้อมูลใน FormData
+    console.log('FormData entries before sending:', Array.from(formData.entries()));
 
-    const res = await axios.post("/api/product/create", formData, {
+    const res = await axios.post('/api/product/create', formData, {
       headers: {
-        "Content-Type": "multipart/form-data", // กำหนด Content-Type สำหรับ FormData
+        'Content-Type': 'multipart/form-data',
       },
     });
 
-    console.log("Response from API:", res.data); // Debug Response ที่ได้รับจาก backend
-
+    console.log('Response from API:', res.data);
     return res.data;
   } catch (error) {
-    console.error("Error creating product:", error.response?.data || error.message);
-    throw new Error("Error creating product");
+    console.error('Error creating product:', error.response?.data || error.message);
+    throw new Error('Error creating product');
   }
 };
 

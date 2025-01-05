@@ -1,37 +1,46 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL; // ตรวจสอบว่า API_URL ถูกตั้งค่าใน .env.local อย่างถูกต้องหรือไม่
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_URL) {
+  throw new Error("API_URL is not defined in environment variables");
+}
 
 const getHeaders = (token: string, isFormData: boolean = false) => {
-  const headers: any = {
-    ...(isFormData ? {} : { "Content-Type": "application/json" }),
-    cache: "no-store",
-  };
+  return isFormData
+    ? { cache: "no-store", ...(token ? { Authorization: token } : {}) }
+    : { "Content-Type": "application/json", cache: "no-store", ...(token ? { Authorization: token } : {}) };
+};
 
-  if (token) {
-    headers.Authorization = token;
+export const post = async (url: string, body: any, token: string = ""): Promise<Response> => {
+  const isFormData = body instanceof FormData;
+  const headers = getHeaders(token, isFormData);
+
+  console.log(`Sending data to: ${API_URL + url}`);
+  console.log("Headers:", headers);
+
+  if (isFormData) {
+    console.log("FormData entries:", Array.from((body as FormData).entries()));
+  } else {
+    console.log("JSON Body:", JSON.stringify(body));
   }
 
-  return headers;
-};
-
-
-export const post = async (
-  url: string,
-  body: any,
-  token: string = ""
-): Promise<Response> => {
-  const isFormData = body instanceof FormData; 
-  const headers = getHeaders(token, isFormData); 
-
-  const res = await fetch(API_URL + url, {
+  const response = await fetch(API_URL + url, {
     method: "POST",
-    headers: headers,
-    body: isFormData ? body : JSON.stringify(body), 
+    headers,
+    body: isFormData ? body : JSON.stringify(body),
   });
-console.log(`full url: ${API_URL + url}`);
-  return res;
+
+  if (!response.ok) {
+    const error = await response.text();
+    console.error(`Error from backend (status ${response.status}):`, error);
+    throw new Error(`Backend Error: ${error}`);
+  }
+
+  return response;
 };
 
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const get = async (url: string, token: string = "", params: any = {}): Promise<Response> => {
   console.log("Params before creating queryString:", params); // เพิ่ม log เพื่อตรวจสอบ params
 
@@ -48,7 +57,7 @@ export const get = async (url: string, token: string = "", params: any = {}): Pr
   return res;
 };
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const patch = async (
   url: string,
   body: any,
@@ -77,7 +86,7 @@ export const patch = async (
   
   return data; // คืนค่า data โดยตรงแทน res
 };
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const deleteRequest = async (
   url: string,
   token: string = ""
