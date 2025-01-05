@@ -17,23 +17,21 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
           label: cat.name,
         }));
         setCategories(formattedCategories);
-
-        // ตั้งค่า default options หลังจาก categories ถูกโหลด
+  
+        // อัปเดต selectedCategories ตามค่า default
         if (selectedCategories.length > 0) {
-          const mappedSelected = selectedCategories.map((id) => {
-            const category = formattedCategories.find((cat) => cat.value === id);
-            return category ? { value: category.value, label: category.label } : null;
-          }).filter(Boolean); // กรองค่าที่เป็น null ออก
-          setDefaultOptions(mappedSelected);
+          setCategory(selectedCategories); // กำหนดค่าใน setCategory
         }
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error("Error fetching categories:", error);
       } finally {
         setIsLoading(false);
       }
     };
+  
     fetchCategories();
   }, []);
+  
 
   const handleChange = (selectedOption) => {
     const selectedValues = isMulti
@@ -53,7 +51,7 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
         isSearchable={true}
         onChange={handleChange}
         placeholder={isLoading ? "Loading categories..." : "Select Category"}
-        value={defaultOptions} // ใช้ value แทน defaultValue
+        value={categories.filter((cat) => selectedCategories.includes(cat.value))} // ใช้ value แทน defaultValue
       />
     </div>
   );

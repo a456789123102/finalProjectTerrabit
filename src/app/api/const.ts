@@ -1,17 +1,18 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL; // ตรวจสอบว่า API_URL ถูกตั้งค่าใน .env.local อย่างถูกต้องหรือไม่
 
-const getHeaders = (token: string) => {
+const getHeaders = (token: string, isFormData: boolean = false) => {
   const headers: any = {
-    "Content-Type": "application/json",
-"cache":"no-store",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
+    cache: "no-store",
   };
 
   if (token) {
-    headers.Authorization = token; // ตรวจสอบว่า token ที่แนบมากับ header ถูกต้องหรือไม่
+    headers.Authorization = token;
   }
 
   return headers;
 };
+
 
 export const post = async (
   url: string,

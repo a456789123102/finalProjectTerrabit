@@ -70,45 +70,38 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
     fetchProductData();
   }, [productId, mode]);
 
+
+  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isLoading) {
-      setMessage('Please wait while the data is loading...');
-      return;
-    }
+  
     if (!name || price === '' || quantity === '' || !description || !categories.length) {
       setMessage('Please fill in all fields');
       return;
     }
-
+  
+    const productData = {
+      name,
+      price,
+      discount: discount || 0,
+      quantity,
+      description,
+      categories,
+      CoverImage: coverImage,
+      ImageDetail1: imageDetail1,
+      ImageDetail2: imageDetail2,
+    };
+  
     try {
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('price', String(price));
-      formData.append('discount', String(Number(discount) / 100));
-      formData.append('quantity', String(quantity));
-      formData.append('description', description);
-      formData.append('categories', JSON.stringify(categories));
-
-      if (coverImage) formData.append('CoverImage', coverImage);
-      if (imageDetail1) formData.append('ImageDetail1', imageDetail1);
-      if (imageDetail2) formData.append('ImageDetail2', imageDetail2);
-
-      const response = await onSubmit(formData);
-      setMessage(
-        mode === 'create'
-          ? `Product created: ${response.product.name} with ID: ${response.product.id}`
-          : `Product updated: ${response.product.name}`
-      );
-
-      if (mode === 'edit') {
-        await fetchProductData();
-      }
-      router.push('/product');
+      await onSubmit(productData);
+      setMessage(mode === 'create' ? 'Product created successfully' : 'Product updated successfully');
     } catch (error) {
+      console.error("Error saving product:", error);
       setMessage('Error saving product');
     }
   };
+  
 
   const handleCategoryChange = (newCategories: number[]) => {
     setCategories(newCategories);
@@ -188,7 +181,14 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
             <label className="font-medium text-gray-600">Cover Image:</label>
             {existingCoverImage && (
               <div className="mb-2">
-                <Image src={existingCoverImage} alt="Cover" className="w-32 h-32 object-cover rounded-lg" />
+<Image
+  src={existingCoverImage}
+  alt="Cover"
+  layout="intrinsic"
+  width={128} // กำหนดความกว้าง
+  height={128} // กำหนดความสูง (จะถูกรักษาสัดส่วน)
+/>
+
               </div>
             )}
             <input type="file" onChange={(e) => setCoverImage(e.target.files?.[0] || null)} />
@@ -198,7 +198,13 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
             <label className="font-medium text-gray-600">Image Detail 1:</label>
             {existingImageDetail1 && (
               <div className="mb-2">
-                <Image src={existingImageDetail1} alt="Detail 1" className="w-32 h-32 object-cover rounded-lg" />
+                    <Image
+      src={existingImageDetail1}
+      alt="Detail 1"
+      layout="intrinsic"
+      width={128} // กำหนดความกว้าง
+      height={128} // กำหนดความสูง (จะถูกรักษาสัดส่วน)
+    />
               </div>
             )}
             <input type="file" onChange={(e) => setImageDetail1(e.target.files?.[0] || null)} />
@@ -208,7 +214,13 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
             <label className="font-medium text-gray-600">Image Detail 2:</label>
             {existingImageDetail2 && (
               <div className="mb-2">
-                <Image src={existingImageDetail2} alt="Detail 2" className="w-32 h-32 object-cover rounded-lg" />
+                 <Image
+      src={existingImageDetail2}
+      alt="Detail 2"
+      layout="intrinsic"
+      width={128} // กำหนดความกว้าง
+      height={128} // กำหนดความสูง (จะถูกรักษาสัดส่วน)
+    />
               </div>
             )}
             <input type="file" onChange={(e) => setImageDetail2(e.target.files?.[0] || null)} />

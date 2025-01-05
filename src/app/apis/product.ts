@@ -1,47 +1,29 @@
 import axios from "axios";
 
-export const createProduct = async (
-  name: string,
-  price: number,
-  discount: number,
-  quantity: number,
-  description: string,
-  categories: number[]
-) => {
+export const createProduct = async (formData: FormData) => {
   try {
-    const res = await axios.post("/api/product/create", {
-      name,
-      price,
-      discount,
-      quantity,
-      description,
-      categories,
+    console.log("FormData entries before sending:");
+    console.log(Array.from(formData.entries())); // Debug ข้อมูลใน FormData
+
+    const res = await axios.post("/api/product/create", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // กำหนด Content-Type สำหรับ FormData
+      },
     });
+
+    console.log("Response from API:", res.data); // Debug Response ที่ได้รับจาก backend
+
     return res.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response?.data || error.message);
-    } else {
-      console.error("Unknown error:", error);
-    }
+    console.error("Error creating product:", error.response?.data || error.message);
     throw new Error("Error creating product");
   }
 };
 
-//upload image
-export const uploadProductImage = async (formData: FormData) => {
-  try {
-    const res = await axios.post("/api/product/uploadImage", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    throw error;
-  }
-};
+
+
+
+
 
 //ดึงหมด
 export const fetchProducts = async (search?: string, categories?: number[],page?:string,pageSize?:string) => {

@@ -6,10 +6,10 @@ import { useUserStore } from '@/store/zustand';
 import { useParams } from 'next/navigation';
 
 const EditProductPage = () => {
-  const { isAdmin } = useUserStore(); 
-  const { id } = useParams();  
-  
-  const productId = parseInt(id, 10); 
+  const { isAdmin } = useUserStore();
+  const { id } = useParams();
+
+  const productId = parseInt(id, 10);
   console.log("Product ID from URL params:", productId);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const EditProductPage = () => {
 
   const handleSubmit = async (productData: any) => {
     try {
-      console.log('Product data being sent:', productData);
+      console.log('Product data being sent from edit page:', productData);
 
       const response = await updateProduct(
         productId,  // ส่ง id ของสินค้าไปใน request
@@ -33,20 +33,20 @@ const EditProductPage = () => {
       );
 
       console.log('Product updated response:', response);
-      return response; 
-     
+      return response;
+
     } catch (error) {
       console.error('Error updating product:', error);
     }
   };
-  
+
 
   return (
     <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE] '>
       <div className=' p-5 flex justify-center flex-col items-center w-2/3 min-w-72 h-screen'>
-     
+
         {isAdmin ? (
-          <ProductForm onSubmit={handleSubmit} productId={productId} mode='edit' /> 
+          <ProductForm onSubmit={handleSubmit} productId={productId} mode='edit' />
         ) : (
           <div className='text-red-800'>You do not have permission to edit products.</div>
         )}
