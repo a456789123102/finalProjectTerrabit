@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import CategorySelect from '../../../../(haveNavPage)/product/components/categoryCard';
 import { getProductById } from '@/app/apis/product';
 import Image from 'next/image';
+import { uploadProductImage } from '@/app/apis/productImage';
 
 interface ProductFormProps {
   onSubmit: (productData: any) => Promise<void>;
@@ -42,9 +43,9 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
         setDescription(product.description || '');
 
         const coverImage = product.Image.find((img: any) => img.name === 'CoverImage');
-        const imageDetail1 = product.Image.find((img: any) => img.name === 'ImageDetail1');
-        const imageDetail2 = product.Image.find((img: any) => img.name === 'ImageDetail2');
-        
+        const imageDetail1 = product.Image.find((img: any) => img.name === 'DetailImage1');
+        const imageDetail2 = product.Image.find((img: any) => img.name === 'DetailImage2');
+
 
         setExistingCoverImage(coverImage?.imageUrl || null);
         setExistingImageDetail1(imageDetail1?.imageUrl || null);
@@ -84,20 +85,54 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
       setMessage('Error submitting product');
     }
   };
-
   const handleCategoryChange = (newCategories: number[]) => {
     setCategories(newCategories);
   };
+
+  const handleUploadImage = async (
+    file: File,
+    label: string, // ชื่อ label ที่ backend คาดหวัง
+    productId: number,
+    setExistingImage: (url: string | null) => void,
+    setFile: (file: File | null) => void
+  ) => {
+    const validLabels = ["CoverImage", "DetailImage1", "DetailImage2"];
+  
+    if (!validLabels.includes(label)) {
+      alert(`Invalid label: ${label}`);
+      return;
+    }
+  
+    try {
+      const formData = new FormData();
+      formData.append(label, file); // ใช้ชื่อฟิลด์ที่ตรงกับ backend (แทน "file")
+  
+      const response = await uploadProductImage(productId, formData);
+      console.log("FormData entries:", Array.from(formData.entries()));
+      if (!response) {
+        throw new Error("Failed to upload image");
+      }
+  
+      setExistingImage(response.imageUrl);
+      setFile(null);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
+    }
+  };
+  
+  
+
 
   if (isLoading) {
     return <div className="text-center text-lg font-semibold">Loading...</div>;
   }
 
   return (
-    <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-md w-full">
-      <div className="w-full flex flex-row">
+    <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-md min-w-full">
+      <div className="min-w-full flex flex-row">
         {/* Left Section: Form Inputs */}
-        <div className="w-1/2 border">
+        <div className={`border ${mode === 'create' ? 'w-full' : 'w-1/2'}`}>
           <h2 className="text-xl font-bold text-center text-gray-800 mb-4">
             {mode === 'create' ? 'Create New Product' : 'Edit Product'}
           </h2>
@@ -156,28 +191,36 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
             <label className="font-medium text-gray-600">Categories:</label>
             <CategorySelect setCategory={handleCategoryChange} isMulti={true} selectedCategories={categories} />
           </div>
+          <div className='w-full justify-center flex'>
+            <button
+              type="submit"
+              className="bg-blue-600 text-white font-semibold px-4 py-2  hover:bg-blue-700 transition duration-300 w-1/2"
+            >
+              {mode === 'create' ? 'Create Product' : 'Update Product'}
+            </button>
+          </div>
         </div>
 
         {/* Right Section: Images */}
-        <div className="w-1/2 p-6">
+        {mode === 'edit' && <div className="w-1/2 p-6">
           <h3 className="text-lg font-semibold mb-4">Images</h3>
           {[
             {
-              label: 'Cover Image',
+              label: 'CoverImage',
               existingImage: existingCoverImage,
               setExistingImage: setExistingCoverImage,
               file: coverImage,
               setFile: setCoverImage,
             },
             {
-              label: 'Image Detail 1',
+              label: 'DetailImage1',
               existingImage: existingImageDetail1,
               setExistingImage: setExistingImageDetail1,
               file: imageDetail1,
               setFile: setImageDetail1,
             },
             {
-              label: 'Image Detail 2',
+              label: 'DetailImage2',
               existingImage: existingImageDetail2,
               setExistingImage: setExistingImageDetail2,
               file: imageDetail2,
@@ -193,11 +236,8 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
                   </div>
                   <button
                     type="button"
-                    onClick={() => {
-                      setExistingImage(null);
-                      setFile(null);
-                    }}
-                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300"
+                    onClick={() => console.log("delete")}
+                    className="bg-red-600 text-white px-4 py-2 hover:bg-red-700 transition duration-300"
                   >
                     Delete
                   </button>
@@ -214,11 +254,10 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
                   {file && (
                     <button
                       type="button"
-                      onClick={async () => {
-                        console.log('Uploading image...');
-                        // Add upload logic here
-                      }}
-                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-300 mt-2"
+                      onClick={() =>
+                        handleUploadImage(file, label, productId!, setExistingImage, setFile)
+                      }
+                      className="bg-green-600 text-white px-4 py-2 hover:bg-green-700 transition duration-300 mt-2"
                     >
                       Upload
                     </button>
@@ -227,15 +266,8 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
               )}
             </div>
           ))}
-        </div>
+        </div>}
       </div>
-
-      <button
-        type="submit"
-        className="bg-blue-600 text-white font-semibold px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
-      >
-        {mode === 'create' ? 'Create Product' : 'Update Product'}
-      </button>
       {message && <p className="text-center mt-4 font-medium text-blue-600">{message}</p>}
     </form>
   );

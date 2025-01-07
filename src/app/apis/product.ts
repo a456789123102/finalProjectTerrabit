@@ -18,10 +18,6 @@ categories: number[],
 };
 
 
-
-
-
-
 //ดึงหมด
 export const fetchProducts = async (search?: string, categories?: number[],page?:string,pageSize?:string) => {
   try {

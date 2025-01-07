@@ -3,8 +3,7 @@ import { useEffect } from 'react';
 import { updateProduct } from '@/app/apis/product';
 import ProductForm from '../../components/productForm';
 import { useUserStore } from '@/store/zustand';
-import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 
 const EditProductPage = () => {
@@ -24,34 +23,34 @@ const EditProductPage = () => {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
-        const currentPath = window.location.pathname; // ใช้ window.location เพื่อดึง Path ปัจจุบัน
+        const currentPath = window.location.pathname;
         router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
       });
     }
   }, [isAdmin, router]);
 
   const handleSubmit = async (productData: any) => {
-        if (
-          !productData.name ||
-          productData.price === '' ||
-          productData.quantity === '' ||
-          !productData.description ||
-          !productData.categories.length
-        ) {
-          console.error('Validation failed: Please fill in all fields');
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Validation failed: Please fill in all fields',
-            showConfirmButton: false,
-          });
-          return;
-        }
+    if (
+      !productData.name ||
+      productData.price === '' ||
+      productData.quantity === '' ||
+      !productData.description ||
+      !productData.categories.length
+    ) {
+      console.error('Validation failed: Please fill in all fields');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Validation failed: Please fill in all fields',
+        showConfirmButton: false,
+      });
+      return;
+    }
     try {
       console.log('Product data being sent from edit page:', productData);
 
       const response = await updateProduct(
-        productId,  // ส่ง id ของสินค้าไปใน request
+        productId,
         productData.name,
         productData.price,
         productData.discount,
@@ -60,31 +59,28 @@ const EditProductPage = () => {
         productData.categories
       );
       console.log('Product updated response:', response);
-           Swal.fire({
-              icon: 'success',
-              title: `Product ID:${response.id} has been Edited`,
-              text: 'Your product has been successfully edited.',
-              showConfirmButton: false,
-            });
+      Swal.fire({
+        icon: 'success',
+        title: `Product ID:${response.id} has been Edited`,
+        text: 'Your product has been successfully edited.',
+        showConfirmButton: false,
+      });
       return response;
 
     } catch (error) {
       console.error('Error updating product:', error);
-Swal.fire({
+      Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Failed to edit the product. Please try again.',
         showConfirmButton: false,
       });
-
     }
   };
 
-
   return (
-    <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE] '>
-      <div className=' p-5 flex justify-center flex-col items-center min-w-3/4  h-screen'>
-
+    <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE]'>
+      <div className='p-5 flex justify-center flex-col items-center w-full max-w-3xl max-h-[99%] min-w-96 overflow-auto'>
         {isAdmin ? (
           <ProductForm onSubmit={handleSubmit} productId={productId} mode='edit' />
         ) : (

@@ -4,12 +4,14 @@ if (!API_URL) {
   throw new Error("API_URL is not defined in environment variables");
 }
 
-const getHeaders = (token: string, isFormData: boolean = false) => {
+// ฟังก์ชันสำหรับสร้าง headers
+const getHeaders = (token: string, isFormData: boolean = false): Record<string, string> => {
   return isFormData
     ? { cache: "no-store", ...(token ? { Authorization: token } : {}) }
     : { "Content-Type": "application/json", cache: "no-store", ...(token ? { Authorization: token } : {}) };
 };
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ฟังก์ชัน post สำหรับส่งข้อมูลไปยัง backend
 export const post = async (
   url: string,
   body: any,
@@ -17,30 +19,22 @@ export const post = async (
 ): Promise<Response> => {
   const isFormData = body instanceof FormData;
 
-  // กำหนด headers ตามประเภทของ body
-  const getHeaders = (token: string, isFormData: boolean = false): Record<string, string> => {
-    const headers: Record<string, string> = {
-      ...(token && { Authorization: `${token}` }), // เพิ่ม Authorization เฉพาะเมื่อมี token
-      ...(isFormData ? {} : { "Content-Type": "application/json" }), // ไม่กำหนด Content-Type สำหรับ FormData
-      cache: "no-store", // ใช้ cache แบบ no-store เสมอ
-    };
-    return headers;
-  };
   console.log(`Sending data to: ${API_URL + url}`);
+  console.log("Headers:", getHeaders(token, isFormData));
 
   if (isFormData) {
     console.log("FormData entries:", Array.from(body.entries()));
   } else {
-    console.log("JSON Body:", JSON.stringify(body)); 
+    console.log("JSON Body:", JSON.stringify(body));
   }
 
   const response = await fetch(API_URL + url, {
     method: "POST",
-    headers: getHeaders(token, isFormData), // เพิ่ม isFormData ให้ getHeaders
-    body: isFormData ? body : JSON.stringify(body), // ส่ง FormData หรือ JSON string
+    headers: getHeaders(token, isFormData),
+    body: isFormData ? body : JSON.stringify(body),
   });
-  
 
+  // ตรวจสอบสถานะ response
   if (!response.ok) {
     const error = await response.text();
     console.error(`Error from backend (status ${response.status}):`, error);
@@ -49,6 +43,7 @@ export const post = async (
 
   return response;
 };
+
 
 
 
