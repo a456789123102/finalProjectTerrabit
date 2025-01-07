@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import CategorySelect from '../../../../(haveNavPage)/product/components/categoryCard';
 import { getProductById } from '@/app/apis/product';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 interface ProductFormProps {
@@ -38,25 +37,21 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
 
         setName(product.name || '');
         setPrice(product.price || '');
-        setDiscount((product.discount || '') * 100);
+        setDiscount(product.discount || 0);
         setQuantity(product.quantity || '');
         setDescription(product.description || '');
 
         const coverImage = product.Image.find((img: any) => img.name === 'CoverImage');
-        const ImageDetail1 = product.Image.find((img: any) => img.name === 'ImageDetail1');
-        const ImageDetail2 = product.Image.find((img: any) => img.name === 'ImageDetail2');
+        const imageDetail1 = product.Image.find((img: any) => img.name === 'ImageDetail1');
+        const imageDetail2 = product.Image.find((img: any) => img.name === 'ImageDetail2');
+        
 
         setExistingCoverImage(coverImage?.imageUrl || null);
-        setExistingImageDetail1(ImageDetail1?.imageUrl || null);
-        setExistingImageDetail2(ImageDetail2?.imageUrl || null);
-  
+        setExistingImageDetail1(imageDetail1?.imageUrl || null);
+        setExistingImageDetail2(imageDetail2?.imageUrl || null);
 
-        if (product.ProductCategory && Array.isArray(product.ProductCategory)) {
-          const categoryIds = product.ProductCategory.map((cat: any) => cat.categoryId);
-          setCategories(categoryIds);
-        } else {
-          setCategories([]);
-        }
+        const categoryIds = product.ProductCategory?.map((cat: any) => cat.categoryId) || [];
+        setCategories(categoryIds);
       } catch (error) {
         setMessage('Error fetching product data');
       } finally {
@@ -69,10 +64,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
     fetchProductData();
   }, [productId, mode]);
 
-
-  
-
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const productData = {
@@ -84,10 +76,14 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
       categories,
     };
 
-    onSubmit(productData); // ส่งข้อมูลไปยังฟังก์ชัน handleSubmit
+    try {
+      await onSubmit(productData);
+      setMessage(mode === 'create' ? 'Product created successfully' : 'Product updated successfully');
+    } catch (error) {
+      console.error('Error submitting product:', error);
+      setMessage('Error submitting product');
+    }
   };
-  
-  
 
   const handleCategoryChange = (newCategories: number[]) => {
     setCategories(newCategories);
@@ -98,13 +94,14 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   }
 
   return (
-    <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-md w-full ">
+    <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-md w-full">
       <div className="w-full flex flex-row">
+        {/* Left Section: Form Inputs */}
         <div className="w-1/2 border">
           <h2 className="text-xl font-bold text-center text-gray-800 mb-4">
             {mode === 'create' ? 'Create New Product' : 'Edit Product'}
           </h2>
-          <div className="flex flex-col">
+          <div className="flex flex-col mb-4">
             <label className="font-medium text-gray-600">Product Name:</label>
             <input
               className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -114,17 +111,17 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
               required
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col mb-4">
             <label className="font-medium text-gray-600">Price:</label>
             <input
               className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="number"
               value={price}
-              onChange={(e) => setPrice(e.target.value ? Number(e.target.value) : '')}
+              onChange={(e) => setPrice(Number(e.target.value) || '')}
               required
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col mb-4">
             <label className="font-medium text-gray-600">Discount (%):</label>
             <input
               className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -132,87 +129,107 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
               min="0"
               max="100"
               value={discount}
-              onChange={(e) => setDiscount(e.target.value ? Number(e.target.value) : '')}
+              onChange={(e) => setDiscount(Number(e.target.value) || '')}
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col mb-4">
             <label className="font-medium text-gray-600">Quantity:</label>
             <input
               className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="number"
               value={quantity}
-              onChange={(e) => setQuantity(e.target.value ? Number(e.target.value) : '')}
+              onChange={(e) => setQuantity(Number(e.target.value) || '')}
               required
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col mb-4">
             <label className="font-medium text-gray-600">Description:</label>
             <textarea
-              className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300 resize-y min-h-60"
+              className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300 resize-y"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
               required
             ></textarea>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col mb-4">
             <label className="font-medium text-gray-600">Categories:</label>
             <CategorySelect setCategory={handleCategoryChange} isMulti={true} selectedCategories={categories} />
           </div>
         </div>
-        <div className="w-1/2">
-          <h3 className="font-medium text-gray-600 mb-2">Images:</h3>
 
-          <div className="flex flex-col mb-4">
-            <label className="font-medium text-gray-600">Cover Image:</label>
-            {existingCoverImage && (
-              <div className="mb-2">
-<Image
-  src={existingCoverImage}
-  alt="Cover"
-  layout="intrinsic"
-  width={128} // กำหนดความกว้าง
-  height={128} // กำหนดความสูง (จะถูกรักษาสัดส่วน)
-/>
-
-              </div>
-            )}
-            <input type="file" onChange={(e) => setCoverImage(e.target.files?.[0] || null)} />
-          </div>
-
-          <div className="flex flex-col mb-4">
-            <label className="font-medium text-gray-600">Image Detail 1:</label>
-            {existingImageDetail1 && (
-              <div className="mb-2">
-                    <Image
-      src={existingImageDetail1}
-      alt="Detail 1"
-      layout="intrinsic"
-      width={128} // กำหนดความกว้าง
-      height={128} // กำหนดความสูง (จะถูกรักษาสัดส่วน)
-    />
-              </div>
-            )}
-            <input type="file" onChange={(e) => setImageDetail1(e.target.files?.[0] || null)} />
-          </div>
-
-          <div className="flex flex-col mb-4">
-            <label className="font-medium text-gray-600">Image Detail 2:</label>
-            {existingImageDetail2 && (
-              <div className="mb-2">
-                 <Image
-      src={existingImageDetail2}
-      alt="Detail 2"
-      layout="intrinsic"
-      width={128} // กำหนดความกว้าง
-      height={128} // กำหนดความสูง (จะถูกรักษาสัดส่วน)
-    />
-              </div>
-            )}
-            <input type="file" onChange={(e) => setImageDetail2(e.target.files?.[0] || null)} />
-          </div>
+        {/* Right Section: Images */}
+        <div className="w-1/2 p-6">
+          <h3 className="text-lg font-semibold mb-4">Images</h3>
+          {[
+            {
+              label: 'Cover Image',
+              existingImage: existingCoverImage,
+              setExistingImage: setExistingCoverImage,
+              file: coverImage,
+              setFile: setCoverImage,
+            },
+            {
+              label: 'Image Detail 1',
+              existingImage: existingImageDetail1,
+              setExistingImage: setExistingImageDetail1,
+              file: imageDetail1,
+              setFile: setImageDetail1,
+            },
+            {
+              label: 'Image Detail 2',
+              existingImage: existingImageDetail2,
+              setExistingImage: setExistingImageDetail2,
+              file: imageDetail2,
+              setFile: setImageDetail2,
+            },
+          ].map(({ label, existingImage, setExistingImage, file, setFile }, index) => (
+            <div key={index} className="flex flex-col mb-4">
+              <label className="font-medium text-gray-600">{label}:</label>
+              {existingImage ? (
+                <>
+                  <div className="mb-2">
+                    <Image src={existingImage} alt={label} width={128} height={128} />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setExistingImage(null);
+                      setFile(null);
+                    }}
+                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300"
+                  >
+                    Delete
+                  </button>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      const selectedFile = e.target.files?.[0] || null;
+                      setFile(selectedFile);
+                    }}
+                  />
+                  {file && (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        console.log('Uploading image...');
+                        // Add upload logic here
+                      }}
+                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-300 mt-2"
+                    >
+                      Upload
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          ))}
         </div>
       </div>
+
       <button
         type="submit"
         className="bg-blue-600 text-white font-semibold px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
