@@ -1,20 +1,19 @@
 import axios from 'axios';
 
-export const createProduct = async (formData: FormData) => {
+export const createProduct = async (
+  name: string,
+price: number,
+discount: number,
+quantity: number,
+description: string,
+categories: number[],
+) => {
   try {
-    console.log('FormData entries before sending:', Array.from(formData.entries()));
-
-    const res = await axios.post('/api/product/create', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    console.log('Response from API:', res.data);
+    const res = await axios.post('/api/product/create', {name, price, discount,quantity, description, categories});
     return res.data;
   } catch (error) {
-    console.error('Error creating product:', error.response?.data || error.message);
-    throw new Error('Error creating product');
+    console.error('Error creating product:', error);
+    throw error;
   }
 };
 

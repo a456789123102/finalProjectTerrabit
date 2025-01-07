@@ -15,27 +15,34 @@ const CreateProductPage = () => {
   }, [isAdmin]);
 
   const handleSubmit = async (productData: any) => {
+    // ตรวจสอบ validation
+    if (
+      !productData.name ||
+      productData.price === '' ||
+      productData.quantity === '' ||
+      !productData.description ||
+      !productData.categories.length
+    ) {
+      console.error('Validation failed: Please fill in all fields');
+      return;
+    }
+  
     try {
-      const formData = new FormData();
-      formData.append('name', productData.name);
-      formData.append('price', String(productData.price));
-      formData.append('discount', String(productData.discount));
-      formData.append('quantity', String(productData.quantity));
-      formData.append('description', productData.description);
-      formData.append('categories', JSON.stringify(productData.categories));
-
-      if (productData.CoverImage) formData.append('CoverImage', productData.CoverImage);
-      if (productData.ImageDetail1) formData.append('ImageDetail1', productData.ImageDetail1);
-      if (productData.ImageDetail2) formData.append('ImageDetail2', productData.ImageDetail2);
-
-      console.log('FormData being sent:', Array.from(formData.entries()));
-
-      const response = await createProduct(formData);
+      const response = await createProduct(
+        productData.name,
+        productData.price,
+        productData.discount/100 || 0,
+        productData.quantity,
+        productData.description,
+        productData.categories
+      );
       console.log('Product created response:', response);
     } catch (error) {
       console.error('Error creating product:', error);
     }
   };
+  
+  
 
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE]">

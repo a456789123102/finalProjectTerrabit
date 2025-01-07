@@ -21,7 +21,6 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   const [categories, setCategories] = useState<number[]>([]);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(mode === 'edit');
-  const router = useRouter();
 
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [imageDetail1, setImageDetail1] = useState<File | null>(null);
@@ -73,14 +72,9 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
 
   
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-  
-    if (!name || price === '' || quantity === '' || !description || !categories.length) {
-      setMessage('Please fill in all fields');
-      return;
-    }
-  
+
     const productData = {
       name,
       price,
@@ -88,19 +82,11 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
       quantity,
       description,
       categories,
-      CoverImage: coverImage,
-      ImageDetail1: imageDetail1,
-      ImageDetail2: imageDetail2,
     };
-  
-    try {
-      await onSubmit(productData);
-      setMessage(mode === 'create' ? 'Product created successfully' : 'Product updated successfully');
-    } catch (error) {
-      console.error("Error saving product:", error);
-      setMessage('Error saving product');
-    }
+
+    onSubmit(productData); // ส่งข้อมูลไปยังฟังก์ชัน handleSubmit
   };
+  
   
 
   const handleCategoryChange = (newCategories: number[]) => {
@@ -112,7 +98,7 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-md w-full ">
+    <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-md w-full ">
       <div className="w-full flex flex-row">
         <div className="w-1/2 border">
           <h2 className="text-xl font-bold text-center text-gray-800 mb-4">

@@ -9,25 +9,37 @@ const getHeaders = (token: string, isFormData: boolean = false) => {
     ? { cache: "no-store", ...(token ? { Authorization: token } : {}) }
     : { "Content-Type": "application/json", cache: "no-store", ...(token ? { Authorization: token } : {}) };
 };
-
-export const post = async (url: string, body: any, token: string = ""): Promise<Response> => {
+///////////////////////////////////////////////////////////////////////////////////////////////////
+export const post = async (
+  url: string,
+  body: any,
+  token: string = ""
+): Promise<Response> => {
   const isFormData = body instanceof FormData;
-  const headers = getHeaders(token, isFormData);
 
+  // กำหนด headers ตามประเภทของ body
+  const getHeaders = (token: string, isFormData: boolean = false): Record<string, string> => {
+    const headers: Record<string, string> = {
+      ...(token && { Authorization: `${token}` }), // เพิ่ม Authorization เฉพาะเมื่อมี token
+      ...(isFormData ? {} : { "Content-Type": "application/json" }), // ไม่กำหนด Content-Type สำหรับ FormData
+      cache: "no-store", // ใช้ cache แบบ no-store เสมอ
+    };
+    return headers;
+  };
   console.log(`Sending data to: ${API_URL + url}`);
-  console.log("Headers:", headers);
 
   if (isFormData) {
-    console.log("FormData entries:", Array.from((body as FormData).entries()));
+    console.log("FormData entries:", Array.from(body.entries()));
   } else {
-    console.log("JSON Body:", JSON.stringify(body));
+    console.log("JSON Body:", JSON.stringify(body)); 
   }
 
   const response = await fetch(API_URL + url, {
     method: "POST",
-    headers,
-    body: isFormData ? body : JSON.stringify(body),
+    headers: getHeaders(token, isFormData), // เพิ่ม isFormData ให้ getHeaders
+    body: isFormData ? body : JSON.stringify(body), // ส่ง FormData หรือ JSON string
   });
+  
 
   if (!response.ok) {
     const error = await response.text();
@@ -37,6 +49,7 @@ export const post = async (url: string, body: any, token: string = ""): Promise<
 
   return response;
 };
+
 
 
 
