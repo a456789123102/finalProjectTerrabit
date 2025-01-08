@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import CategorySelect from '../../../../(haveNavPage)/product/components/categoryCard';
 import { getProductById } from '@/app/apis/product';
 import Image from 'next/image';
-import { uploadProductImage } from '@/app/apis/productImage';
+import { uploadProductImage,deleteImage } from '@/app/apis/productImage';
+
 
 interface ProductFormProps {
   onSubmit: (productData: any) => Promise<void>;
@@ -96,24 +97,17 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
     setExistingImage: (url: string | null) => void,
     setFile: (file: File | null) => void
   ) => {
-    const validLabels = ["CoverImage", "DetailImage1", "DetailImage2"];
-  
-    if (!validLabels.includes(label)) {
-      alert(`Invalid label: ${label}`);
-      return;
-    }
-  
     try {
       const formData = new FormData();
-      formData.append(label, file); // ใช้ชื่อฟิลด์ที่ตรงกับ backend (แทน "file")
+      formData.append(label, file); 
   
       const response = await uploadProductImage(productId, formData);
       console.log("FormData entries:", Array.from(formData.entries()));
       if (!response) {
         throw new Error("Failed to upload image");
       }
-  
-      setExistingImage(response.imageUrl);
+//refresh หน้า page สักทีนึงใน useeffect ตรงนี้ให้รูปที่เพิ่งอัพไปมาแสดง
+fetchProductData()
       setFile(null);
     } catch (error) {
       console.error("Error uploading image:", error);

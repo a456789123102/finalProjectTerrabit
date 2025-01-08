@@ -89,7 +89,6 @@ export const updateProduct = async (
         categories,
       }
     );
-    console.log("DATA FROM APIS"+res)
     return res.data;
     
   } catch (error) {

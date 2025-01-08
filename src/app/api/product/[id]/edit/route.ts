@@ -11,7 +11,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
             return NextResponse.json({ error: "Token not found" }, { status: 401 });
         }
 
-        const data = await patch(`/api/product/${id}/edit`, body, token); // ส่ง token ไปใน header
+        const res = await patch(`/api/product/${id}/edit`, body, token); // ส่ง token ไปใน header
+        const data = await res.json(); 
         console.log("Data from API:", data);
         return NextResponse.json(data);
         

@@ -71,28 +71,17 @@ export const patch = async (
   body: any,
   token: string = ""
 ): Promise<Response> => {
-  const headers = getHeaders(token);  // ใช้ getHeaders ในการสร้าง headers
-  
+  const headers = getHeaders(token);  
   const fullUrl = `${API_URL}${url}`;
-  console.log("Full URL:", fullUrl);  // ตรวจสอบ URL ที่จะส่งคำขอ
+  console.log("Full URL:", fullUrl); 
 
   const res = await fetch(fullUrl, {
     method: "PATCH",
     headers: headers,
-    body: JSON.stringify(body),  // แปลง body เป็น JSON ก่อนส่ง
+    body: JSON.stringify(body), 
   });
 
-  if (!res.ok) {
-    const errorData = await res.json();
-    console.error("Error response from server:", errorData);
-    throw new Error(`Error: ${res.status} ${res.statusText}`);
-  }
-
-  // อ่านข้อมูล response body
-  const data = await res.json();
-  console.log("Response data:", data);
-  
-  return data; // คืนค่า data โดยตรงแทน res
+  return res;
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const deleteRequest = async (
@@ -107,23 +96,7 @@ export const deleteRequest = async (
     method: "DELETE",
     headers: headers
   });
-
-  if (!res.ok) {
-    const text = await res.text();  // อ่านข้อมูลเป็น text ก่อน
-    console.error("Error response from server:", text);
-    throw new Error(`Error: ${res.status} ${res.statusText} - Response: ${text}`);
-  }
-
-  let data;
-  try {
-    data = await res.json();  // แปลง response เป็น JSON
-  } catch (error) {
-    console.error("Failed to parse JSON response:", error);
-    throw new Error('Response is not valid JSON');
-  }
-
-  console.log("Response data:", data);
-  return data;
+return res;
 }
 
 

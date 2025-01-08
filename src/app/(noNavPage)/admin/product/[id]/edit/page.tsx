@@ -15,17 +15,9 @@ const EditProductPage = () => {
   console.log("Product ID from URL params:", productId);
 
   useEffect(() => {
-    if (!isAdmin) {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Please login before creating a product!",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
+    if (isAdmin === false) {
         const currentPath = window.location.pathname;
         router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
-      });
     }
   }, [isAdmin, router]);
 
@@ -65,8 +57,7 @@ const EditProductPage = () => {
         text: 'Your product has been successfully edited.',
         showConfirmButton: false,
       });
-      return response;
-
+      router.push(`/product/${response.id}`);
     } catch (error) {
       console.error('Error updating product:', error);
       Swal.fire({

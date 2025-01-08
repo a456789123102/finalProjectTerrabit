@@ -12,17 +12,9 @@ const CreateProductPage = () => {
   const { isAdmin } = useUserStore();
 
   useEffect(() => {
-    if (!isAdmin) {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Please login before creating a product!",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        const currentPath = window.location.pathname; // ใช้ window.location เพื่อดึง Path ปัจจุบัน
+    if (isAdmin === false) {
+        const currentPath = window.location.pathname; 
         router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
-      });
     }
   }, [isAdmin, router]);
   
@@ -65,7 +57,7 @@ const CreateProductPage = () => {
         text: 'Your product has been successfully created.',
         showConfirmButton: false,
       });
-      router.push(`/product/${response.id}`);
+      router.push(`/admin/product/${response.product.id}/edit`);
     } catch (error) {
       console.error('Error creating product:', error);
       Swal.fire({

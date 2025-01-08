@@ -1,10 +1,10 @@
 import { NextResponse, NextRequest } from "next/server";
 import { post } from "@/app/api/const";
 
-export async function POST(req: NextRequest, { params }: { params: { productId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const formData = await req.formData(); // รับ FormData จากคำขอ
-    const productId = params.productId; // ดึง productId จาก params
+    const productId = params.id; // ดึง productId จาก params
     const token = req.cookies.get("token")?.value; // รับ token จาก cookies
 
     // ส่งคำขอไปยัง backend

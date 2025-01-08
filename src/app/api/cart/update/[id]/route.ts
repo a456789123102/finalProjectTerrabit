@@ -10,7 +10,8 @@ export async function PATCH(req: NextRequest,{params}: { params: { id: string } 
             return NextResponse.json({ error: "Token not found" }, { status: 401 });
         }
 
-        const data = await patch(`/api/cart/update/${id}`, body, token);
+        const res = await patch(`/api/cart/update/${id}`, body, token);
+        const data = await res.json();
         return NextResponse.json(data);
     } catch (error) {
         console.error("Server error:", error);
