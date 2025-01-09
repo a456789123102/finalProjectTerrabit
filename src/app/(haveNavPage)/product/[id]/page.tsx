@@ -151,7 +151,7 @@ const ProductDetail = () => {
               <div>
                 {product.discount !== 0 && product.discount !== null && (<div className='flex flex-row '> <div className="text-3xl text-gray-400 mb-2 line-through">
                   ฿ {product.price}</div>
-                  <div className='ml-2 text-red-400'>-{product.discount * 100}%</div>
+                  <div className='ml-2 text-red-400'>-{product.discount}%</div>
                 </div>)}
               </div>
               <div className="text-4xl font-semibold mb-6">

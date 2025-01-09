@@ -5,7 +5,7 @@ import CategorySelect from '../../../../(haveNavPage)/product/components/categor
 import { getProductById } from '@/app/apis/product';
 import Image from 'next/image';
 import { uploadProductImage,deleteImage } from '@/app/apis/productImage';
-
+import Swal from "sweetalert2";
 
 interface ProductFormProps {
   onSubmit: (productData: any) => Promise<void>;
@@ -31,10 +31,20 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   const [existingImageDetail1, setExistingImageDetail1] = useState<string | null>(null);
   const [existingImageDetail2, setExistingImageDetail2] = useState<string | null>(null);
 
+  const [existingCoverImageId, setExistingCoverImageId] = useState<number | null>(null);
+const [existingImageDetail1Id, setExistingImageDetail1Id] = useState<number | null>(null);
+const [existingImageDetail2Id, setExistingImageDetail2Id] = useState<number | null>(null);
+
   const fetchProductData = async () => {
-    if (mode === 'edit' && productId) {
+    if (mode === 'edit' ) {
+      if (productId === undefined) {
+        console.error("Invalid product ID:", productId);
+        return; // หยุดการทำงานถ้า productId ไม่ถูกต้อง
+      }
       setIsLoading(true);
       try {
+        console.log("Fetching data for product ID:", productId);
+    
         const product = await getProductById(productId);
 
         setName(product.name || '');
@@ -51,6 +61,11 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
         setExistingCoverImage(coverImage?.imageUrl || null);
         setExistingImageDetail1(imageDetail1?.imageUrl || null);
         setExistingImageDetail2(imageDetail2?.imageUrl || null);
+
+        setExistingCoverImageId(coverImage?.id || null);
+        setExistingImageDetail1Id(imageDetail1?.id || null);
+        setExistingImageDetail2Id(imageDetail2?.id || null);
+  
 
         const categoryIds = product.ProductCategory?.map((cat: any) => cat.categoryId) || [];
         setCategories(categoryIds);
@@ -106,7 +121,6 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
       if (!response) {
         throw new Error("Failed to upload image");
       }
-//refresh หน้า page สักทีนึงใน useeffect ตรงนี้ให้รูปที่เพิ่งอัพไปมาแสดง
 fetchProductData()
       setFile(null);
     } catch (error) {
@@ -114,7 +128,39 @@ fetchProductData()
       alert("Failed to upload image. Please try again.");
     }
   };
+
+
+
+  const handleDeleteImage = async (imageId: number,label:string) => {
+    try {
+      // แสดง SweetAlert confirmation dialog
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: `You want to delete ${label} (Id: ${imageId})`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
   
+      // ถ้าผู้ใช้กดปุ่ม "Yes, delete it!"
+      if (result.isConfirmed) {
+        const res = await deleteImage(imageId);
+  
+        if (res) {
+          Swal.fire("Deleted!", "Your image has been deleted.", "success");
+          fetchProductData(); // รีเฟรชข้อมูล
+          return res;
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error);
+  
+      // แสดง SweetAlert ในกรณีเกิดข้อผิดพลาด
+      Swal.fire("Error!", "Failed to delete the image. Please try again.", "error");
+    }
+  };
   
 
 
@@ -203,6 +249,7 @@ fetchProductData()
               label: 'CoverImage',
               existingImage: existingCoverImage,
               setExistingImage: setExistingCoverImage,
+              existingImageId: existingCoverImageId,
               file: coverImage,
               setFile: setCoverImage,
             },
@@ -210,6 +257,7 @@ fetchProductData()
               label: 'DetailImage1',
               existingImage: existingImageDetail1,
               setExistingImage: setExistingImageDetail1,
+              existingImageId: existingImageDetail1Id,
               file: imageDetail1,
               setFile: setImageDetail1,
             },
@@ -217,10 +265,11 @@ fetchProductData()
               label: 'DetailImage2',
               existingImage: existingImageDetail2,
               setExistingImage: setExistingImageDetail2,
+              existingImageId:existingImageDetail2Id,
               file: imageDetail2,
               setFile: setImageDetail2,
             },
-          ].map(({ label, existingImage, setExistingImage, file, setFile }, index) => (
+          ].map(({ label, existingImage, setExistingImage, existingImageId, file, setFile }, index) => (
             <div key={index} className="flex flex-col mb-4">
               <label className="font-medium text-gray-600">{label}:</label>
               {existingImage ? (
@@ -230,7 +279,7 @@ fetchProductData()
                   </div>
                   <button
                     type="button"
-                    onClick={() => console.log("delete")}
+                    onClick={()=> handleDeleteImage(existingImageId!,label)}
                     className="bg-red-600 text-white px-4 py-2 hover:bg-red-700 transition duration-300"
                   >
                     Delete

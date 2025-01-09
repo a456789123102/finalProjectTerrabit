@@ -53,11 +53,11 @@ const EditProductPage = () => {
       console.log('Product updated response:', response);
       Swal.fire({
         icon: 'success',
-        title: `Product ID:${response.id} has been Edited`,
+        title: `Product ID:${response.product.id} has been Edited`,
         text: 'Your product has been successfully edited.',
         showConfirmButton: false,
       });
-      router.push(`/product/${response.id}`);
+      router.push(`/product/${response.product.id}`);
     } catch (error) {
       console.error('Error updating product:', error);
       Swal.fire({
