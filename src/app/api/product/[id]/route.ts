@@ -1,22 +1,9 @@
-// import { NextRequest, NextResponse } from 'next/server';
-// import { get } from "../../const";
 
-// export async function GET(req: NextRequest) {
-//     try {
-//         const  id  = req.nextUrl.searchParams;
-//         const res = await get(`/api/product/${id}`);
-//         const data = await res.json();
-//         return NextResponse.json(data);
-//     } catch (error) {
-//         console.error("Server error:", error);
-//         return NextResponse.json({ error: "Failed to get products" }, { status: 500 });
-//     }
-// }
 
 import { NextRequest, NextResponse } from 'next/server';
 import { get } from "../../const";
 
-export async function GET(req: NextRequest, { params }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
 

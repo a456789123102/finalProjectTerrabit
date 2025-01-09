@@ -1,25 +1,36 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const createProduct = async (
   name: string,
-price: number,
-discount: number,
-quantity: number,
-description: string,
-categories: number[],
+  price: number,
+  discount: number,
+  quantity: number,
+  description: string,
+  categories: number[]
 ) => {
   try {
-    const res = await axios.post('/api/product/create', {name, price, discount,quantity, description, categories});
+    const res = await axios.post("/api/product/create", {
+      name,
+      price,
+      discount,
+      quantity,
+      description,
+      categories,
+    });
     return res.data;
   } catch (error) {
-    console.error('Error creating product:', error);
+    console.error("Error creating product:", error);
     throw error;
   }
 };
 
-
 //ดึงหมด
-export const fetchProducts = async (search?: string, categories?: number[],page?:string,pageSize?:string) => {
+export const fetchProducts = async (
+  search?: string,
+  categories?: number[],
+  page?: string,
+  pageSize?: string
+) => {
   try {
     // สร้าง params โดยใช้ URLSearchParams
     const params = new URLSearchParams();
@@ -39,7 +50,6 @@ export const fetchProducts = async (search?: string, categories?: number[],page?
       params.append("pageSize", pageSize);
       console.log(`pagesize add: ${pageSize}`);
     }
-
 
     const res = await axios.get("/api/product/get", {
       params: params,
@@ -72,14 +82,14 @@ export const updateProduct = async (
   id: number,
   name: string,
   price: number,
-  discount:number,
+  discount: number,
   quantity: number,
   description: string,
   categories: number[]
 ) => {
   try {
     const res = await axios.patch(
-      `/api/product/${id}/edit`,  // ใช้ path ตามที่ backend กำหนด
+      `/api/product/${id}/edit`, // ใช้ path ตามที่ backend กำหนด
       {
         name,
         price,
@@ -90,7 +100,6 @@ export const updateProduct = async (
       }
     );
     return res.data;
-    
   } catch (error) {
     console.error("Error updating product IN APIS:", error);
     throw error;
@@ -98,7 +107,7 @@ export const updateProduct = async (
 };
 
 //ดึงจากไอดีใน params
-export const fetchProductFromCatId = async(id: number) => {
+export const fetchProductFromCatId = async (id: number) => {
   try {
     const res = await axios.get(`/api/product/category/${id}`);
     console.log("Response from Backend:", res.data);
@@ -107,4 +116,26 @@ export const fetchProductFromCatId = async(id: number) => {
     console.error("Error fetching product by category ID:", error);
     throw error;
   }
-}
+};
+
+//ดึงRelated
+export const fetchRelatedProducts = async (
+  categories: number[],
+  name: string,
+  productId: number
+) => {
+  try {
+    // สร้าง params โดยใช้ URLSearchParams
+    const params = new URLSearchParams();
+    params.append("category", categories.join(","));
+    params.append("name", name);
+    const res = await axios.get(`/api/product/${productId}/related`, {
+      params: params,
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw new Error("Error fetching products");
+  }
+};

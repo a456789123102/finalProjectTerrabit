@@ -73,7 +73,7 @@ const ProductDetail = () => {
       router.push(`/login?redirect=${currentPath}`);
       return;
     }
-    if (!product || !product.id || !product.finalPrice || AddQuantity <= 0) {
+    if (!product || !product.finalPrice || AddQuantity <= 0) {
       alert("Product details are incomplete or quantity is invalid");
       return; 
     }
