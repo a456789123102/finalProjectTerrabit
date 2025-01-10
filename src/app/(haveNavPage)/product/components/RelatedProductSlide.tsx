@@ -9,9 +9,11 @@ function RelatedProductSlide({ categories, name, productId }) {
   const fetchProductList = async () => {
     try {
       setLoading(true); // เริ่มการโหลด
+      console.log("categories:", categories);
+console.log("name:", name);
+console.log("productId:", productId);
       const products = await fetchRelatedProducts(categories, name, productId);
-      console.log("Data from fetch:", products);
-      setRelatedProducts(products);
+      setRelatedProducts(products.relatedProducts);
     } catch (error) {
       console.error("Error fetching related products:", error);
     } finally {
@@ -28,9 +30,9 @@ function RelatedProductSlide({ categories, name, productId }) {
       {loading ? (
         <div className="text-center w-full">Loading related products...</div>
       ) : relatedProducts.length > 0 ? (
-        relatedProducts.map((product) => (
-          <div key={product.id} className="mx-2 w-1/4 min-w-[250px]">
-            <ProductCard product={product} />
+        relatedProducts.map((products) => (
+          <div key={products.id} className="mx-2 w-1/4 min-w-[250px]">
+            <ProductCard product={products} />
           </div>
         ))
       ) : (

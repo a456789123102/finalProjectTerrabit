@@ -10,6 +10,7 @@ import StarRating from '@/app/components/starRating';
 import RelatedProductSlide from "../components/RelatedProductSlide"
 import {createCart} from "@/app/apis/carts"
 import { useRouter } from 'next/navigation';
+import ImageSwiper from "../components/imageSwiper";
 
 
 type Product = {
@@ -127,21 +128,10 @@ const ProductDetail = () => {
         <div className='flex flex-col items-center justify-center w-4/6'>
           <div className='flex flex-col md:flex-row items-start justify-between w-full max-w-6xl'> {/* เปลี่ยน w-4/6 เป็น w-full */}
             {/* Left: Image Gallery */}
-            <div className='flex flex-col gap-4'>
-              {product.Image && product.Image.length > 0 ? (
-                product.Image.map((img, index) => (
-                  <div key={index} className={`border border-gray-700 ${index === 0 ? 'w-full' : 'w-24 h-24'} rounded-md`}>
-                    <Image
-                      src={img.imageUrl}
-                      alt={img.name}
-                      layout="responsive"
-                      width={300}
-                      height={400}
-                      className="object-cover rounded-md"
-                    />
-                  </div>
-                ))
-              ) : (
+            <div className='flex flex-col gap-4 w-1/2'>
+              {product.Image && product.Image.length > 0 ? 
+              <ImageSwiper images= {product.Image}/>
+              : (
                 <p>No image available</p>
               )}
             </div>
@@ -205,7 +195,7 @@ const ProductDetail = () => {
               <div className='my-2 pb-2'>Related Product</div>
               <div className='flex justify-between items-center '>
                 <RelatedProductSlide
-                  category={product.ProductCategory.map(cat => cat.categoryId)}
+                  categories={product?.ProductCategory.map((cat) => cat.categoryId)}
                   name={product.name}
                   productId={product.id}
                 />

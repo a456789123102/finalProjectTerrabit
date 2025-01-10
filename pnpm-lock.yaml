@@ -50,6 +50,9 @@ importers:
       sweetalert2:
         specifier: ^11.15.2
         version: 11.15.2
+      swiper:
+        specifier: ^11.2.0
+        version: 11.2.0
       zustand:
         specifier: 5.0.0-rc.2
         version: 5.0.0-rc.2(@types/react@18.3.8)(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
@@ -3162,6 +3165,10 @@ packages:
 
   sweetalert2@11.15.2:
     resolution: {integrity: sha512-KSfHZTU2f+iivA2wudlL1jv9FjvEtJW9Fc0GKC6hhEsZS7SNz3Ppfv92Nerw0E2qqGNT9mPB/07SYEASbHvS+A==}
+
+  swiper@11.2.0:
+    resolution: {integrity: sha512-rjjAKgDEs+grR2eQshVDCcE4KNPC7CI294nfcbV9gE8WCsLdvOYXDeZKUYevqAZZp8j5hE7kpT3dAGVKFBWlxQ==}
+    engines: {node: '>= 4.7.0'}
 
   tailwind-merge@1.14.0:
     resolution: {integrity: sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==}
@@ -7739,6 +7746,8 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   sweetalert2@11.15.2: {}
+
+  swiper@11.2.0: {}
 
   tailwind-merge@1.14.0: {}
 

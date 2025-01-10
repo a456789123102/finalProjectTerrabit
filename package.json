@@ -23,6 +23,7 @@
     "react-dom": "^18",
     "react-select": "^5.8.1",
     "sweetalert2": "^11.15.2",
+    "swiper": "^11.2.0",
     "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
