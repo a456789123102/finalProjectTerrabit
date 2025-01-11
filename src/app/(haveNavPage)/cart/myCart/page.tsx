@@ -4,11 +4,14 @@ import React, { useState, useEffect } from 'react';
 import ProductCart from "../components/productCart";
 import { myCarts } from '@/app/apis/carts';
 import { useCartStore } from '@/store/cartStore';
-import { deleteCart } from '@/app/apis/carts';
+import { deleteCart, clearCart } from '@/app/apis/carts';
 
 function MyCart() {
   const [products, setProducts] = useState([]);
-  const setCartItemCount = useCartStore((state) => state.setCartItemCount); 
+  const setCartItemCount = useCartStore((state) => state.setCartItemCount);
+  const cartItemCount = useCartStore((state) => state.cartItemCount); // ดึงค่า cartItemCount จาก Zustand Store
+
+  const [totalPrice, setTotalPrice] = useState(0);
 
   // ฟังก์ชันที่ใช้ดึงข้อมูลสินค้าในตะกร้า
   const fetchProductCart = async () => {
@@ -17,32 +20,45 @@ function MyCart() {
       console.log("Fetched cartData:", cartData);
 
       if (Array.isArray(cartData)) {
-        setProducts(cartData); // ใช้ cartData โดยตรง
-        setCartItemCount(cartData.length); // อัพเดตจำนวนสินค้าในตะกร้า
+        setProducts(cartData);
+        setCartItemCount(cartData.length);
+        const total = cartData.reduce((acc, cartItem) => acc + cartItem.totalPrice, 0)
+        setTotalPrice(total);  // อัพเดต Total Price ใน State
+        console.log("Total Price:", totalPrice);
       } else {
         console.error("Invalid cart data format:", cartData);
-        setCartItemCount(0); // ถ้าไม่ใช่ Array ให้ตั้งค่าจำนวนสินค้าเป็น 0
+        setCartItemCount(0);
       }
     } catch (error) {
       console.error("Error fetching carts:", error);
-      setCartItemCount(0); // กรณีเกิดข้อผิดพลาดในการดึงข้อมูล
+      setCartItemCount(0);
     }
   };
 
-  // เรียกฟังก์ชันดึงข้อมูลสินค้าเมื่อคอมโพเนนต์โหลดครั้งแรก
   useEffect(() => {
-    fetchProductCart();  // ดึงข้อมูลสินค้าทันทีเมื่อคอมโพเนนต์โหลด
-  }, []); 
+    fetchProductCart();
+  }, []);
 
-  // ฟังก์ชันที่ใช้หลังจากลบสินค้าออกจากตะกร้า
+
   const handleDeleteCart = async (cartId: number) => {
     try {
-      await deleteCart(cartId);  // ส่ง cartId ไปยัง deleteCart
-      fetchProductCart();  // ดึงข้อมูลใหม่หลังจากลบสินค้า
+      console.log("Delete Cart")
+      await deleteCart(cartId);
+      fetchProductCart();
     } catch (error) {
       console.error("Error deleting cart:", error);
     }
   };
+
+  const handleClearCart = async () => {
+    try {
+       await clearCart();
+      fetchProductCart();
+      console.log("clear")
+    } catch (error) {
+      console.error("Clear Cart Error", error)
+    }
+  }
 
   return (
     <div className='flex flex-col items-center'>
@@ -58,14 +74,21 @@ function MyCart() {
           </div>
         </div>
         {products.map((product, index) => (
-          <ProductCart 
-            key={index} 
-            cart={product} 
-            onDelete={() => handleDeleteCart(product.id)} 
+          <ProductCart
+            key={index}
+            cart={product}
+            onDelete={() => handleDeleteCart(product.id)}
           />
         ))}
       </div>
-      <div className="fixed bottom-0 w-full bg-gray-800 text-white text-center p-4">this is footer</div>
+      <div className="fixed bottom-0 w-5/6 bg-white  text-center flex flex-row p-4 justify-end items-center ">
+        <div className='flex flex-row justify-end border items-center gap-3'>
+          <div>Total ({cartItemCount} item):</div>
+          <div className='text-2xl text-orange-600'>฿{totalPrice}</div>
+          <div className=' bg-orange-600 p-2 px-7 text-white  cursor-pointer hover:bg-orange-500'>Check Out</div>
+          <div className='p-2 text-[0.8rem] text-red-600 hover:underline cursor-pointer'onClick={handleClearCart}> Delete All</div>
+        </div>
+      </div>
     </div>
   );
 }

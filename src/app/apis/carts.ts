@@ -53,3 +53,12 @@ export const deleteCart = async (cartId: number) => {
     throw error;  // โยน error ต่อไป
   }
 }
+
+export const clearCart = async () => {
+try {
+  const res = await axios.delete(`/api/cart/clearAll`);
+  return res.data;
+} catch (error) {
+  throw error;
+}
+}
