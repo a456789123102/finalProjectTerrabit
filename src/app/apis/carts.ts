@@ -50,7 +50,7 @@ export const deleteCart = async (cartId: number) => {
     } else {
       console.error("Unexpected error deleting cart:", error);
     }
-    throw error;  // โยน error ต่อไป
+    throw error;  
   }
 }
 
@@ -61,4 +61,13 @@ try {
 } catch (error) {
   throw error;
 }
+}
+
+export const checkoutCart = async () => {
+  try {
+    const res = await axios.post(`/api/cart/checkout`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
 }

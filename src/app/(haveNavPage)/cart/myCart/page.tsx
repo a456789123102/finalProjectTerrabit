@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import ProductCart from "../components/productCart";
-import { myCarts } from '@/app/apis/carts';
 import { useCartStore } from '@/store/cartStore';
-import { deleteCart, clearCart } from '@/app/apis/carts';
+import { deleteCart, clearCart, checkoutCart, myCarts } from '@/app/apis/carts';
 
 function MyCart() {
   const [products, setProducts] = useState([]);
@@ -52,11 +51,19 @@ function MyCart() {
 
   const handleClearCart = async () => {
     try {
-       await clearCart();
+      await clearCart();
       fetchProductCart();
       console.log("clear")
     } catch (error) {
       console.error("Clear Cart Error", error)
+    }
+  }
+
+  const handleCheckout = async () => {
+    try {
+      await checkoutCart();
+    } catch (error) {
+      console.error("Checkout Error", error)
     }
   }
 
@@ -85,8 +92,8 @@ function MyCart() {
         <div className='flex flex-row justify-end border items-center gap-3'>
           <div>Total ({cartItemCount} item):</div>
           <div className='text-2xl text-orange-600'>฿{totalPrice}</div>
-          <div className=' bg-orange-600 p-2 px-7 text-white  cursor-pointer hover:bg-orange-500'>Check Out</div>
-          <div className='p-2 text-[0.8rem] text-red-600 hover:underline cursor-pointer'onClick={handleClearCart}> Delete All</div>
+          <div className=' bg-orange-600 p-2 px-7 text-white  cursor-pointer hover:bg-orange-500' onClick={handleCheckout}>Check Out</div>
+          <div className='p-2 text-[0.8rem] text-red-600 hover:underline cursor-pointer' onClick={handleClearCart}> Delete All</div>
         </div>
       </div>
     </div>

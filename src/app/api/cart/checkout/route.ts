@@ -1,0 +1,20 @@
+import { NextRequest, NextResponse } from "next/server";
+import { post } from "@/app/api/const";
+
+export async function POST(req: NextRequest) {
+    try {
+        const token = req.cookies.get("token")?.value;
+        if (!token) {
+            return NextResponse.json({ error: "Token not found" }, { status: 401 });
+        }
+
+        const res = await post("/api/cart/checkout", token);
+        const data = await res.json();
+
+        return NextResponse.json(data);
+
+    } catch (error) {
+        console.error("Server error:", error);
+        return NextResponse.json({ error: "Checkout failed" }, { status: 500 });
+    }
+}
