@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import AddressForm from '../components/addressForm'; 
 
@@ -12,7 +13,6 @@ interface AddressData {
   }
 
 function CreateAddressPage() {
-
     const handleSubmit = async (addressData:AddressData) => {
         if (!addressData.recipientName || !addressData.street || !addressData.city || !addressData.state || !addressData.zipCode) {
             console.error("All fields are required");

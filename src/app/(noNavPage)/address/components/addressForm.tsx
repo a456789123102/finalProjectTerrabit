@@ -1,5 +1,7 @@
 'use client'
-import React, { useState } from 'react';
+import { getOwnAddress } from '@/app/apis/address';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface AddressFormProps {
   onSubmit: (addressData: any) => Promise<void>;
@@ -12,6 +14,35 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const router = useRouter();
+
+  const fetchAddress = async () => {
+    try {
+      const response = await getOwnAddress();
+      const address = response.address; // Extract the address object
+      console.log('address:::', address);
+
+      if (address) {
+        if (mode === 'edit') {
+          // Set values for edit mode
+          setRecipientName(address.recipientName);
+          setStreet(address.street);
+          setCity(address.city);
+          setState(address.state);
+          setZipCode(address.zipCode);
+        } else if (mode === 'create') {
+          // Redirect to edit page if address exists
+          router.push('/address/edit');
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching address:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAddress();
+  }, [mode]);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +112,6 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
       <button type="submit" className="w-2/3 px-4 py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600 self-center">
         {mode === 'create' ? 'Create Address' : 'Update Address'}
       </button>
-
     </form>
   );
 }

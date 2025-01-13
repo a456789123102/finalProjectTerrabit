@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { updateAddress } from '@/app/apis/address';
 import AddressForm from '../components/addressForm';
@@ -19,7 +20,7 @@ function EditAddressPage() {
           }
           
         try {
-            console.log("submit create")
+            console.log("submit edit")
             const response = await updateAddress(
                 addressData.recipientName, 
                 addressData.street, 
