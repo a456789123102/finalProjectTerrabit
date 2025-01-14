@@ -8,9 +8,8 @@ export const config = {
   export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        console.log("BODY =" + body);
         const token = req.cookies.get("token")?.value;
-
+console.log("Token from NextJS:", token);
         const res = await post('/api/cart/add', body, token);
         const data = await res.json();
         return NextResponse.json(data);
