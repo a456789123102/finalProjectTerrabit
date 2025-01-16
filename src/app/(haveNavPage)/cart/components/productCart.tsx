@@ -53,8 +53,7 @@ function ProductCart({ cart, onDelete }: { cart: Cart; onDelete: () => void }) {
         </div>
         <div className='flex flex-col'>
           <div>
-            <div onClick={onDelete} className='cursor-pointer hover:underline hover:text-red-600'>Delete</div>
-            <div>Related</div>
+            <div onClick={onDelete} className='text-slate-800 cursor-pointer hover:underline hover:text-red-600 text-[0.7rem]'>Remove</div>
           </div>
         </div>
       </div>

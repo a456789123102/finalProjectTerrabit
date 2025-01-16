@@ -1,9 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { myOrder } from "@/app/apis/order";
+import addressDropdown from "../../components/addressDropdown";
 
 function Orders() {
-  const [orders, setOrders] = useState([]); // เก็บข้อมูล orders
+  const [orders, setOrders] = useState([]); 
+  const [addresses, setAddress] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [status, setStatus] = useState("awaiting_slip_upload"); // สถานะคำสั่งซื้อ
 
   useEffect(() => {
@@ -16,6 +19,16 @@ function Orders() {
         console.error("Error fetching orders:", error);
       }
     };
+
+    const fetchAddress = async () => {
+      try {
+        const addressItems = await getMyAddress();
+        console.log("Fetched addresses:", JSON.stringify(addressItems, null, 2)); // Debug Response
+        setAddress(addressItems); // อัปเดต State
+      } catch (error) {
+        console.error("Error fetching addresses:", error);
+      }
+    }
 
     fetchOrders();
   }, [status]);

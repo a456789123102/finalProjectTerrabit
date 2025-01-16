@@ -72,7 +72,7 @@ function MyCart() {
   return (
     <div className='flex flex-col items-center'>
       <div className='self-start p-2 bg-white w-full pl-5'>Shopping Cart</div>
-      <div className='w-5/6 justify-center flex flex-col mt-5'>
+      <div className='w-5/6 justify-center flex flex-col mt-5 min-w-[850px]'>
         <div className='flex flex-row w-full h-12 items-center border bg-slate-50 p-2'>
           <div className='w-1/2 pl-5 border'>Product</div>
           <div className='flex flex-row w-1/2 justify-around'>
@@ -90,12 +90,12 @@ function MyCart() {
           />
         ))}
       </div>
-      <div className="fixed bottom-0 w-5/6 bg-white  text-center flex flex-row p-4 justify-end items-center ">
+      <div className="fixed bottom-0 w-5/6 bg-white  text-center flex flex-row p-4 justify-end items-center min-w-[544px]">
         <div className='flex flex-row justify-end border items-center gap-3'>
           <div>Total ({cartItemCount} item):</div>
           <div className='text-2xl text-orange-600'>฿{totalPrice}</div>
           <div className=' bg-orange-600 p-2 px-7 text-white  cursor-pointer hover:bg-orange-500' onClick={handleCheckout}>Check Out</div>
-          <div className='p-2 text-[0.8rem] text-red-600 hover:underline cursor-pointer' onClick={handleClearCart}> Delete All</div>
+          <div className='p-2 text-[0.8rem] text-red-600 hover:underline cursor-pointer' onClick={handleClearCart}>Remove All</div>
         </div>
       </div>
     </div>

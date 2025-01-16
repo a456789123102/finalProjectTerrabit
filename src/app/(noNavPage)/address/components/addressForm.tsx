@@ -1,7 +1,7 @@
 'use client'
-import { getOwnAddress } from '@/app/apis/address';
+import { getOneAddress } from '@/app/apis/address';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams} from 'next/navigation';
 
 interface AddressFormProps {
   onSubmit: (addressData: any) => Promise<void>;
@@ -14,35 +14,33 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
-  const router = useRouter();
 
-  const fetchAddress = async () => {
-    try {
-      const response = await getOwnAddress();
-      const address = response.address; // Extract the address object
-      console.log('address:::', address);
-
-      if (address) {
-        if (mode === 'edit') {
-          // Set values for edit mode
-          setRecipientName(address.recipientName);
-          setStreet(address.street);
-          setCity(address.city);
-          setState(address.state);
-          setZipCode(address.zipCode);
-        } else if (mode === 'create') {
-          // Redirect to edit page if address exists
-          router.push('/address/edit');
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching address:', error);
-    }
-  };
+  const { id } = useParams();
+  console.log('id:', id);
 
   useEffect(() => {
-    fetchAddress();
-  }, [mode]);
+    if (mode === 'edit' && id) { 
+      const fetchAddress = async () => {
+        try {
+          const response = await getOneAddress(id);
+          if (response.address && response.address.length > 0) { 
+            const address = response.address[0]; 
+            console.log('Fetched address:', address);
+            
+            setRecipientName(address.recipientName || ""); 
+            setStreet(address.street || ""); 
+            setCity(address.city || ""); 
+            setState(address.state || ""); 
+            setZipCode(address.zipCode || ""); 
+          }
+        } catch (error) {
+          console.error('Error fetching address:', error);
+        }
+      };
+      fetchAddress();
+    }
+  }, [mode, id]);
+  
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

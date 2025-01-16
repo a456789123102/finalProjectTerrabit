@@ -93,7 +93,7 @@ function ProductTable() {
           return <span>{value.map((item) => item.category?.name).join(", ")}</span>;
         }
         if (key === "discount") {
-          return <span>{(value * 100).toFixed(2)}%</span>;
+          return <span>{value}%</span>;
         }
         if (key === "Actions") {
           return (
