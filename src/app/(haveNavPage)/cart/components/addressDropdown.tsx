@@ -1,29 +1,58 @@
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 
-function addressDropdown(addresses,selectedAddress,setSelectedAddress) {
+interface Address {
+  id: string;
+  recipientName: string;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+}
+
+interface AddressDropdownProps {
+  addresses: Address[];
+  selectedAddress: string;
+  handleSelectAddress: (id: string) => void;
+  oderId: string;
+}
+const AddressDropdown: React.FC<AddressDropdownProps> = ({ addresses, selectedAddress,oderId, handleSelectAddress }) => {
+  const selectedAddressObj = addresses.find((address) => address.id === selectedAddress);
+
   return (
-    <div className="flex flex-row items-center h-full p-1" >
-      <Dropdown  >
-        <DropdownTrigger>
-          <Button variant="bordered">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 hover:text-amber-400">
-     <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-   </svg>
-   
-          </Button>
+    <div className="bg-gray-200 w-full ">
+    <Dropdown className="w-full">
+      <DropdownTrigger>
+        <Button variant="bordered" className="w-full block">
+          <div className="text-slate-900 border text-[0.7rem] w-full whitespace-normal break-words text-left ">
+            {selectedAddressObj
+              ? `${selectedAddressObj.recipientName}, ${selectedAddressObj.street}, ${selectedAddressObj.city}, ${selectedAddressObj.state}, ${selectedAddressObj.zipCode}`
+              : "Select an address"}
+          </div>
+        </Button>
         </DropdownTrigger>
-        <DropdownMenu aria-label="Dynamic Actions" className="border">
-          {addresses.map((address) => (
-         <DropdownItem key={address.id} className={`hover:text-base border-b py-1 text-sm`}>
-     <div onClick={() => setSelectedAddress(address.id)} className={`${address.id === selectedAddress ? 'bg-yellow-200' : ''}`}>
-    {address.recipientName}, {address.street}, {address.city}, {address.state}, {address.zipCode}
-     </div>
-         </DropdownItem>
-          ))}
+        <DropdownMenu aria-label="Dynamic Actions" className="border rounded shadow-lg w-full">
+          {addresses
+            .filter((address) => address.id !== selectedAddress)
+            .map((address) => (
+              <DropdownItem
+                key={address.id}
+                className="bg-gray-100 border-b py-2 text-[0.7rem] my-1 w-full"
+              >
+                <div
+                  onClick={() => handleSelectAddress(oderId,address.id)}
+                  className={`p-2 hover:bg-gray-200 text text-slate-700`}
+                >
+                  {address.recipientName}, {address.street}, {address.city},{" "}
+                  {address.state}, {address.zipCode}
+                </div>
+              </DropdownItem>
+            ))}
         </DropdownMenu>
       </Dropdown>
     </div>
-  )
+
+  );
 }
 
-export default addressDropdown
+export default AddressDropdown;
+

@@ -16,6 +16,7 @@ interface Address {
 function MyAddress() {
     const router = useRouter();
     const [address, setAddress] = useState<Address[]>([]);
+    const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchAddress = async () => {
@@ -38,15 +39,35 @@ function MyAddress() {
         try {
             const deleteAction = await deleteAddress(id);
             console.log('Deleted address:', deleteAction);
+            if (deleteAction) {
+                setAlertMessage('Address deleted successfully!');
+                setTimeout(() => {
+                    setAlertMessage(null);
+                }, 2000);
+            }
             setAddress(address.filter((addr) => addr.id !== id));
         } catch (error) {
             console.error('Error deleting address:', error);
+            setAlertMessage('Failed to delete Address!');
+            setTimeout(() => {
+                setAlertMessage(null);
+            }, 2000);
         }
     }
 
     return (
-        <div className='w-full h-screen flex justify-center items-center'>
-            <div className='w-3/5 min-w-96 bg-slate-100 min-h-2.5 flex flex-col p-7'>
+        <div className='w-full h-screen flex justify-center items-center relative'>
+                  {alertMessage && (
+        <div
+          className={` fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 p-7 rounded shadow-lg ${alertMessage.includes("successfully")
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+            }`}
+        >
+          {alertMessage}
+        </div>
+      )}
+            <div className='w-3/5 min-w-96 bg-slate-100 flex flex-col p-7 mt-20 min-h-screen '>
                 <div className='flex flex-row justify-between font-bold py-3'>
                 <div className='text-xl '>You have {addressAmount} Addresses</div>
                 <div className='p-2 bg-slate-600 text-white cursor-pointer hover:bg-slate-800 flex flex-row gap-1' onClick={() => router.push('/address/create')}>

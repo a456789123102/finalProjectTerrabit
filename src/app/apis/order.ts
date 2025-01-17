@@ -22,12 +22,19 @@ console.log(`queryString: ${queryString}`);
     // รวม query string กับ URL
     const url = queryString ? `/api/order/get?${queryString}` : "/api/order/get";
 
-    // ส่ง request ไปยัง API
     const res = await axios.get(url);
-    return res.data; // ส่งข้อมูล JSON กลับ
+    return res.data; 
   } catch (error) {
     console.error("Error fetching orders:", error);
     throw error;
   }
 };
 
+export const updateOrderAddress = async (id: number) => {
+  try {
+    const res = await axios.patch(`/api/order/update/${id}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
