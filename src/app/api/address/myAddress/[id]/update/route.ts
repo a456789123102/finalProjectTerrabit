@@ -1,4 +1,4 @@
-import { type NextRequest, NextResponse } from 'next/server';
+import {NextRequest, NextResponse } from 'next/server';
 import { patch } from "@/app/api/const"; 
 
 
@@ -17,6 +17,6 @@ import { patch } from "@/app/api/const";
         return NextResponse.json(data);
     }catch (error) {
         console.error("Server error:", error);
-        return NextResponse.json({ error: "update product failed" }, { status: 500 });
+        return NextResponse.json({ error: "update address failed" }, { status: 500 });
     }
 }

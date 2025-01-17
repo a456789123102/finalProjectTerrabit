@@ -1,7 +1,7 @@
 'use client'; // ใช้คำสั่งนี้ที่บรรทัดแรก
 
 import React, { useEffect, useState } from 'react';
-import { getOwnAddress } from '@/app/apis/address'; // Make sure to replace 'path-to-getOwnAddress' with the actual path
+import { getOwnAddress,deleteAddress } from '@/app/apis/address'; // Make sure to replace 'path-to-getOwnAddress' with the actual path
 import { useRouter } from 'next/navigation'; 
 
 interface Address {
@@ -22,7 +22,7 @@ function MyAddress() {
             try {
                 const response = await getOwnAddress();
                 console.log('Fetched address:', response);
-                setAddress(response.address);
+               setAddress(response.address);
             } catch (error) {
                 console.error('Error fetching address:', error);
             }
@@ -34,19 +34,37 @@ function MyAddress() {
        router.push(`/address/${id}/edit`);
     }
 
+    const handleDeleteClick = async (id: number) => {
+        try {
+            const deleteAction = await deleteAddress(id);
+            console.log('Deleted address:', deleteAction);
+            setAddress(address.filter((addr) => addr.id !== id));
+        } catch (error) {
+            console.error('Error deleting address:', error);
+        }
+    }
+
     return (
         <div className='w-full h-screen flex justify-center items-center'>
-            <div className='w-3/5 min-w-96 bg-slate-100 min-h-96 flex flex-col p-7'>
-                <div className='text-xl py-3'>You have {addressAmount} Addresses</div>
+            <div className='w-3/5 min-w-96 bg-slate-100 min-h-2.5 flex flex-col p-7'>
+                <div className='flex flex-row justify-between font-bold py-3'>
+                <div className='text-xl '>You have {addressAmount} Addresses</div>
+                <div className='p-2 bg-slate-600 text-white cursor-pointer hover:bg-slate-800 flex flex-row gap-1' onClick={() => router.push('/address/create')}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6 " >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <div className=''>Add new Address</div>
+                </div>
+                </div>
                 {addressAmount > 0 ?
                     <div>
                         {address.map((addr) => (
                             <div key={addr.id} className='border-2 p-4 mb-4 hover:bg-zinc-200 flex flex-row'>
                                 <div className='w-full flex flex-col'>
-                                    <div><strong>Recipient Name :</strong> {addr.recipientName}</div>
-                                    <div><strong>City :</strong> {addr.city}</div>
-                                    <div><strong>State :</strong> {addr.state}</div>
-                                    <div><strong>Zip Code :</strong> {addr.zipCode}</div>
+                                    <div className='flex flex-row gap-2'><div className="font-bold">Recipient Name :</div> <div>{addr.recipientName}</div></div>
+                                    <div className='flex flex-row gap-2'><div className="font-bold">City :</div> <div>{addr.city}</div></div>
+                                    <div className='flex flex-row gap-2'><div className="font-bold">State :</div> <div>{addr.state}</div></div>
+                                    <div className='flex flex-row gap-2'><div className="font-bold">Zip Code :</div> <div>{addr.zipCode}</div></div>
                                 </div>
                                 <div className="flex flex-col items-center justify-between space-y-2">
 
@@ -74,7 +92,7 @@ function MyAddress() {
                                     </div>
 
                                     {/* Delete Icon */}
-                                    <div className="relative group flex items-center justify-center">
+                                    <div className="relative group flex items-center justify-center" onClick={() => handleDeleteClick(addr.id)}>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="none"
@@ -100,7 +118,7 @@ function MyAddress() {
                         ))}
                     </div>
                     :
-                    <div>go create one</div>
+                    <div>Create some...</div>
                 }
             </div>
         </div>
