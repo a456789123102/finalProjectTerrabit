@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import ProductCart from "../components/productCart";
 import { useCartStore } from '@/store/cartStore';
 import { deleteCart, clearCart, checkoutCart, myCarts } from '@/app/apis/carts';
-
+import { useRouter } from "next/navigation";
 function MyCart() {
   const [products, setProducts] = useState([]);
   const setCartItemCount = useCartStore((state) => state.setCartItemCount);
   const cartItemCount = useCartStore((state) => state.cartItemCount); // ดึงค่า cartItemCount จาก Zustand Store
+  const router = useRouter();
 
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -64,6 +65,7 @@ function MyCart() {
       console.log("Checkout here naja")
       await checkoutCart();
       fetchProductCart();
+      router.push('/user/purchase')
     } catch (error) {
       console.error("Checkout Error", error)
     }

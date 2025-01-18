@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { myOrder, updateOrderAddress } from "@/app/apis/order";
 import { getOwnAddress } from "@/app/apis/address";
-import AddressDropdown from "../../components/addressDropdown";
+import AddressDropdown from "../components/addressDropdown";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -48,23 +48,22 @@ function Orders() {
   };
 
   const statuses = [
-    { key: "awaiting_slip_upload", label: "Pending upload slip" },
-    { key: "awaiting_confirmation", label: "Pending confirmation" },
+    { key: "awaiting_slip_upload", label: "To Pay" },
+    { key: "awaiting_confirmation", label: "To Confirmed" },
     { key: "order_approved", label: "Approved" },
     { key: "order_cancelled", label: "Cancelled" },
   ];
 
   return (
-    <div className="  flex flex-col items-center gap-3 min-w-[590px]">
+    <div className="  flex flex-col items-center gap-3 min-w-[590px] ">
       <div className='self-start p-2 bg-white w-full pl-5'>checkout section</div>
-      <div className=" bg-white w-5/6 justify-center flex flex-col mt-5 p-6">
-        <div className="p-4 text-xl">Payment Status</div>
-        <div className="flex flex-row ">
+      <div className=" bg-gray-100 w-5/6 justify-center flex flex-col mt-5 p-6 m-4 border">
+        <div className="flex flex-row bg-white justify-between">
           {statuses.map((item) => (
             <button
               key={item.key}
-              className={`p-2 px-4 transition-all duration-300 hover:text-blue-600 hover:border-b
-            ${status === item.key ? "border-x border-b bg-gradient-to-t from-yellow-200 to-white" : ""}`}
+              className={` p-4 px-6 transition-all duration-300  hover:text-yellow-600 text-[1.1rem] w-full
+            ${status === item.key ? "border-b-2  border-yellow-600 text-yellow-600 " : "border-b-2"}`}
               onClick={() => setStatus(item.key)}
             >
               {item.label}

@@ -6,7 +6,7 @@ function Layout({ children }: PropsWithChildren) {
     return (
       <Text className="">
         <Nav />  {/* Nav จะอยู่ภายใต้ Logo */}
-        <div className="pt-3">
+        <div className="pt-7 bg-gray-100 w-full h-screen">
           {children}  {/* Content ของแต่ละหน้า */}
         </div>
       </Text>
