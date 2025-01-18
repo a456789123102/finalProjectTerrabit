@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {patch} from "../../../const";
 
 export async function PATCH(req: NextRequest,{params}: { params: { id: string } }) {
+    
     try {
         const {id} = params;
         const body = await req.json();

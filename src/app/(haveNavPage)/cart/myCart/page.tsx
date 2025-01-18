@@ -72,27 +72,28 @@ function MyCart() {
   }
 
   return (
-    <div className='flex flex-col items-center'>
-      <div className='self-start p-2 bg-white w-full pl-5'>Shopping Cart</div>
-      <div className='w-5/6 justify-center flex flex-col mt-5 min-w-[850px]'>
-        <div className='flex flex-row w-full h-12 items-center border bg-slate-50 p-2'>
-          <div className='w-1/2 pl-5 border'>Product</div>
-          <div className='flex flex-row w-1/2 justify-around'>
-            <div>Unit Price</div>
-            <div>Quantity</div>
-            <div>Total Price</div>
-            <div>Actions</div>
+    <div className='flex flex-col items-center bg-gray-100 min-h-screen'>
+      <div className='self-start p-2 bg-white w-full pl-5 mt-7 border'>Shopping Cart</div>
+      <div className='w-5/6 justify-center flex flex-col mt-5 min-w-[850px] text-gray-700'>
+        <div className='flex flex-row w-full h-12 items-center shadow-sm bg-white p-2'>
+          <div className='w-1/2 pl-5 '>Product</div>
+          <div className='flex flex-row w-1/2 '>
+            <div className='w-1/4 items-center justify-center flex'>Unit Price</div>
+            <div className='w-1/4 items-center justify-center flex'>Quantity</div>
+            <div className='w-1/4 items-center justify-center flex'>Total Price</div>
+            <div className='w-1/4 items-center justify-center flex'>Actions</div>
           </div>
         </div>
         {products.map((product, index) => (
-          <ProductCart
-            key={index}
-            cart={product}
-            onDelete={() => handleDeleteCart(product.id)}
-          />
+  <ProductCart
+  key={index}
+  cart={product}
+  onDelete={() => handleDeleteCart(product.id)}
+  onFetchData={fetchProductCart} // ใช้ชื่อ onFetchData ตรงกัน
+/>
         ))}
       </div>
-      <div className="fixed bottom-0 w-5/6 bg-white  text-center flex flex-row p-4 justify-end items-center min-w-[544px]">
+      <div className="fixed bottom-0 w-5/6 bg-white  text-center flex flex-row p-4 justify-end items-center min-w-[544px] border">
         <div className='flex flex-row justify-end border items-center gap-3'>
           <div>Total ({cartItemCount} item):</div>
           <div className='text-2xl text-orange-600'>฿{totalPrice}</div>

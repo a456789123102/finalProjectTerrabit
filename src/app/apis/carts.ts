@@ -32,7 +32,7 @@ export const updateCart = async (
   quantity: number
 ) => {
   try {
-    const res = await axios.put(`/api/cart/update/${productId}`,{quantity});
+    const res = await axios.patch(`/api/cart/update/${productId}`,{quantity});
     return res.data;
   } catch (error) {
     console.error("Error updating cart:",error);
