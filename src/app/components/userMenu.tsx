@@ -60,7 +60,7 @@ export default function UserMenu() {
             <DropdownItem
               key={item.key}
               className="hover:bg-orange-100 py-1"
-              onClick={() => item.onClick ? item.onClick() : handleAction(item.path)}
+              onPress={() => item.onClick ? item.onClick() : handleAction(item.path)}
             >
               {item.label}
             </DropdownItem>

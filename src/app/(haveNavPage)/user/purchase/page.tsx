@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import { myOrder, updateOrderAddress } from "@/app/apis/order";
 import { getOwnAddress } from "@/app/apis/address";
 import AddressDropdown from "../components/addressDropdown";
-import Image from "next/image";
+
+import SlipSection from "../components/slipSection";
+import { uploadSlipImage } from "@/app/apis/slipImage";
 
 interface OrderItem {
   id: string;
@@ -13,20 +15,20 @@ interface OrderItem {
 }
 
 interface Order {
-  id: string;
+  id: number;
   totalPrice: number;
   items: OrderItem[];
   status: string;
-  addressesId: string;
+  addressesId: number;
 }
 
 interface Address {
-  id: string;
-  addressLine: string;
+  id: number;
+  recipientName: string;
+  street: string;
   city: string;
   state: string;
-  postalCode: string;
-  country: string;
+  zipCode: string;
 }
 
 interface Status {
@@ -43,40 +45,53 @@ function Orders() {
 
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const orderItems = await myOrder(status);
-        setOrders(orderItems); // Update state with fetched orders
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
-    };
-    fetchOrders();
+    fetchOrders(); // โหลดข้อมูลเมื่อ component ถูก mount หรือ status เปลี่ยน
   }, [status]);
 
   useEffect(() => {
-    const fetchAddress = async () => {
-      try {
-        const addressItems = await getOwnAddress();
-        console.log("Fetched addresses:", JSON.stringify(addressItems, null, 2));
-        setAddresses(addressItems.address); // Ensure `addressItems.address` is an array
-      } catch (error) {
-        console.error("Error fetching addresses:", error);
-      }
-    };
-    fetchAddress();
+    fetchAddress(); // โหลดข้อมูลเมื่อ orders เปลี่ยน
   }, [orders]);
 
-  const handleSelectAddress = async (orderId: string, newAddressId: string) => {
+  const fetchOrders = async () => {
+    try {
+      const orderItems = await myOrder(status);
+      setOrders(orderItems); // อัปเดตข้อมูล order
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+
+  const fetchAddress = async () => {
+    try {
+      const addressItems = await getOwnAddress();
+      console.log("Fetched addresses:", JSON.stringify(addressItems, null, 2));
+      setAddresses(addressItems.address); // อัปเดตข้อมูล address
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+    }
+  };
+
+  const handleSelectAddress = async (orderId: number, newAddressId: number) => {
     try {
       console.log("orderId:", orderId, "newAddressId:", newAddressId);
-      // Example: Uncomment when `updateOrderAddress` API is ready
-      // const res = await updateOrderAddress(orderId, newAddressId);
-      // console.log("updated order addresses:", JSON.stringify(res, null, 2));
+      const res = await updateOrderAddress(orderId, newAddressId);
+      console.log("updated order addresses:", JSON.stringify(res, null, 2));
+      await fetchOrders(); // รีเฟรชข้อมูลหลังจากอัปเดตที่อยู่สำเร็จ
     } catch (error) {
       console.error("Error updating address:", error);
     }
   };
+
+  const handleUploadSlip = async (orderId: number, slip: File) => {
+    try {
+      console.log("orderId:", orderId, "slip:", slip);
+    const res = await uploadSlipImage(orderId, slip);
+    console.log("Uploaded slip:", JSON.stringify(res, null, 2));
+    fetchOrders();
+    } catch (error) {
+      console.error("Error uploading slip:", error);
+    }
+  }
 
 
   const handleImageClick = () => {
@@ -91,6 +106,7 @@ function Orders() {
     { key: "awaiting_slip_upload", label: "To Pay" },
     { key: "awaiting_confirmation", label: "To Confirmed" },
     { key: "order_approved", label: "Approved" },
+    { key: "order_rejected", label: "Rejected" },
     { key: "order_cancelled", label: "Cancelled" },
   ];
 
@@ -132,64 +148,31 @@ function Orders() {
                     ))}
                   </div>
                 </div>
-                <div className="border w-1/4 p-2 gap-1 flex flex-col">
-                  <div>Slip:</div>
-                  {order.status === "awaiting_slip_upload" ? (
-                    <input type="file" placeholder="Slip Image" />
-                  ) : (
-                    order.slipUrl && (
-                      <>
-                        {/* รูปภาพที่แสดงปกติ */}
-                        <Image
-                          src={order.slipUrl}
-                          alt="Slip"
-                          width={100}
-                          height={100}
-                          className="cursor-pointer"
-                          onClick={handleImageClick} // คลิกเพื่อเปิด Modal
-                        />
-
-                        {/* Modal สำหรับรูปภาพขยาย */}
-                        {isModalOpen && (
-                          <div
-                            className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center z-50"
-                            onClick={handleModalClose} // คลิกนอก Modal เพื่อปิด
-                          >
-                            <div className="relative">
-                              {/* รูปภาพขยาย */}
-                              <Image
-                                src={order.slipUrl}
-                                alt="Slip Enlarged"
-                                width={800}
-                                height={800}
-                             
-                              />
-                              {/* ปุ่มปิด */}
-                              <button
-                                className="absolute top-2 right-2 text-white bg-red-600 px-2 py-1 rounded"
-                                onClick={handleModalClose}
-                              >
-                                Close
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    )
-                  )}
+                <div className="border w-1/4 p-2 gap-1 ">
+                  <SlipSection
+                    order={order}
+                    isModalOpen={isModalOpen}
+                    handleImageClick={handleImageClick}
+                    handleModalClose={handleModalClose}
+                    handleUploadSlip={handleUploadSlip}
+                  />
                 </div>
                 <div className="border w-1/4 p-2 flex flex-col gap-2">
-                  <div>Shipping to:</div>
+                  {order.addressesId ? (<div className="text-green-700">Shipping to:</div>):(<div className="text-red-700">Please Select an address:</div>)}
                   <AddressDropdown
-                    addresses={addresses}
-                    selectedAddress={order.addressesId}
-                    orderId={order.id}
-                    handleSelectAddress={handleSelectAddress}
+                    addresses={addresses} // Array ของ Address
+                    selectedAddress={order.addressesId} // ID ของที่อยู่ที่เลือก
+                    orderId={order.id} // ID ของออร์เดอร์
+                    handleSelectAddress={handleSelectAddress} // ฟังก์ชัน callback
                   />
+
+
                 </div>
                 <div className="border w-1/4 p-2">
                   <div>Action</div>
-                  <div>Delete</div>
+                  {order.status === "awaiting_slip_upload" ? (
+                    <div>Delete</div>
+                  ) : <div>Cancel</div>}
                 </div>
               </div>
             ))

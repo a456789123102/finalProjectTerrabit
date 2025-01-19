@@ -26,13 +26,9 @@ function Logo() {
     }
   }, [username, setUser, router]);  // ตรวจสอบเมื่อ username เปลี่ยน
 
-  const handleClick = () => {
-    router.push('/');
-  };
-
   return (
     <Text className='flex flex-row justify-between w-screen h-8 px-5 bg-[#181C14]'>
-      <Link href={'/'} className='text-yellow-500 hover:text-yellow-300 cursor-pointer' onClick={handleClick}>
+      <Link href={'/'} className='text-yellow-500 hover:text-yellow-300 cursor-pointer' >
         Terrabit pixel Studio
       </Link>
       {username ? (

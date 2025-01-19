@@ -30,9 +30,10 @@ console.log(`queryString: ${queryString}`);
   }
 };
 
-export const updateOrderAddress = async (id: number) => {
+export const updateOrderAddress = async (id: number,newAddressId:number) => {
   try {
-    const res = await axios.patch(`/api/order/update/${id}`);
+    const res = await axios.patch(`/api/order/update/${id}`,{newAddressId});
+    console.log(`Patching :/api/order/update/${id}`);
     return res.data;
   } catch (error) {
     throw error;

@@ -67,7 +67,7 @@ export default function AdminMenu() {
               key={item.key}
               color={item.key === "delete" ? "danger" : "default"}
               className="hover:bg-orange-100"
-              onClick={() => handleAction(item.path)} 
+              onPress={() => handleAction(item.path)} 
             >
               {item.label}
             </DropdownItem>
