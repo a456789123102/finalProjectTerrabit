@@ -37,14 +37,14 @@ function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, h
     <div className="w-full flex flex-col gap-2">
       {/* ข้อความแสดงสถานะ */}
       {order.slipUrl ? (
-        <div className="text-green-700">Your Payment Slip:</div>
+        <div className="text-green-700 text-[1.1rem] mb-2 font-bold">Your Payment Slip:</div>
       ) : (
-        <div className="text-red-700">Please upload your payment slip Here:</div>
+        <div className="text-red-700 text-[1.1rem] mb-2 font-bold">Upload Your payment slip:</div>
       )}
 
       {/* อัพโหลดสลิป */}
       {order.status === "awaiting_slip_upload" && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 text-[0.7rem] text-slate-700">
           <input
             type="file"
             placeholder="Slip Image"
@@ -57,7 +57,7 @@ function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, h
              <div className="flex flex-col items-start gap-2">
           <div>Selected File: {selectedFile.name}</div>
             <button
-              className="px-2 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 self-center"
               onClick={() => handleUploadSlip(order.id, selectedFile)} // ส่งไฟล์ไปยังฟังก์ชันอัพโหลด
             >
               Upload
@@ -69,17 +69,19 @@ function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, h
 
       {/* แสดงรูปภาพถ้ามี slipUrl */}
       {order.slipUrl && (
-        <div>
-          <Image
-            src={order.slipUrl}
-            alt="Slip"
-            width={100}
-            height={100}
-            className="cursor-pointer"
-            onClick={handleImageClick} // คลิกเพื่อเปิด Modal
-          />
-        </div>
-      )}
+  <div className="flex flex-col gap-2 items-center">
+    <Image
+      src={order.slipUrl}
+      alt="Slip"
+      width={100}
+      height={100}
+      className="cursor-pointer"
+      onClick={handleImageClick} // คลิกเพื่อเปิด Modal
+    />
+    <button className="text-sm px-3 py-1 text-white bg-red-500 rounded">Delete Image</button>
+  </div>
+)}
+
 
       {/* Modal สำหรับรูปภาพขยาย */}
       {isModalOpen && (

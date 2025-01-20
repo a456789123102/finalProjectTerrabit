@@ -60,7 +60,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           <div className="text-lg font-semibold text-black">Price: {product.finalPrice} THB</div>
           {product.discount !== 0 && product.discount !== null && (
             <div className="text-red-700 mb-1 text-xs ml-2 bg-red-300 p-1 rounded-sm">
-              -{product.discount * 100}%
+              -{product.discount}%
             </div>
           )}
         </div>

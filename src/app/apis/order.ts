@@ -39,3 +39,12 @@ export const updateOrderAddress = async (id: number,newAddressId:number) => {
     throw error;
   }
 }
+
+export const deleteOrder = async (id: number) => {
+  try {
+    const res = await axios.delete(`/api/order/${id}/delete`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
