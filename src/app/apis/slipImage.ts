@@ -25,12 +25,12 @@ import axios from "axios";
   
   
 
-// export const deleteImage = async (imageId: number) => {
-//   try {
-//     const res = await axios.delete(`/api/productImage/${imageId}/delete`);
-//     return res.data;
-//   } catch (error) {
-//     console.error("Error deleting image", error);
-//     throw error;
-//   }
-// };
+export const deleteImage = async (id: number) => {
+  try {
+    const res = await axios.patch(`/api/slipImage/${id}/delete`);
+    return res.data;
+  } catch (error) {
+    console.error("Error deleting image", error);
+    throw error;
+  }
+};

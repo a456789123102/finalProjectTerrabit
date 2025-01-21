@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from "next/image";
 
-function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, handleUploadSlip }) {
+function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, handleUploadSlip,handleClearSlipImage }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -78,7 +78,8 @@ function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, h
       className="cursor-pointer"
       onClick={handleImageClick} // คลิกเพื่อเปิด Modal
     />
-    <button className="text-sm px-3 py-1 text-white bg-red-500 rounded">Delete Image</button>
+    {order.status === "awaiting_slip_upload"|| order.status === "awaiting_confirmation"&& <button className="text-sm px-3 py-1 text-white bg-red-500 rounded" onClick={()=>{handleClearSlipImage(order.id,order.status)}}>Delete Image</button>}
+   
   </div>
 )}
 

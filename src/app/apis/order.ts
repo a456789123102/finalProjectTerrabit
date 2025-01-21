@@ -48,3 +48,13 @@ export const deleteOrder = async (id: number) => {
     throw error;
   }
 }
+
+export const cancelOrder = async (id: number) => {
+  try {
+    const statusRequest = "awaiting_rejection";
+    const res = await axios.patch(`/api/order/${id}/userUpdateStatus`, { status: statusRequest });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

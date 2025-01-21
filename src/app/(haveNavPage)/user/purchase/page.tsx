@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { myOrder, updateOrderAddress,deleteOrder } from "@/app/apis/order";
+import { myOrder, updateOrderAddress, deleteOrder,cancelOrder } from "@/app/apis/order";
 import { getOwnAddress } from "@/app/apis/address";
 import AddressDropdown from "../components/addressDropdown";
 
 import SlipSection from "../components/slipSection";
-import { uploadSlipImage } from "@/app/apis/slipImage";
+import { deleteImage, uploadSlipImage } from "@/app/apis/slipImage";
 
 interface OrderItem {
   id: string;
@@ -94,16 +94,38 @@ function Orders() {
     }
   }
 
-  const handleDeleteSlip = async (orderId: number) => {
+  const handleClearSlipImage = async (orderId: number,status:string) =>{
+try {
 
+if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
+  const res = await deleteImage(orderId);
+  console.log("clear slipImage",res);
+  fetchOrders();
+}
+} catch (error) {
+  console.error("error clearing slip",error)
+}
   }
+
+
+  const handleOrderCancel = async (orderId:number) => {
+    try {
+      console.log("request cancle orderId:", orderId);
+      const res = await cancelOrder(orderId);
+      console.log("request cancel order:", JSON.stringify(res, null, 2));
+      fetchOrders();
+      setStatus("awaiting_rejection");
+    } catch (error) {
+      console.error("Error deleting order:", error);
+  }
+}
 
   const handleOrderDelete = async (orderId: number) => {
     try {
       console.log("orderId:", orderId);
       const res = await deleteOrder(orderId);
       console.log("Deleted order:", JSON.stringify(res, null, 2));
-     fetchOrders();
+      fetchOrders();
     } catch (error) {
       console.error("Error deleting order:", error);
     }
@@ -151,26 +173,28 @@ function Orders() {
                 key={order.id}
                 className="border-2 p-3 flex flex-row justify-between min-h-20"
               >
-                <div className="border p-2 w-1/4">
-                  <div className="flex flex-row p-2 gap-3">
-                    <div className=" flex flex-row gap-2">
-                    <div className="font-bold">Order ID:</div>
-                    <div> {order.id}</div>
+                <div className="border p-2 w-1/4 flex flex-col justify-between">
+                  <div>
+                    <div className="flex flex-row p-2 gap-3">
+                      <div className=" flex flex-row gap-2">
+                        <div className="font-bold">Order ID:</div>
+                        <div> {order.id}</div>
+                      </div>
+                    </div>
+                    <div className=" text-slate-700 text-[0.7rem]">
+                      {order.items.map((item) => (
+                        <div key={item.id} className="border-b gap-2 flex flex-row">
+                          <div className="text-black">{item.productName},</div> <div>Quantity: {item.quantity}, Price: {item.price}</div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className=" text-slate-700 text-[0.7rem]">
-                    {order.items.map((item) => (
-                      <div key={item.id} className="border-b gap-2 flex flex-row">
-                        <div className="text-black">{item.productName},</div> <div>Quantity: {item.quantity}, Price: {item.price}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex flex-row justify-between p-2 gap-2">
-                    <div>Total: {order.totalPrice} THB</div>
+                  <div className="flex flex-row  p-2 gap-2 self-end">
+                    <div className="font-bold">Total: </div>
                     <div>{order.totalPrice} </div>
                     <div>THB</div>
                   </div>
-                  
+
                 </div>
                 <div className="border w-1/4 p-2 gap-1 ">
                   <SlipSection
@@ -179,21 +203,23 @@ function Orders() {
                     handleImageClick={handleImageClick}
                     handleModalClose={handleModalClose}
                     handleUploadSlip={handleUploadSlip}
+                    handleClearSlipImage={handleClearSlipImage}
                   />
                 </div>
                 <div className="border w-1/4 p-3 flex flex-col gap-2">
                   {
-                    order.addressesId &&  order.status !== "awaiting_slip_upload" &&  order.status !== "awaiting_confirmation" ? (
+                    order.addressesId && order.status !== "awaiting_slip_upload" && order.status !== "awaiting_confirmation" ? (
                       <div>
                         <div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>
-                        {(() => { const curradd = addresses.find((address) => address.id === order.addressesId)
-                            return curradd ? <div className="text-[0.8rem] text-slate-800">{curradd.recipientName}, {curradd.street}, {curradd.city}, {curradd.state}, {curradd.zipCode}</div> : <div>No address found</div>;
-                          })()
+                        {(() => {
+                          const curradd = addresses.find((address) => address.id === order.addressesId)
+                          return curradd ? <div className="text-[0.8rem] text-slate-800">{curradd.recipientName}, {curradd.street}, {curradd.city}, {curradd.state}, {curradd.zipCode}</div> : <div>No address found</div>;
+                        })()
                         }
                       </div>
                     ) : (
                       <div>
-                       {order.addressesId ? (<div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>):( <div className="text-red-700 text-[1.1rem] mb-2 font-bold">Please Select an address:</div>)}
+                        {order.addressesId ? (<div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>) : (<div className="text-red-700 text-[1.1rem] mb-2 font-bold">Please Select an address:</div>)}
                         <AddressDropdown
                           addresses={addresses} // Array of addresses
                           selectedAddress={order.addressesId} // ID of the selected address
@@ -208,16 +234,17 @@ function Orders() {
                 <div className="border w-1/4 p-3">
                   <div className="text-[1.1rem] mb-2 font-bold">Action:</div>
                   <div className="text-[0.8rem] text-white">
-                  {order.status === "awaiting_slip_upload" ? (
-                    <button className="p-2 px-4 bg-red-500 hover:bg-red-400 shadow-md rounded" onClick={()=>{handleOrderDelete(order.id)}}>Delete</button>
-                  ) : order.status === "awaiting_confirmation" || order.status === "order_approved" ? (<button className="p-2 px-4 bg-orange-500 hover:bg-orange-400  shadow-md rounded">Cancel & refound</button>):
-                  <button className="p-2 px-4 bg-red-400 hover:bg-red-500  shadow-md rounded">Cancel Rejection</button>}
+                    {order.status === "awaiting_slip_upload" ? (
+                      <button className="p-2 px-4 bg-red-500 hover:bg-red-400 shadow-md rounded" onClick={() => { handleOrderDelete(order.id) }}>Delete this Order</button>
+                    ) : order.status === "awaiting_confirmation" || order.status === "order_approved" ? 
+                    (<button className="p-2 px-4 bg-orange-500 hover:bg-orange-400  shadow-md rounded" onClick={() => {handleOrderCancel(order.id) }}>Cancel this order.</button>) :
+                      <button className="p-2 px-4 bg-red-400 hover:bg-red-500  shadow-md rounded">Undo the cancellation.</button>}
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <li>No orders found.</li>
+            <div className="p-5">No orders found.</div>
           )}
         </div>
       </div>
