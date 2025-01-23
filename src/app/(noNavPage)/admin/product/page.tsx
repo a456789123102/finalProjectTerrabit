@@ -19,7 +19,7 @@ function ProductTable() {
   const [category, setCategory] = useState('');
   const [pagination, setPagination] = useState({
     page: 1,
-    pageSize: 5,
+    pageSize: 10,
     totalPages: 1,
     totalProducts: 0,
   });
@@ -104,7 +104,7 @@ function ProductTable() {
               >
                 Delete
               </button>
-<Link href={`/admin/product/${row.original.id}/edit`} className="bg-purple-500 text-white px-2 py-1">Edit</Link>
+              <Link href={`/admin/product/${row.original.id}/edit`} className="bg-purple-500 text-white px-2 py-1">Edit</Link>
             </div>
           );
         }

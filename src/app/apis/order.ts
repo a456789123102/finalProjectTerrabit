@@ -58,3 +58,22 @@ export const cancelOrder = async (id: number) => {
     throw error;
   }
 };
+/////////////////////////////////////////////////////
+
+export const fetchAllOrders = async (statuses:string[]) => {
+try {
+  const params = new URLSearchParams();
+  if(statuses && statuses.length > 0){
+    statuses.forEach((status) =>{
+      params.append("status",status)
+    });
+  }
+  const res = await axios.get("/api/order/all",{
+    params:params,
+  });
+  return res.data;
+} catch (error) {
+  console.error("error fetching order",error);
+  throw error;
+}
+}

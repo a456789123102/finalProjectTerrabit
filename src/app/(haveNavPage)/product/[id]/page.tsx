@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import StarRating from '@/app/components/starRating';
 import RelatedProductSlide from "../components/RelatedProductSlide"
-import {createCart} from "@/app/apis/carts"
+import { createCart } from "@/app/apis/carts"
 import { useRouter } from 'next/navigation';
 import ImageSwiper from "../components/imageSwiper";
 
@@ -45,7 +45,7 @@ interface Review {
 }
 
 const ProductDetail = () => {
-  const { username} = useUserStore();
+  const { username } = useUserStore();
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,7 +57,7 @@ const ProductDetail = () => {
     return <Link href={`/product/category/${id}`} className='p-2 mx-2 bg-lime-950 justify-center hover:text-amber-300 hover:underline'>{name}</Link>;
   };
   const handleIncreaseClick = () => {
-    if(AddQuantity < product.quantity){
+    if (AddQuantity < product.quantity) {
       setAddQuantity(AddQuantity + 1);
     }
   };
@@ -67,7 +67,7 @@ const ProductDetail = () => {
     }
   };
 
-  const handleAddToCart = async () =>{ 
+  const handleAddToCart = async () => {
     if (!username) {
       alert("You must be logged in to add to cart");
       const currentPath = encodeURIComponent(window.location.pathname);
@@ -76,14 +76,14 @@ const ProductDetail = () => {
     }
     if (!product || !product.finalPrice || AddQuantity <= 0) {
       alert("Product details are incomplete or quantity is invalid");
-      return; 
+      return;
     }
     try {
       await createCart(product.id, AddQuantity, product.finalPrice * AddQuantity);
       router.push(`/cart/myCart`)
     } catch (error) {
       console.error("Error adding to cart:", error);
-    alert("Failed to add to cart. Please try again later.");
+      alert("Failed to add to cart. Please try again later.");
     }
   }
 
@@ -126,17 +126,16 @@ const ProductDetail = () => {
     <div className='flex flex-col items-center justify-center  text-white p-8 '>
       {product ? (
         <div className='flex flex-col items-center justify-center w-4/6'>
-          <div className='flex flex-col md:flex-row items-start justify-between w-full max-w-6xl'> {/* เปลี่ยน w-4/6 เป็น w-full */}
-            {/* Left: Image Gallery */}
-            <div className='flex flex-col gap-4 w-1/2'>
-              {product.Image && product.Image.length > 0 ? 
-              <ImageSwiper images= {product.Image}/>
-              : (
-                <p>No image available</p>
-              )}
+          <div className='flex flex-col md:flex-row items-start justify-between w-full'>
+            <div className='flex flex-col gap-4 w-1/2 border'>
+              {product.Image && product.Image.length > 0 ?
+                <ImageSwiper images={product.Image} />
+                : (
+                  <p>No image available</p>
+                )}
             </div>
             {/* Right: Product Details */}
-            <div className='flex flex-col ml-8'>
+            <div className='flex flex-col ml-8 w-1/2 pr-8'>
               <div className="text-4xl font-bold uppercase tracking-wider mb-6">{product.name}</div>
               <div>
                 {product.discount !== 0 && product.discount !== null && (<div className='flex flex-row '> <div className="text-3xl text-gray-400 mb-2 line-through">
@@ -152,7 +151,7 @@ const ProductDetail = () => {
                 <div className='bg-white text-black text-[0.8rem]'>
                   <button className="px-4 py-2 border" onClick={handleDecreaseClick}>-</button>
                   <span className='text-xl px-4 py-2'>{AddQuantity}</span>
-                  <button className="px-4 py-2  border"onClick={handleIncreaseClick}>+</button>
+                  <button className="px-4 py-2  border" onClick={handleIncreaseClick}>+</button>
                 </div>
 
               </div>
@@ -161,21 +160,24 @@ const ProductDetail = () => {
                   <CategoryItem key={productCategory.categoryId} name={productCategory.category.name} id={productCategory.categoryId} />
                 ))}
               </div>
-              <div className=''>
-                <button className="bg-[#1C1C1C] text-white py-4 px-8 mb-6 rounded-lg text-xl hover:bg-gray-700 w-full" onClick={handleAddToCart}>
+              <div>
+                <button
+                  className=" relative bg-[#141313] text-white py-4 px-8 text-xl w-full hover:text-yellow-100 before:content-[''] before:absolute before:top-0 before:right-[-20px] before:w-8 before:h-full before:bg-[#141313] before:skew-x-[-20deg]"
+                  onClick={handleAddToCart}
+                >
                   ADD TO CART
                 </button>
               </div>
             </div>
           </div>
-          <div className='my-2 bg-[#1C1C1C] text-white min-w-full p-5'>
+          <div className='mt-4 my-2 bg-[#1C1C1C] text-white w-full p-5'>
             <div className="text-2xl">Description</div>
             <div>{product.description}</div>
           </div>
           <div className='my-2 bg-[#1C1C1C] text-white min-w-full p-3 '>
             <div>
               <div className="text-2xl">Reviews(pending)</div>
-              <div className='p-3 '>
+              <div className='p-3'>
                 {reviews.map((review: Review) => (
                   <div key={review.id} className='p-3 my-2 bg-white border'>
                     <div className='font-semibold'>{review.user.username}</div>
@@ -190,7 +192,7 @@ const ProductDetail = () => {
             </div>
             {/* Reviews */}
           </div>
-          <div className='my-2 bg-[#1C1C1C] min-w-full p-5'>
+          <div className='my-2 bg-[#1C1C1C] w-full p-5'>
             <div className="text-2xl">
               <div className='my-2 pb-2'>Related Product</div>
               <div className='flex justify-between items-center '>

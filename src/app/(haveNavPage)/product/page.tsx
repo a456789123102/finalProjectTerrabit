@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchProducts } from '../../apis/product';
 import ProductCard from './components/productCard';
-import CategorySelect from './components/categoryCard'; 
+import CategorySelect from './components/categoryCard';
 import Text from '@/app/components/text';
 
 const ProductList = () => {
@@ -11,9 +11,9 @@ const ProductList = () => {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [pagination, setPagination] = useState({
-    page: 1, 
-    pageSize: 5, 
-    totalPages: 1, 
+    page: 1,
+    pageSize: 15,
+    totalPages: 1,
     totalProducts: 0,
   });
 
@@ -26,7 +26,7 @@ const ProductList = () => {
       });
       const productData = await fetchProducts(
         search,
-        category? [parseInt(category)] : [],
+        category ? [parseInt(category)] : [],
         pagination.page.toString(), // แปลงเป็น string
         pagination.pageSize.toString() // แปลงเป็น string
       );
@@ -80,14 +80,14 @@ const ProductList = () => {
             className="border border-gray-300 p-2 rounded w-full"
           />
           <div className="min-w-32 min-h-12">
-            <CategorySelect 
-              setCategory={handleCategoryChange} 
+            <CategorySelect
+              setCategory={handleCategoryChange}
               selectedCategory={category}
               isMulti={false}
-            /> 
+            />
           </div>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="bg-[#1B4242] text-white px-4 py-2 rounded hover:bg-[#387478] hover:text-amber-400"
           >
             ค้นหา
@@ -106,27 +106,28 @@ const ProductList = () => {
       )}
 
       {/* Pagination Controls */}
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex justify-center items-center flex-col mt-11 gap-2">
+        <div className=" mt-4">{pagination.totalProducts} products found.</div>
         <div className="flex flex-row gap-4">
-          <button 
-            onClick={handlePrevPage} 
-            disabled={pagination.page === 1} 
+          <button
+            onClick={handlePrevPage}
+            disabled={pagination.page === 1}
             className="bg-[#1B4242] p-2 shadow-md text-amber-300 cursor-pointer"
           >
-            Previous
+            Prev.
           </button>
           <span className="">
             Page {pagination.page} / {pagination.totalPages}
           </span>
-          <button 
-            onClick={handleNextPage} 
-            disabled={pagination.page === pagination.totalPages} 
+          <button
+            onClick={handleNextPage}
+            disabled={pagination.page === pagination.totalPages}
             className="bg-[#1B4242] p-2 shadow-md text-amber-300 cursor-pointer"
           >
             Next
           </button>
         </div>
-        <p className=" mt-4">{pagination.totalProducts} products found.</p>
+
       </div>
     </div>
   );
