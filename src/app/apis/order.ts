@@ -12,23 +12,7 @@ export const myOrder = async (status: string) => {
 };
 
 
-export const getAllOrders = async (status?: Array<string>) => {
-  try {
-    // ตรวจสอบและแปลง status เป็น query string
-    const queryString = status?.length
-      ? `status=${status.map((s) => encodeURIComponent(s)).join(",")}`
-      : "";
-console.log(`queryString: ${queryString}`);
-    // รวม query string กับ URL
-    const url = queryString ? `/api/order/get?${queryString}` : "/api/order/get";
 
-    const res = await axios.get(url);
-    return res.data; 
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    throw error;
-  }
-};
 
 export const updateOrderAddress = async (id: number,newAddressId:number) => {
   try {
@@ -60,7 +44,7 @@ export const cancelOrder = async (id: number) => {
 };
 /////////////////////////////////////////////////////
 
-export const fetchAllOrders = async (statuses:string[]) => {
+export const fetchAllOrders = async (statuses?:string[]) => {
 try {
   const params = new URLSearchParams();
   if(statuses && statuses.length > 0){
@@ -72,8 +56,10 @@ try {
     params:params,
   });
   return res.data;
+
 } catch (error) {
   console.error("error fetching order",error);
   throw error;
 }
 }
+///////////////////////////////////////////////////////////
