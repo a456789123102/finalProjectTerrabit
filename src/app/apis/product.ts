@@ -139,3 +139,14 @@ export const fetchRelatedProducts = async (
     throw new Error("Error fetching products");
   }
 };
+
+//ลบ product
+export const deleteProduct = async (id:number) =>{
+  try {
+   const res = await axios.delete(`/api/product/${id}/delete`);
+   return res.data;
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    throw error;
+  }
+};

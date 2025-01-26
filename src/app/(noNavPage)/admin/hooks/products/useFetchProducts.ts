@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { fetchProducts } from "@/app/apis/product";
 
-const useFetchProducts = (searchQuery, category, pagination, setPagination) => {
+const useFetchProducts = (searchQuery, category, pagination, setPagination, forceFetch) => {
   const [products, setProducts] = useState([]);
 
   const fetchProductLists = async () => {
@@ -22,7 +21,7 @@ const useFetchProducts = (searchQuery, category, pagination, setPagination) => {
 
   useEffect(() => {
     fetchProductLists();
-  }, [searchQuery, category, pagination.page, pagination.pageSize]);
+  }, [searchQuery, category, pagination.page, pagination.pageSize, forceFetch]); // เพิ่ม forceFetch ใน dependency
 
   return products;
 };

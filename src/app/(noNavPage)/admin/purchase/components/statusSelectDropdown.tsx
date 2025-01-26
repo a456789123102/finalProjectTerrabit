@@ -35,19 +35,20 @@ const StatusSelectDropdown = ({ status, setStatus }: StatusSelectDropdownProps) 
   };
 
   return (
- <Select
-        classNamePrefix="select"
-        isMulti={true}
-        isClearable={true}
-        isSearchable={true}
-        placeholder={"Select order status..."}
-        options={statuses}
-        value={selectedOptions}
-        className="text-sm w-60"
-        onChange={handleChange}
-        getOptionValue={(option) => option.key} 
-        getOptionLabel={(option) => option.label} 
-      />
+<Select
+  classNamePrefix="custom-select"
+  isMulti={true}
+  isClearable={true}
+  isSearchable={true}
+  placeholder={"Select order status..."}
+  options={statuses}
+  value={selectedOptions}
+  className="text-sm text-black w-[200px] h-[40px]" // กำหนดขนาดคงที่
+  onChange={handleChange}
+  getOptionValue={(option) => option.key}
+  getOptionLabel={(option) => option.label}
+/>
+
   );
 };
 

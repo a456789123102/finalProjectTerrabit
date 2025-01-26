@@ -16,7 +16,7 @@ interface ProductFormProps {
 const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState<number | ''>('');
-  const [discount, setDiscount] = useState<number | ''>(''); // Discount in percentage
+  const [discount, setDiscount] = useState<number | ''>(''); 
   const [quantity, setQuantity] = useState<number | ''>('');
   const [description, setDescription] = useState('');
   const [categories, setCategories] = useState<number[]>([]);
@@ -49,7 +49,7 @@ const [existingImageDetail2Id, setExistingImageDetail2Id] = useState<number | nu
 
         setName(product.name || '');
         setPrice(product.price || '');
-        setDiscount(product.discount || 0);
+        setDiscount(product.discount *100 || 0);
         setQuantity(product.quantity || '');
         setDescription(product.description || '');
 

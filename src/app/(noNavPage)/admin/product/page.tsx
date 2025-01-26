@@ -11,12 +11,14 @@ import {
 } from "@tanstack/react-table";
 import Swal from 'sweetalert2';
 import Link from 'next/link';
+import { deleteProduct } from "@/app/apis/product";
 
 function ProductTable() {
   const { themeColors } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [tempSearchQuery, setTempSearchQuery] = useState("");
   const [category, setCategory] = useState('');
+  const [forceFetch, setForceFetch] = useState(false); 
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 10,
@@ -27,7 +29,7 @@ function ProductTable() {
     'id', 'name', 'price', 'discount', 'finalPrice', 'quantity', 'ProductCategory', "Actions"
   ]);
 
-  const products = useFetchProducts(searchQuery, category, pagination, setPagination);
+  const products = useFetchProducts(searchQuery, category, pagination, setPagination, forceFetch);
 
   const handlePrevPage = () => {
     if (pagination.page > 1) {
@@ -69,7 +71,11 @@ function ProductTable() {
 
     if (result.isConfirmed) {
       try {
-        console.log(`Deleting product with id: ${id}`);
+        await deleteProduct(id);
+
+        // บังคับให้รีเฟรชข้อมูลใหม่
+        setForceFetch((prev) => !prev);
+
         Swal.fire('Deleted!', 'Your product has been deleted.', 'success');
       } catch (error) {
         console.error("Error deleting product:", error);
