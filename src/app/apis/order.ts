@@ -12,7 +12,7 @@ export const myOrder = async (status: string) => {
 };
 
 
-
+//////////////////////////////////////////////////////////////////////////////////
 
 export const updateOrderAddress = async (id: number,newAddressId:number) => {
   try {
@@ -63,3 +63,13 @@ try {
 }
 }
 ///////////////////////////////////////////////////////////
+
+export const updateOrderStatus = async (orderId:number,status:string) => {
+  try {
+    const res = await axios.patch(`/api/order/${orderId}/userUpdateStatus`, { status: status });
+    console.log("res apis data:",res)
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}

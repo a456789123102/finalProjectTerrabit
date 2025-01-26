@@ -76,7 +76,13 @@ function ProductTable() {
         // บังคับให้รีเฟรชข้อมูลใหม่
         setForceFetch((prev) => !prev);
 
-        Swal.fire('Deleted!', 'Your product has been deleted.', 'success');
+    Swal.fire({
+  position: "center",
+  icon: "success",
+  title: `Product Id ${id} deleted successfully`,
+  showConfirmButton: false,
+  timer: 1500
+});
       } catch (error) {
         console.error("Error deleting product:", error);
         Swal.fire('Error!', 'Failed to delete the product.', 'error');

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchAllOrders } from "@/app/apis/order";
 
-export const useFetchOrders = (statuses:string[]) => {
+export const useFetchOrders = (statuses:string[],forceFetch) => {
     const [orders, setOrders] = useState([]);
 
     const fetchOrderLists = async () => {
@@ -15,7 +15,7 @@ try {
 
     useEffect(() =>{
         fetchOrderLists();
-    },[statuses]);
+    },[statuses, forceFetch]);
 
 return orders;
 }
