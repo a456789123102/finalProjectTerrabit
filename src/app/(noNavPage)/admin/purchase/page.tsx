@@ -45,7 +45,9 @@ function PurchaseTable() {
     });
   const [forceFetch, setForceFetch] = useState(false); 
 
-    const orders: Order[] = useFetchOrders(status,forceFetch); // Ensure useFetchOrders returns an Order[]
+    const orders: Order[] = useFetchOrders(status,forceFetch,searchQuery,pagination, setPagination);
+    console.log("orders:",orders) 
+    console.log("pagi:",pagination)
 
     const [columnKeysFiltered, setColumnKeysFiltered] = useState<string[]>([
         'id',
@@ -87,14 +89,13 @@ function PurchaseTable() {
         try {
           const validStatus = ['awaiting_confirmation', 'awaiting_rejection'];
           if (!validStatus.includes(currentStatus)) {
-            console.error(`Invalid status: ${currentStatus}. Expected 'awaiting_confirmation' or 'awaiting_rejection'`);
+            console.error(`IIIInvalid status: ${currentStatus}. Expected 'awaiting_confirmation' or 'awaiting_rejection'`);
             return;
           }
       
           const updatedStatus = 'order_rejected';
           console.log(`Order ${orderId} rejected from status ${currentStatus} with new status: ${updatedStatus}`);
           
-          // Call API to update order status
           const res = await updateOrderStatus(orderId, updatedStatus);
           console.log(`Order ${orderId} status updated successfully to: ${updatedStatus}`);
         } catch (error) {
@@ -132,6 +133,7 @@ function PurchaseTable() {
           // ใช้ for...of เพื่อจัดการ asynchronous อย่างถูกต้อง
           for (const [orderIdStr, isSelected] of Object.entries(selectedOrders)) {
             if (isSelected) {
+                
               const orderId = parseInt(orderIdStr, 10);
               const order = orders.find((o) => o.id === orderId);
       
@@ -282,6 +284,33 @@ function PurchaseTable() {
         getCoreRowModel: getCoreRowModel(),
     });
 
+    const handlePrevPage = () => {
+        if (pagination.page > 1) {
+          setPagination(prev => ({ ...prev, page: prev.page - 1 }));
+        }
+      };
+    
+      const handleNextPage = () => {
+        if (pagination.page < pagination.totalPages) {
+          setPagination(prev => ({ ...prev, page: prev.page + 1 }));
+        }
+      };
+    
+      const handleSearchQuery = (e) => {
+        e.preventDefault();
+        setSearchQuery(tempSearchQuery);
+        setPagination(prev => ({ ...prev, page: 1 }));
+      };
+    
+      const handlePageSizeChange = (newPageSize: number) => {
+        setPagination((prev) => ({
+          ...prev,
+          pageSize: newPageSize,
+          page: 1, 
+        }));
+        console.log('newPageSize:',newPageSize);
+      };
+
     return (
         <div
             className="min-h-screen p-7 flex flex-col justify-start items-center gap-5"
@@ -290,8 +319,7 @@ function PurchaseTable() {
             <div className="w-full flex justify-between items-center border p-4">
                 <div>header section</div>
 
-                <div className="flex flex-row gap-2 text-[0.8rem]">
-                    <div>Status:</div>
+                <div className="flex flex-row gap-2 text-[0.8rem] items-center">
                     <StatusSelectDropdown status={status} setStatus={setStatus} />
                     <div className="flex flex-row items-center gap-1">
                         <input
@@ -331,6 +359,12 @@ function PurchaseTable() {
                     </div>
                 )}
             </div>
+            <PaginationControls
+          pagination={pagination}
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+          handlePageSizeChange={handlePageSizeChange}
+        />
         </div>
     );
 }

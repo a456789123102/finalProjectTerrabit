@@ -44,14 +44,24 @@ export const cancelOrder = async (id: number) => {
 };
 /////////////////////////////////////////////////////
 
-export const fetchAllOrders = async (statuses?:string[]) => {
+export const fetchAllOrders = async (statuses?:string[],searchQuery?:string,page?: string,
+  pageSize?: string) => {
 try {
   const params = new URLSearchParams();
-  if(statuses && statuses.length > 0){
-    statuses.forEach((status) =>{
-      params.append("status",status)
-    });
-  }
+  if (statuses && statuses.length > 0) {
+    statuses.forEach((s) => params.append("status", s))
+   }
+   if (searchQuery) {
+     params.append("search", searchQuery);
+   }
+   if (page) {
+     params.append("page", page);
+   }
+   if (pageSize) {
+     params.append("pageSize", pageSize);
+     console.log(`pagesize add: ${pageSize}`);
+   }
+  console.log("params:", params);
   const res = await axios.get("/api/order/all",{
     params:params,
   });
@@ -66,7 +76,12 @@ try {
 
 export const updateOrderStatus = async (orderId:number,status:string) => {
   try {
-    const res = await axios.patch(`/api/order/${orderId}/userUpdateStatus`, { status: status });
+    const params = new URLSearchParams();
+    params.append("status", status);
+    console.log("params:", params);
+    const res = await axios.patch(`/api/order/${orderId}/adminUpdateStatus`, {
+      params: params,
+    });
     console.log("res apis data:",res)
     return res.data;
   } catch (error) {
