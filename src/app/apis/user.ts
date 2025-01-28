@@ -20,6 +20,7 @@ export const getAllUsers = async (
   page?: string,
   pageSize?: string,
   sortBy?: string,
+  sortOrder?:string,
 ) => {
   try {
     const params = new URLSearchParams();
@@ -31,6 +32,9 @@ export const getAllUsers = async (
     }
     if (sortBy) {
         params.append("sortBy", sortBy);
+      }
+      if (sortOrder) {
+        params.append("sortOrder", sortOrder);
       }
     const res = await axios.get("/api/users/usersInfo", { params: params });//+
     return res.data;

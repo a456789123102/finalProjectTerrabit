@@ -1,8 +1,7 @@
 import { getAllUsers } from "@/app/apis/user";
-import { user } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 
-const useFetchUsers = (searchQuery,pagination, setPagination, forceFetch,sortBy) => {
+const useFetchUsers = (searchQuery,pagination, setPagination, forceFetch,sortBy,sortOrder) => {
 const [users, setUsers] = useState([]);
 const fetchUserList = async () => {
     try {
@@ -15,7 +14,7 @@ const fetchUserList = async () => {
 
 useEffect(() => {
     fetchUserList();
-}, [searchQuery, pagination.page, pagination.pageSize, forceFetch, sortBy]);
+}, [searchQuery, pagination.page, pagination.pageSize, forceFetch, sortBy,sortOrder]);
 return users;
 }
 export default useFetchUsers;

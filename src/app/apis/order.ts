@@ -88,3 +88,19 @@ export const updateOrderStatus = async (orderId:number,status:string) => {
     throw error;
   }
 }
+////////////////////////////////////////////////////////////
+
+export const fetchgetOrderForCharts = async (interval:string,startDate:Date,endDate:Date) => {
+  try {
+    const params = new URLSearchParams();
+    params.append("interval", interval);
+    params.append("startDate", startDate.toISOString());
+    params.append("endDate", endDate.toISOString());
+    const res = await axios.get(`/api/order/charts/getOrderForCharts`,{params: params});
+    
+    return res.data;
+  } catch (error) {
+    console.error("error fetching order", error);
+    throw error;
+  }
+}
