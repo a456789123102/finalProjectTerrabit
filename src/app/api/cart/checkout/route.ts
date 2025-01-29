@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
         if (!token) {
             return NextResponse.json({ error: "Token not found" }, { status: 401 });
         }
-
         const res = await post("/api/cart/checkout",{},  token);
         const data = await res.json();
         return NextResponse.json(data);

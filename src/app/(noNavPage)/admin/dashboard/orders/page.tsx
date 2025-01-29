@@ -29,7 +29,6 @@ function orderCharts() {
             />
 <button className='bg-gray-300 p-2 hover:bg-gray-500'>Confirm</button>
         </div>
-
         <div>
             <div>charts</div>
   

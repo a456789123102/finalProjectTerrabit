@@ -44,8 +44,7 @@ export const cancelOrder = async (id: number) => {
 };
 /////////////////////////////////////////////////////
 
-export const fetchAllOrders = async (statuses?:string[],searchQuery?:string,page?: string,
-  pageSize?: string) => {
+export const fetchAllOrders = async (statuses?:string[],searchQuery?:string,page?: string,pageSize?: string) => {
 try {
   const params = new URLSearchParams();
   if (statuses && statuses.length > 0) {

@@ -152,7 +152,8 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
     <div className="flex flex-col items-center gap-3 min-w-[590px]">
       <div className="self-start p-2 bg-white w-full pl-5">Checkout Section</div>
       <div className="bg-gray-100 w-5/6 justify-center flex flex-col mt-5 p-6 m-4 border">
-        <div className="flex flex-row bg-white justify-between">
+      <div className="flex flex-row bg-white justify-between w-full ">
+
           {statuses.map((item) => (
             <button
               key={item.key}

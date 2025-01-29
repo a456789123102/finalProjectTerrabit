@@ -45,9 +45,10 @@ function PurchaseTable() {
     });
   const [forceFetch, setForceFetch] = useState(false); 
 
-    const orders: Order[] = useFetchOrders(status,forceFetch,searchQuery,pagination, setPagination);
-    console.log("orders:",orders) 
-    console.log("pagi:",pagination)
+  const orders: Order[] = useFetchOrders(status, forceFetch, searchQuery, pagination, setPagination) ?? [];
+  console.log("orders:", orders);
+  console.log("pagi:", pagination ?? { page: "undefined", pageSize: "undefined" });
+  
 
     const [columnKeysFiltered, setColumnKeysFiltered] = useState<string[]>([
         'id',
