@@ -11,16 +11,7 @@ const CreateProductPage = () => {
   const router = useRouter();
   const { isAdmin } = useUserStore();
 
-  useEffect(() => {
-    if (isAdmin === false) {
-        const currentPath = window.location.pathname; 
-        router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
-    }
-  }, [isAdmin, router]);
-  
-  
-
-  if (!isAdmin) return null; // ไม่ต้องแสดงอะไรหากไม่ใช่ Admin
+  if (!isAdmin) return null;
 
   const handleSubmit = async (productData: any) => {
     // ตรวจสอบ validation

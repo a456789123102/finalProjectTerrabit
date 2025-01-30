@@ -21,7 +21,7 @@ function Logo() {
           setUser(data);  // เซ็ตข้อมูลผู้ใช้
         })
         .catch(() => {
-          router.push("/login");  // ถ้าผิดพลาดก็ให้ไปที่หน้า login
+          //router.push("/login");  // ถ้าผิดพลาดก็ให้ไปที่หน้า login
         });
     }
   }, [username, setUser, router]);  // ตรวจสอบเมื่อ username เปลี่ยน
@@ -37,7 +37,7 @@ function Logo() {
           {isAdmin && <AdminMenu />} {/* แสดง AdminMenu ถ้าเป็น admin */}
         </div>
       ) : (
-        <Link href="/login" className="text-yellow-500">Please login</Link>
+        <Link href="/login" className="text-yellow-500">login</Link>
       )}
     </Text>
   );
