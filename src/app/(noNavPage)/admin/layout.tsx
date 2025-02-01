@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation"; // ✅ ใช้ usePathname() ได้ใน Next.js 14+
+import { useRouter } from "next/navigation"; // ❌ ไม่ใช้ usePathname() แล้ว
 import { useUserStore } from "@/store/zustand";
 import AdminNavbar from "./components/adminNavbar";
 import AdminSidebar from "./components/adminSidebar";
@@ -9,17 +9,27 @@ import { ThemeProvider, useTheme } from "@/app/context/themeContext";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const pathname = usePathname();
   const { username, isAdmin } = useUserStore();
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const [isScrollDown, setIsScrollDown] = useState(false); 
+  const [isScrollDown, setIsScrollDown] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // ✅ ป้องกัน Redirect ทันที
 
-  if (!username) {
-    const currentPath = encodeURIComponent(window.location.pathname);
-    router.push(`/login?redirect=${currentPath}`);
-    return;
-  }
-  
+  useEffect(() => {
+    if (username === undefined) {
+      console.log("⏳ กำลังโหลด Zustand state...");
+      return; 
+    }
+
+    if (!username) {
+      console.log("🔴 User not logged in. Redirecting...");
+      const currentPath = encodeURIComponent(window.location.pathname);
+      router.replace(`/login?redirect=${currentPath}`);
+    } else {
+      console.log("✅ Authenticated, rendering page.");
+      setIsCheckingAuth(false);
+    }
+  }, [username, router]);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrollDown(window.scrollY > 30);
@@ -29,6 +39,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  if (isCheckingAuth) return <p>Loading...</p>; // ✅ ป้องกัน Flickering
 
   return (
     <ThemeProvider>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import ChartFiltersPanel from '../../components/ChartFiltersPanel';
 import useFetchOrderForCharts from '../../hooks/orders/useFetchgetOrderForCharts';
+import LineChartComponent from '../../components/charts/LineChartComponent';
 
 function orderCharts() {
       const [interval, setInterval] = useState<string>("monthly");
@@ -30,7 +31,9 @@ function orderCharts() {
 <button className='bg-gray-300 p-2 hover:bg-gray-500'>Confirm</button>
         </div>
         <div>
-            <div>charts</div>
+            <div>
+            <LineChartComponent data={chartsData} />
+            </div>
   
         </div>
     </div>
