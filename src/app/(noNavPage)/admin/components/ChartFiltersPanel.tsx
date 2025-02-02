@@ -6,7 +6,6 @@ const ChartFiltersPanel = ({interval, setInterval,startDate, setStartDate,endDat
 
   return (
     <div>
-      <div>Filters</div>
       <DateRangePicker
         startDate={startDate}
         onStartDateChange={setStartDate}
