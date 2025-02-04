@@ -1,7 +1,10 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-function LineChartComponent({ data }) {
+function LineChartComponent({ data, chartKeys }) {
+console.log(`chartKeys:${chartKeys}`);
+  const colors = ["#82ca9d", "#8884d8", "#ffc658", "#ff7300"];
+
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart
@@ -9,12 +12,18 @@ function LineChartComponent({ data }) {
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="label" /> {/* Fixed: Changed 'name' to 'label' */}
+        <XAxis dataKey="label" />
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="totalOrders" stroke="#82ca9d" /> 
-        {/* Ensure `totalOrders` has a 'value' key. If it's a number, use `dataKey="totalOrders"` directly */}
+        {chartKeys.map((key, index) => (
+          <Line
+            key={key}
+            type="monotone"
+            dataKey={key}
+            stroke={colors[index % colors.length]} // Cycle through colors if there are more keys than colors
+          />
+        ))}
       </LineChart>
     </ResponsiveContainer>
   );

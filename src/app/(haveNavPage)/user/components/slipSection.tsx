@@ -43,7 +43,7 @@ function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, h
       )}
 
       {/* อัพโหลดสลิป */}
-      {order.status === "awaiting_slip_upload" && (
+      {order.status === "awaiting_slip_upload" && !order.slipUrl && (
         <div className="flex flex-col gap-2 text-[0.7rem] text-slate-700">
           <input
             type="file"

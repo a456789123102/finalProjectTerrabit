@@ -5,7 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 const DateRangePicker = ({startDate,onStartDateChange,endDate,onEndDateChange}) => {
 
   return (
-    <div>
+    <div className="flex flex-row gap-2">
+      <div>from:</div>
       <DatePicker
         selected={startDate}
         onChange={(date) => onStartDateChange(date)}
@@ -13,8 +14,9 @@ const DateRangePicker = ({startDate,onStartDateChange,endDate,onEndDateChange}) 
         startDate={startDate}
         endDate={endDate}
         placeholderText="Start Date"
+        className="text-black px-2"
       />
-      <span>to</span>
+      <span>to:</span>
       <DatePicker
         selected={endDate}
         onChange={(date) =>  onEndDateChange(date)}
@@ -23,6 +25,7 @@ const DateRangePicker = ({startDate,onStartDateChange,endDate,onEndDateChange}) 
         endDate={endDate}
         minDate={startDate}
         placeholderText="End Date"
+        className="text-black px-2"
       />
     </div>
   );

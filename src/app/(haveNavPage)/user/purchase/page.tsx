@@ -152,8 +152,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
     <div className="flex flex-col items-center gap-3 min-w-[590px]">
       <div className="self-start p-2 bg-white w-full pl-5">Checkout Section</div>
       <div className="bg-gray-100 w-5/6 justify-center flex flex-col mt-5 p-6 m-4 border">
-      <div className="flex flex-row bg-white justify-between w-full ">
-
+      <div className="flex flex-row bg-white justify-between w-full shadow-sm">
           {statuses.map((item) => (
             <button
               key={item.key}
@@ -167,12 +166,12 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
             </button>
           ))}
         </div>
-        <div className="flex flex-col gap-5 bg-white w-full mt-5">
+        <div className="flex flex-col gap-5 bg-gray-100 w-full mt-5">
           {orders.length > 0 ? (
             orders.map((order) => (
               <div
                 key={order.id}
-                className="border-2 p-3 flex flex-row justify-between min-h-20"
+                className="shadow-sm p-3 flex flex-row justify-between min-h-20 bg-white"
               >
                 <div className="border p-2 w-1/4 flex flex-col justify-between">
                   <div>

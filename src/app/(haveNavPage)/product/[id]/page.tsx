@@ -27,6 +27,9 @@ type Product = {
 
 type Category = {
   categoryId: number;
+  category:{
+    name: string;
+  }
   name: string;
 };
 
@@ -38,9 +41,7 @@ type ProductImage = {
 interface Review {
   id: number;
   rating: number;
-  user: {
-    username: string;
-  };
+    userName: string;
   comments: string;
 }
 
@@ -49,7 +50,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const [reviews, serReviews] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [AddQuantity, setAddQuantity] = useState(1);
   const router = useRouter();
 
@@ -57,7 +58,7 @@ const ProductDetail = () => {
     return <Link href={`/product/category/${id}`} className='p-2 mx-2 bg-lime-950 justify-center hover:text-amber-300 hover:underline'>{name}</Link>;
   };
   const handleIncreaseClick = () => {
-    if (AddQuantity < product.quantity) {
+    if (product && AddQuantity < product.quantity) {
       setAddQuantity(AddQuantity + 1);
     }
   };
@@ -111,7 +112,7 @@ const ProductDetail = () => {
         try {
           const reviewData = await getReviewsById(Number(id));
           console.log('Review Data:', reviewData);
-          serReviews(reviewData);
+          setReviews(reviewData);
         } catch (error) {
           console.error(error);
         }
@@ -180,7 +181,7 @@ const ProductDetail = () => {
               <div className='p-3'>
                 {reviews.map((review: Review) => (
                   <div key={review.id} className='p-3 my-2 bg-white border'>
-                    <div className='font-semibold'>{review.user.username}</div>
+                    <div className='font-semibold'>{review.userName}</div>
                     <div className='flex flex-row'>
                       <StarRating rating={review.rating} />
                     </div>
