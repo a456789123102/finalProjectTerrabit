@@ -16,6 +16,7 @@ const config: Config = {
       fontFamily: {
         pixelify: ['PixelifySans', 'sans-serif'], 
         BebasNeue: ['BebasNeue', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
       },
     },
   },

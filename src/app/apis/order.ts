@@ -75,11 +75,8 @@ try {
 
 export const updateOrderStatus = async (orderId:number,status:string) => {
   try {
-    const params = new URLSearchParams();
-    params.append("status", status);
-    console.log("params:", params);
     const res = await axios.patch(`/api/order/${orderId}/adminUpdateStatus`, {
-      params: params,
+      status:status
     });
     console.log("res apis data:",res)
     return res.data;

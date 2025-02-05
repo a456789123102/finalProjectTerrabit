@@ -65,132 +65,142 @@ function PurchaseTable() {
         return [...Object.keys(orders[0]), 'Select'];
     }, [orders]);
 
-    const handleApprove = async (orderId: number, currentStatus: string) => {
+    const handleReject = async (orderId: number, currentStatus: string) => {
         try {
-            const validStatus = ['awaiting_confirmation', 'awaiting_rejection']
+            const validStatus = ['awaiting_confirmation', 'awaiting_rejection'];
             if (!validStatus.includes(currentStatus)) {
                 console.error(`Invalid status: ${currentStatus}. Expected 'awaiting_confirmation' or 'awaiting_rejection'`);
-                return;
+                throw new Error(`Invalid status: ${currentStatus}`);
             }
-            let updatedStatus = ""
+    
+            const updatedStatus = 'order_rejected';
+            console.log(`Order ${orderId} rejected from status ${currentStatus} with new status: ${updatedStatus}`);
+    
+            const res = await updateOrderStatus(orderId, updatedStatus);
+    
+            // ตรวจสอบผลลัพธ์จาก API ใหม่
+            if (!res || res.status !== 200) {
+                throw new Error(`Failed to update status for Order ID ${orderId}`);
+            }
+    
+            console.log(`Order ${orderId} status updated successfully to: ${updatedStatus}`);
+        } catch (error) {
+            console.error('Failed to reject status', error);
+            throw error; // ส่ง error ไปให้ handleConfirm จัดการ
+        }
+    };
+    
+    const handleApprove = async (orderId: number, currentStatus: string) => {
+        try {
+            const validStatus = ['awaiting_confirmation', 'awaiting_rejection'];
+            if (!validStatus.includes(currentStatus)) {
+                console.error(`Invalid status: ${currentStatus}. Expected 'awaiting_confirmation' or 'awaiting_rejection'`);
+                throw new Error(`Invalid status: ${currentStatus}`);
+            }
+    
+            let updatedStatus = "";
             if (currentStatus === 'awaiting_confirmation') {
-                updatedStatus = 'order_approved';
+                updatedStatus = "order_approved";
             } else if (currentStatus === 'awaiting_rejection') {
                 updatedStatus = 'order_cancelled';
             }
-            console.log(`Order ${orderId} approved from status${currentStatus} with new status: ${updatedStatus}`);
+    
+            console.log(`Order ${orderId} approved from status ${currentStatus} with new status: ${updatedStatus}`);
             const res = await updateOrderStatus(orderId, updatedStatus);
-
+            if (!res || res.status !== 200) {
+                throw new Error(`Failed to update status for Order ID ${orderId}`);
+            }
+            console.log(`Order ${orderId} status updated successfully to: ${updatedStatus}`);
         } catch (error) {
             console.error('Failed to update status', error);
+            throw error; // ส่ง error ไปให้ handleConfirm จัดการ
         }
     };
+      
+  const handleConfirm = async () => {
+    const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `Do you want to ${actionType} the selected orders?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, proceed!',
+        cancelButtonText: 'No, cancel!',
+        background: themeColors.primary,
+        color: themeColors.text,
+    });
 
-    const handleReject = async (orderId: number, currentStatus: string) => {
-        try {
-          const validStatus = ['awaiting_confirmation', 'awaiting_rejection'];
-          if (!validStatus.includes(currentStatus)) {
-            console.error(`IIIInvalid status: ${currentStatus}. Expected 'awaiting_confirmation' or 'awaiting_rejection'`);
-            return;
-          }
-      
-          const updatedStatus = 'order_rejected';
-          console.log(`Order ${orderId} rejected from status ${currentStatus} with new status: ${updatedStatus}`);
-          
-          const res = await updateOrderStatus(orderId, updatedStatus);
-          console.log(`Order ${orderId} status updated successfully to: ${updatedStatus}`);
-        } catch (error) {
-          console.error('Failed to reject status', error);
-        }
-      };
-      
-      const handleConfirm = async () => {
-        const result = await Swal.fire({
-          title: 'Are you sure?',
-          text: `Do you want to ${actionType} the selected orders?`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, proceed!',
-          cancelButtonText: 'No, cancel!',
-          background: themeColors.primary,
-          color: themeColors.text,
-        });
-      
-        if (!result.isConfirmed) {
-          Swal.fire({
+    if (!result.isConfirmed) {
+        Swal.fire({
             position: 'center',
             icon: 'info',
             title: 'Action Cancelled',
             text: 'No changes were made.',
             showConfirmButton: false,
             timer: 2000,
-          });
-          return;
-        }
-      
-        try {
-          const failedOrders: string[] = [];
-          
-          // ใช้ for...of เพื่อจัดการ asynchronous อย่างถูกต้อง
-          for (const [orderIdStr, isSelected] of Object.entries(selectedOrders)) {
+        });
+        return;
+    }
+
+    try {
+        const failedOrders: string[] = [];
+
+        // ใช้ for...of เพื่อจัดการ asynchronous อย่างถูกต้อง
+        for (const [orderIdStr, isSelected] of Object.entries(selectedOrders)) {
             if (isSelected) {
-                
-              const orderId = parseInt(orderIdStr, 10);
-              const order = orders.find((o) => o.id === orderId);
-      
-              if (!order) {
-                console.warn(`Order ID ${orderId} not found.`);
-                failedOrders.push(orderIdStr);
-                continue;
-              }
-      
-              try {
-                if (actionType === 'approve') {
-                  await handleApprove(orderId, order.status);
-                } else if (actionType === 'reject') {
-                  await handleReject(orderId, order.status);
+                const orderId = parseInt(orderIdStr, 10);
+                const order = orders.find((o) => o.id === orderId);
+
+                if (!order) {
+                    console.warn(`Order ID ${orderId} not found.`);
+                    failedOrders.push(orderIdStr);
+                    continue;
                 }
-              } catch (error) {
-                console.error(`Failed to update Order ID ${orderId}:`, error);
-                failedOrders.push(orderIdStr);
-              }
+
+                try {
+                    if (actionType === 'approve') {
+                        await handleApprove(orderId, order.status); // รอให้ handleApprove เสร็จสิ้น
+                    } else if (actionType === 'reject') {
+                        await handleReject(orderId, order.status); // รอให้ handleReject เสร็จสิ้น
+                    }
+                } catch (error) {
+                    console.error(`Failed to update Order ID ${orderId}:`, error);
+                    failedOrders.push(orderIdStr);
+                }
             }
-          }
-      
-          if (failedOrders.length > 0) {
+        }
+
+        if (failedOrders.length > 0) {
             Swal.fire({
-              position: 'center',
-              icon: 'error',
-              title: 'Some Orders Failed',
-              text: `The following orders could not be updated: ${failedOrders.join(', ')}`,
-              showConfirmButton: true,
+                position: 'center',
+                icon: 'error',
+                title: 'Some Orders Failed',
+                text: `The following orders could not be updated: ${failedOrders.join(', ')}`,
+                showConfirmButton: true,
             });
-          } else {
+        } else {
             Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Success',
-              text: `Orders have been successfully ${actionType}d.`,
-              showConfirmButton: false,
-              timer: 3000,
+                position: 'center',
+                icon: 'success',
+                title: 'Success',
+                text: `Orders have been successfully ${actionType}d.`,
+                showConfirmButton: false,
+                timer: 3000,
             });
-          }
-      
-          // บังคับดึงข้อมูลใหม่
-          setForceFetch((prev) => !prev);
-        } catch (error) {
-          console.error('Error updating orders:', error);
-          Swal.fire({
+        }
+
+        // บังคับดึงข้อมูลใหม่
+        setForceFetch((prev) => !prev);
+    } catch (error) {
+        console.error('Error updating orders:', error);
+        Swal.fire({
             position: 'center',
             icon: 'error',
             title: 'Update Failed',
             text: 'An error occurred while updating the orders. Please try again.',
             showConfirmButton: true,
-          });
-        }
-      };
-      
-      
+        });
+    }
+};
       
     const handleSelectAll = () => {
         const selectableOrders = orders

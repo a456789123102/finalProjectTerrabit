@@ -8,8 +8,11 @@ export default function Home() {
       <div>
       Welcome page: This is my final Project
       </div>
-      <div>Font Usage1:<div className="font-pixelify">Pixelify</div></div>
-      <div>go to ... page</div>
+<div>
+<div className='text-3xl'>Font Usage</div>
+<div className="font-pixelify">1.Pixelify "hello"</div>
+<div className="font-poppins">2.Poppins "hello"</div>
+</div>
     </div>
 </div>
   );

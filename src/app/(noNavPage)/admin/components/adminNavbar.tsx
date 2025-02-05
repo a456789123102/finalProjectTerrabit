@@ -14,7 +14,6 @@ function AdminNavbar({ toggleSidebar, isScrollDown }: AdminNavbarProps) {
     <div style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}>
       <div
         className={`h-12 flex flex-row items-center border w-full ${isScrollDown ? 'top-0 z-40 fixed' : 'top-8'}`}
-        style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}  
       >
         <div>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 mx-2" onClick={toggleSidebar}>
