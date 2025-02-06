@@ -145,7 +145,7 @@ function ProductTable() {
   return (
     <div
       className="min-h-screen p-7 flex flex-col justify-start items-center gap-5"
-      style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}
+      style={{ backgroundColor: themeColors.bg, color: themeColors.text }}
     >
       <div className="w-full flex justify-between items-center border p-4">
         <div className="flex-1">

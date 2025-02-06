@@ -9,7 +9,7 @@ function DataTable({ table }: any) {
     <div className="w-full overflow-x-auto">
       <table
         className="border-collapse border border-gray-300 w-full"
-        style={{ backgroundColor: themeColors.navbar, color: themeColors.text }}
+        style={{ backgroundColor: themeColors.bg, color: themeColors.text }}
       >
         <thead style={{ backgroundColor: themeColors.tertiary }}>
           {table.getHeaderGroups().map((group) => (

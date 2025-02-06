@@ -100,3 +100,13 @@ export const fetchgetOrderForCharts = async (interval:string,startDate:Date,endD
     throw error;
   }
 }
+//////////////////////////////////////////////////////////////////
+export const fetchgetWeeklySaleForCharts = async () => {
+  try {
+    const res = await axios.get(`/api/order/charts/getWeeklySaleForCharts`);
+    return res.data;
+  } catch (error) {
+    console.error("error fetching order", error);
+    throw error;
+  }
+}
