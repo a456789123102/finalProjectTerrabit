@@ -82,10 +82,11 @@ function ProductCart({
           <button className="px-2 py-1  border" onClick={handleIncreaseClick} disabled={tempQuantity >= cart.product.quantity}>+</button>
         </div>
         <div className='w-1/4 items-center justify-center flex'>
-          ฿{cart.product?.finalPrice && cart.quantity
-            ? `฿${cart.product.finalPrice * cart.quantity}`
-            : "Price not available"}
-        </div>
+  {cart.product?.finalPrice && cart.quantity
+    ? `฿${Number((cart.product.finalPrice * cart.quantity).toFixed(2)).toLocaleString()}`
+    : "Price not available"}
+</div>
+
         <div className='w-1/4 items-center justify-center flex'>
           <div className='flex flex-col items-center gap-1'>
             <div onClick={onDelete} className='text-slate-800 cursor-pointer hover:underline hover:text-red-600 text-[0.7rem]'>Remove</div>
