@@ -1,27 +1,35 @@
 import React from "react";
 import UseFetchWeeklySaleForCharts from "../../hooks/orders/useFetchWeeklySaleForCharts";
+import useFetchWeeklyUserForCharts from "../../hooks/users/useFetchWeeklyUserForCharts";
 import TopPieChartBox from "./topPieChartBox";
 
 function TopDashboard() {
   // เรียกใช้ Hook เพื่อดึงข้อมูล
-  const { chartsData, totalOrders, lastWowOrders, totalIncome, lastWowIncomes } = UseFetchWeeklySaleForCharts();
-
+  const { orderChartsData, totalOrders, lastWowOrders, totalIncome, lastWowIncomes } = UseFetchWeeklySaleForCharts();
+const { userChartsData,totalUsers,lastWowUsers} = useFetchWeeklyUserForCharts();
   // กำหนดค่าที่ต้องการใช้
   const Data = [
 {
-  chartsData: chartsData,
+  chartsData: orderChartsData,
   keyData: "totalIncome",
   color: "#A02334",
   headerText: "Total Income",
   amount: totalIncome, // ✅ ใช้ค่าที่ดึงมาได้
   wow: lastWowIncomes,
 },{
-  chartsData: chartsData,
+  chartsData: orderChartsData,
   keyData: "totalOrders",
   color: "#FFAD60",
   headerText: "Total Orders",
   amount: totalOrders, // ✅ ใช้ค่าที่ดึงมาได้
   wow: lastWowOrders,
+},{
+  chartsData: userChartsData,
+  keyData: "total",
+  color: "#3A8DFF",
+  headerText: "Total Users",
+  amount: totalUsers, 
+  wow: lastWowUsers,
 }
   ]
 

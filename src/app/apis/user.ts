@@ -14,7 +14,7 @@ export const me = async () => {
   }
 };
 
-
+/////////////////////////////////////////////////
 export const getAllUsers = async (
   search?: string,
   page?: string,
@@ -42,4 +42,14 @@ export const getAllUsers = async (
     throw error;
   }
 };
+/////////////////////////////////////////////////////
 
+export const  fetchgetWeeklyUserForCharts = async () => {
+  try {
+    const res = await axios.get(`/api/users/charts/getWeeklyUserForCharts`);
+    return res.data;
+  } catch (error) {
+    console.error("error fetching order", error);
+    throw error;
+  }
+}
