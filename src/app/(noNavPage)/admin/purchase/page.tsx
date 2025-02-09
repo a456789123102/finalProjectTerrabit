@@ -46,6 +46,7 @@ function PurchaseTable() {
   const [forceFetch, setForceFetch] = useState(false); 
 
   const orders: Order[] = useFetchOrders(status, forceFetch, searchQuery, pagination, setPagination) ?? [];
+
   console.log("orders:", orders);
   console.log("pagi:", pagination ?? { page: "undefined", pageSize: "undefined" });
   
@@ -89,33 +90,49 @@ function PurchaseTable() {
             throw error; // ส่ง error ไปให้ handleConfirm จัดการ
         }
     };
-    
     const handleApprove = async (orderId: number, currentStatus: string) => {
         try {
-            const validStatus = ['awaiting_confirmation', 'awaiting_rejection'];
-            if (!validStatus.includes(currentStatus)) {
-                console.error(`Invalid status: ${currentStatus}. Expected 'awaiting_confirmation' or 'awaiting_rejection'`);
-                throw new Error(`Invalid status: ${currentStatus}`);
+            if (!['awaiting_confirmation', 'awaiting_rejection'].includes(currentStatus)) {
+                console.error(`Invalid status: ${currentStatus}`);
+                return;
             }
     
-            let updatedStatus = "";
-            if (currentStatus === 'awaiting_confirmation') {
-                updatedStatus = "order_approved";
-            } else if (currentStatus === 'awaiting_rejection') {
-                updatedStatus = 'order_cancelled';
-            }
+            let updatedStatus = currentStatus === 'awaiting_confirmation' ? "order_approved" : "order_cancelled";
     
-            console.log(`Order ${orderId} approved from status ${currentStatus} with new status: ${updatedStatus}`);
+            console.log(`Updating Order ${orderId} -> ${updatedStatus}`);
             const res = await updateOrderStatus(orderId, updatedStatus);
-            if (!res || res.status !== 200) {
-                throw new Error(`Failed to update status for Order ID ${orderId}`);
+    
+            if (!res || res?.status !== 200) {
+                console.error(`Failed to update Order ID ${orderId}`);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update Failed',
+                    text: `Could not update Order ID ${orderId}. Please try again.`,
+                });
+                return;
             }
-            console.log(`Order ${orderId} status updated successfully to: ${updatedStatus}`);
+    
+            console.log(`Order ${orderId} updated successfully.`);
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: `Order ID ${orderId} updated successfully.`,
+                timer: 2000,
+                showConfirmButton: false,
+            });
+    
+            // ✅ อัปเดตข้อมูลใหม่หลังเปลี่ยนสถานะสำเร็จ
+            setForceFetch(prev => !prev);
         } catch (error) {
-            console.error('Failed to update status', error);
-            throw error; // ส่ง error ไปให้ handleConfirm จัดการ
+            console.error('Failed to update order:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Unexpected Error',
+                text: 'An unexpected error occurred. Please try again.',
+            });
         }
     };
+    
       
   const handleConfirm = async () => {
     const result = await Swal.fire({

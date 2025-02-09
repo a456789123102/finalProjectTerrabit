@@ -37,7 +37,7 @@ function Logo() {
           {isAdmin && <AdminMenu />} {/* แสดง AdminMenu ถ้าเป็น admin */}
         </div>
       ) : (
-        <Link href="/login" className="text-yellow-500">login</Link>
+        <Link href="/login" className="text-yellow-500 hover:underline">login</Link>
       )}
     </Text>
   );

@@ -26,20 +26,23 @@ console.log("productId:", productId);
   }, [categories, name, productId]); // ดึงข้อมูลเมื่อ props เปลี่ยน
 
   return (
-    <div className="flex flex-row h-full">
-      {loading ? (
-        <div className="text-center w-full">Loading related products...</div>
-      ) : relatedProducts.length > 0 ? (
-        relatedProducts.map((products) => (
-          <div key={products.id} className="mx-2 w-1/4 min-w-[250px]">
-            <ProductCard product={products} />
-          </div>
-        ))
-      ) : (
-        <div className="text-center w-full">No related products found.</div>
-      )}
+    <div className="relative w-full overflow-hidden"> {/* ✅ จำกัดการแสดงผล */}
+      <div className="flex flex-row h-full overflow-x-auto scrollbar-hide whitespace-nowrap"> {/* ✅ เลื่อนซ้าย-ขวาได้ */}
+        {loading ? (
+          <div className="text-center w-full">Loading related products...</div>
+        ) : relatedProducts.length > 0 ? (
+          relatedProducts.slice(0, 4).map((product) => (  // ✅ ลดจำนวนที่แสดง
+            <div key={product.id} className="mx-2 w-1/4 min-w-[250px]">
+              <ProductCard product={product} />
+            </div>
+          ))
+        ) : (
+          <div className="text-center w-full">No related products found.</div>
+        )}
+      </div>
     </div>
   );
+  
 }
 
 export default RelatedProductSlide;

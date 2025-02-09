@@ -55,7 +55,7 @@ function orderCharts() {
     style={{ backgroundColor: themeColors.primary}}
     >
       <div className='w-full border-y-2 flex flex-row gap-5 p-2 px-5 items-center my-7 '
-       style={{ backgroundColor: themeColors.secondary}}
+       style={{ backgroundColor: themeColors.base}}
       >
         <ChartFiltersPanel
           interval={tempInterval}
@@ -72,7 +72,7 @@ function orderCharts() {
       </div>
       <div>
         <div className='border mx-7 p-5 flex flex-col'>
-         <div className='p-3' style={{ backgroundColor: themeColors.secondary}}>
+         <div className='p-3' style={{ backgroundColor: themeColors.base}}>
          <LineChartComponent data={chartsData} chartKeys={chartKeys} />
          </div>
           <div className='flex flex-row justify-between mt-7 border'>

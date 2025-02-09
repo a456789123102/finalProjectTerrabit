@@ -4,7 +4,8 @@ import {get} from '../../const'
 export async function GET(req: NextRequest, {params}) {
     try {
         const {id} = params
-        const res = await get(`/api/reviews/${id}`)
+        const token = req.cookies.get('token')?.value;
+        const res = await get(`/api/reviews/${id}`,token)
         if (!res.ok) {
           throw new Error(`Failed to fetch career with ID ${id}`);
         }

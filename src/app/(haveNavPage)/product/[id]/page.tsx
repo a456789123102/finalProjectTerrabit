@@ -4,14 +4,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getProductById } from '../../../apis/product';
 import { getReviewsById } from '../.././../apis/review';
-import Image from 'next/image';
 import Link from 'next/link';
-import StarRating from '@/app/components/starRating';
 import RelatedProductSlide from "../components/RelatedProductSlide"
 import { createCart } from "@/app/apis/carts"
 import { useRouter } from 'next/navigation';
 import ImageSwiper from "../components/imageSwiper";
-
+import ReviewArea from '../components/reviewArea';
 
 type Product = {
   id: number,
@@ -38,12 +36,7 @@ type ProductImage = {
   name: string;
   imageUrl: string;
 };
-interface Review {
-  id: number;
-  rating: number;
-    userName: string;
-  comments: string;
-}
+
 
 const ProductDetail = () => {
   const { username } = useUserStore();
@@ -51,6 +44,8 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
+  const [myReviews, setMyReviews] = useState(null);
+  const [myReviewPermission, setMyReviewsPermission] = useState(false);
   const [AddQuantity, setAddQuantity] = useState(1);
   const router = useRouter();
 
@@ -112,23 +107,27 @@ const ProductDetail = () => {
         try {
           const reviewData = await getReviewsById(Number(id));
           console.log('Review Data:', reviewData);
-          setReviews(reviewData);
+          setReviews(reviewData.reviews);
+          setMyReviews(reviewData.myReviews)
+          setMyReviewsPermission(reviewData.myReviewsPermission)
+          console.log('My Reviews:', myReviews)
+          console.log('My Reviews Permission:', myReviewPermission);
         } catch (error) {
           console.error(error);
         }
       };
       fetchReviews();
     }
-  }, [id]);
+  }, [id,myReviewPermission]);
 
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className='flex flex-col items-center justify-center  text-white p-8 '>
+    <div className='flex flex-col items-center justify-center  text-white pt-8'>
       {product ? (
-        <div className='flex flex-col items-center justify-center w-4/6'>
+        <div className='flex flex-col items-center justify-center lg:w-4/6 md:w-2/3 w-full'>
           <div className='flex flex-col md:flex-row items-start justify-between w-full'>
-            <div className='flex flex-col gap-4 w-1/2 border'>
+            <div className='flex flex-col gap-4 w-1/2 border min-w-[450px]'>
               {product.Image && product.Image.length > 0 ?
                 <ImageSwiper images={product.Image} />
                 : (
@@ -149,7 +148,7 @@ const ProductDetail = () => {
               <div className='text-xl'>Left : {product.quantity}</div>
               <div className='flex items-center gap-4 mb-6'>
                 <span className='text-xl'>Quantity:</span>
-                <div className='bg-white text-black text-[0.8rem]'>
+                <div className='bg-white text-black text-[0.8rem] flex flex-row'>
                   <button className="px-4 py-2 border" onClick={handleDecreaseClick}>-</button>
                   <span className='text-xl px-4 py-2'>{AddQuantity}</span>
                   <button className="px-4 py-2  border" onClick={handleIncreaseClick}>+</button>
@@ -178,7 +177,7 @@ const ProductDetail = () => {
           <div className='my-2 bg-[#1C1C1C] text-white min-w-full p-3 '>
             <div>
               <div className="text-2xl">Reviews(pending)</div>
-              <div className='p-3'>
+              {/* <div className='p-3'>
                 {reviews.map((review: Review) => (
                   <div key={review.id} className='p-3 my-2 bg-white border'>
                     <div className='font-semibold'>{review.userName}</div>
@@ -188,8 +187,8 @@ const ProductDetail = () => {
                     <div className='text-slate-800'>{review.comments}</div>
                   </div>
                 ))}
-              </div>
-
+              </div> */}
+<ReviewArea reviews={reviews} myReviews={myReviews}  myReviewPermission={myReviewPermission}/>
             </div>
             {/* Reviews */}
           </div>
