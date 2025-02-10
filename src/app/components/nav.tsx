@@ -33,7 +33,7 @@ function Nav() {
 
   return (
     <Text className={`hover:h-12 flex flex-row   justify-between bg-black bg-opacity-80 h-8 px-5 text-yellow-400 transition-all duration-300 ${isFixed ? 'fixed top-0 w-full z-40' : 'relative'}`}>
-      <div className='flex flex-row gap-7 w-1/3 items-center'>
+      <div className='flex flex-row gap-7 w-1/3 items-center overflow-hidden'>
         {menuItems.map((item, index) => (
           item.href ? (
             <Link key={index} href={item.href} className="hover:underline cursor-pointer hover:text-yellow-200 hover:text-[1.3rem] transition-all duration-200 delay-50">

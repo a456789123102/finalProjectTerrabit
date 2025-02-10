@@ -45,7 +45,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
   const [myReviews, setMyReviews] = useState(null);
-  const [myReviewPermission, setMyReviewsPermission] = useState(false);
+  const [myReviewPermission, setMyReviewsPermission] = useState(null);
   const [AddQuantity, setAddQuantity] = useState(1);
   const router = useRouter();
 
@@ -109,7 +109,7 @@ const ProductDetail = () => {
           console.log('Review Data:', reviewData);
           setReviews(reviewData.reviews);
           setMyReviews(reviewData.myReviews)
-          setMyReviewsPermission(reviewData.myReviewsPermission)
+          setMyReviewsPermission(reviewData.myReviewPermission)
           console.log('My Reviews:', myReviews)
           console.log('My Reviews Permission:', myReviewPermission);
         } catch (error) {
@@ -177,17 +177,6 @@ const ProductDetail = () => {
           <div className='my-2 bg-[#1C1C1C] text-white min-w-full p-3 '>
             <div>
               <div className="text-2xl">Reviews(pending)</div>
-              {/* <div className='p-3'>
-                {reviews.map((review: Review) => (
-                  <div key={review.id} className='p-3 my-2 bg-white border'>
-                    <div className='font-semibold'>{review.userName}</div>
-                    <div className='flex flex-row'>
-                      <StarRating rating={review.rating} />
-                    </div>
-                    <div className='text-slate-800'>{review.comments}</div>
-                  </div>
-                ))}
-              </div> */}
 <ReviewArea reviews={reviews} myReviews={myReviews}  myReviewPermission={myReviewPermission}/>
             </div>
             {/* Reviews */}

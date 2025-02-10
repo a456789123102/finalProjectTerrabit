@@ -9,3 +9,16 @@ return res.data;
         throw error;
     }
 }
+
+export const createReview = async (productId: string, rating: number, comments: string) => {
+  try {
+    const res = await axios.post(`/api/reviews/${productId}/create`, {
+      rating,
+      comments,
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Axios error:", error);
+    throw error;
+  }
+};

@@ -2,7 +2,7 @@ import React from 'react';
 import StarRating from '@/app/components/starRating';
 import { useUserStore } from '@/store/zustand';
 import { useRouter } from 'next/navigation';
-import personalReviewBox from './personalReviewBox';
+import PersonalReviewBox from './personalReviewBox';
 
 interface Review {
     id: number;
@@ -21,8 +21,8 @@ function ReviewArea({ reviews, myReviews, myReviewPermission }) {
     const { username } = useUserStore();
     return (
         <div>
-            <div className="bg-gray-50 text-slate-800 rounded-md h-auto p-1 shadow-md">
-                <div className="p-4 w-full border border-gray-300 bg-white rounded-lg shadow-sm"> {/* ✅ เส้นขอบสมมาตร */}
+            <div className="bg-gray-50 text-slate-800 rounded-md h-auto p-1 shadow-md gap-4">
+                <div className="p-3 w-full border border-gray-300 bg-white rounded-lg shadow-sm"> {/* ✅ เส้นขอบสมมาตร */}
                     {myReviews !== null ? (
                         <div className="p-4 my-2 bg-gray-100 rounded-lg border border-gray-300">
                             <div className="font-semibold text-lg text-gray-900">{myReviews.userName}</div>
@@ -32,9 +32,7 @@ function ReviewArea({ reviews, myReviews, myReviewPermission }) {
                             <div className="mt-2 text-gray-700">{myReviews.comments}</div>
                         </div>
                     ) : myReviewPermission ? (
-                        <div className="text-gray-600 text-center italic">
-                            You have purchased this product! Feel free to share your review.
-                        </div>
+                        <PersonalReviewBox />
                     ) : username ? (
                         <div className="text-gray-600 text-center italic">
                             You need to purchase this product before leaving a review.

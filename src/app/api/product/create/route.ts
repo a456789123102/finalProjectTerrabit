@@ -1,6 +1,5 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import formidable, { Fields, Files } from 'formidable';
 import { post } from '../../const';
 
 // Helper: Parse FormData
