@@ -10,6 +10,7 @@ import { createCart } from "@/app/apis/carts"
 import { useRouter } from 'next/navigation';
 import ImageSwiper from "../components/imageSwiper";
 import ReviewArea from '../components/reviewArea';
+import { ChevronLeft, ChevronRight, Star, StarHalf } from "lucide-react"
 
 type Product = {
   id: number,
@@ -25,7 +26,7 @@ type Product = {
 
 type Category = {
   categoryId: number;
-  category:{
+  category: {
     name: string;
   }
   name: string;
@@ -44,9 +45,15 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
+  const [totalRating, setTotalRating] = useState(null);
   const [myReviews, setMyReviews] = useState(null);
   const [myReviewPermission, setMyReviewsPermission] = useState(null);
   const [AddQuantity, setAddQuantity] = useState(1);
+  const [paginations, setPaginations] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalReviews: 0,
+  });
   const router = useRouter();
 
   const CategoryItem = ({ name, id }: { name: string; id: number }) => {
@@ -60,6 +67,18 @@ const ProductDetail = () => {
   const handleDecreaseClick = () => {
     if (AddQuantity > 1) {
       setAddQuantity(AddQuantity - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (paginations.currentPage < paginations.totalPages) {
+      setPaginations((prev) => ({ ...prev, currentPage: prev.currentPage + 1 }));
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (paginations.currentPage > 1) {
+      setPaginations((prev) => ({ ...prev, currentPage: prev.currentPage - 1 }));
     }
   };
 
@@ -110,15 +129,15 @@ const ProductDetail = () => {
           setReviews(reviewData.reviews);
           setMyReviews(reviewData.myReviews)
           setMyReviewsPermission(reviewData.myReviewPermission)
-          console.log('My Reviews:', myReviews)
-          console.log('My Reviews Permission:', myReviewPermission);
+          setTotalRating(reviewData.ratingScore ? reviewData.ratingScore : null)
+          setPaginations(reviewData.Pagination)
         } catch (error) {
           console.error(error);
         }
       };
       fetchReviews();
     }
-  }, [id,myReviewPermission]);
+  }, [id, myReviewPermission]);
 
   if (loading) return <p>Loading...</p>;
 
@@ -174,12 +193,44 @@ const ProductDetail = () => {
             <div className="text-2xl">Description</div>
             <div>{product.description}</div>
           </div>
-          <div className='my-2 bg-[#1C1C1C] text-white min-w-full p-3 '>
+          <div className='my-2 bg-[#1C1C1C] w-full p-5 justify-center'>
             <div>
-              <div className="text-2xl">Reviews(pending)</div>
-<ReviewArea reviews={reviews} myReviews={myReviews}  myReviewPermission={myReviewPermission}/>
+              <div className="text-2xl mb-3">Product Ratings</div>
+              {totalRating && (
+                <div className="flex flex-row font-poppins text-gray-300 mb-2 w-full justify-between px-1">
+                  {/* Section ซ้าย */}
+                  <div className="flex flex-row items-baseline">
+                    {/* คะแนนตัวเลข + "out of 5" */}
+                    <div className="mb-2 mr-2 flex flex-row pr-2 items-baseline">
+                      <div className="pr-1 text-[2rem] text-yellow-300">{totalRating}</div>
+                      <div className="text-[1rem]">out of 5</div>
+                    </div>
+                    <div className="flex gap-1 items-baseline">
+                      {[...Array(Math.floor(totalRating))].map((_, i) => (
+                        <Star key={i} className="text-yellow-400 w-5 h-5" />
+                      ))}
+                      {totalRating % 1 !== 0 && <StarHalf className="text-yellow-400 w-5 h-5" />}
+                    </div>
+                  </div>
+                  <div className="justify-self-end ">Total 23 reviews.</div>
+                </div>
+              )}
+              <ReviewArea reviews={reviews} myReviews={myReviews} myReviewPermission={myReviewPermission} />
+              <div className="flex flex-row gap-4 items-center justify-center mt-4">
+                <ChevronLeft
+                  className="transition-transform duration-200 hover:scale-125 cursor-pointer"
+                  size={40}
+                />
+                <div>
+                  Page {paginations.currentPage} / {paginations.totalPages}
+                </div>
+                <ChevronRight
+                  className="transition-transform duration-200 hover:scale-125 cursor-pointer"
+                  size={40}
+                />
+              </div>
+
             </div>
-            {/* Reviews */}
           </div>
           <div className='my-2 bg-[#1C1C1C] w-full p-5'>
             <div className="text-2xl">

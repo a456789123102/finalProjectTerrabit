@@ -4,6 +4,7 @@ import { fetchProducts } from '../../apis/product';
 import ProductCard from './components/productCard';
 import CategorySelect from './components/categoryCard';
 import Text from '@/app/components/text';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -107,25 +108,27 @@ const ProductList = () => {
 
       {/* Pagination Controls */}
       <div className="flex justify-center items-center flex-col mt-11 gap-2">
-        <div className=" mt-4">{pagination.totalProducts} products found.</div>
-        <div className="flex flex-row gap-4">
-          <button
-            onClick={handlePrevPage}
-            disabled={pagination.page === 1}
-            className="bg-[#1B4242] p-2 shadow-md text-amber-300 cursor-pointer"
-          >
-            Prev.
-          </button>
-          <span className="">
+        <div className=" mt-4 text-[0.8rem] text-gray-600">{pagination.totalProducts} products found.</div>
+        <div className="flex flex-row gap-4 items-center">
+
+          {pagination.page > 1 && (
+            <ChevronLeft
+              className="transition-transform duration-200 hover:scale-125 cursor-pointer"
+              size={40} // ตั้งขนาดไอคอนที่นี่แทน
+              onClick={handlePrevPage}
+            />
+          )}
+          <div>
             Page {pagination.page} / {pagination.totalPages}
-          </span>
-          <button
-            onClick={handleNextPage}
-            disabled={pagination.page === pagination.totalPages}
-            className="bg-[#1B4242] p-2 shadow-md text-amber-300 cursor-pointer"
-          >
-            Next
-          </button>
+          </div>
+
+          {pagination.totalPages > pagination.page && (
+            <ChevronRight
+              className="transition-transform duration-200 hover:scale-125 cursor-pointer"
+              size={40} // ตั้งขนาดไอคอนที่นี่แทน
+              onClick={handleNextPage} />
+          )}
+
         </div>
 
       </div>

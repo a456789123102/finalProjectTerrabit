@@ -9,6 +9,7 @@ interface Review {
     rating: number;
     userName: string;
     comments: string;
+    updatedAt: string;
 }
 function ReviewArea({ reviews, myReviews, myReviewPermission }) {
     const router = useRouter();
@@ -21,15 +22,29 @@ function ReviewArea({ reviews, myReviews, myReviewPermission }) {
     const { username } = useUserStore();
     return (
         <div>
-            <div className="bg-gray-50 text-slate-800 rounded-md h-auto p-1 shadow-md gap-4">
-                <div className="p-3 w-full border border-gray-300 bg-white rounded-lg shadow-sm"> {/* ✅ เส้นขอบสมมาตร */}
+
+            <div className="bg-gray-50 text-slate-800 rounded-[4px] h-auto p-1 gap-4">
+                <div className="p-3 w-full border border-gray-300 bg-white">
                     {myReviews !== null ? (
-                        <div className="p-4 my-2 bg-gray-100 rounded-lg border border-gray-300">
-                            <div className="font-semibold text-lg text-gray-900">{myReviews.userName}</div>
-                            <div className="flex items-center mt-1">
-                                <StarRating rating={myReviews.rating} />
+                        <div className='p-1'>
+                            <div className='flex flex-row gap-2 items-baseline'>
+                                <div className="font-semibold text-slate-900 text-xl ">{myReviews.userName}</div>
+                                <div className="flex flex-row">
+                                    <StarRating rating={myReviews.rating} />
+                                </div>
                             </div>
-                            <div className="mt-2 text-gray-700">{myReviews.comments}</div>
+                            <div className='text-[0.75rem] text-slate-500 mb-2'>  {new Date(myReviews.updatedAt).toLocaleString("en-GB", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                            }).replace(",", "")}</div>
+                            <div className="text-slate-700 min-h-20 overflow-hidden break-words whitespace-normal">
+                                {myReviews.comments}
+                            </div>
+
                         </div>
                     ) : myReviewPermission ? (
                         <PersonalReviewBox />
@@ -51,18 +66,28 @@ function ReviewArea({ reviews, myReviews, myReviewPermission }) {
                     )}
                 </div>
             </div>
-
-
-
-
             {reviews.length > 0 ? (
                 reviews.map((review: Review) => (
-                    <div key={review.id} className="p-3 my-2 bg-white border">
-                        <div className="font-semibold">{review.userName}</div>
-                        <div className="flex flex-row">
-                            <StarRating rating={review.rating} />
+                    <div key={review.id} className="p-1 my-3 bg-white border border-gray-300 rounded-[4px]">
+                        <div className='p-3 border'>
+                            <div className='flex flex-row gap-2 items-baseline'>
+                                <div className="font-semibold text-slate-900">{review.userName}</div>
+                                <div className="flex flex-row">
+                                    <StarRating rating={review.rating} />
+                                </div>
+                            </div>
+                            <div className='text-[0.75rem] text-slate-500 mb-2 '>
+                            {new Date(review.updatedAt).toLocaleString("en-GB", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                            }).replace(",", "")}
+                            </div>
+                            <div className="text-slate-600 min-h-20">{review.comments}</div>
                         </div>
-                        <div className="text-slate-800">{review.comments}</div>
                     </div>
                 ))
             ) : (
