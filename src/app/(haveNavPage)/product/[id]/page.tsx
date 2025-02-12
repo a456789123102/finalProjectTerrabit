@@ -54,7 +54,16 @@ const ProductDetail = () => {
     totalPages: 1,
     totalReviews: 0,
   });
+  const [isEditClick, setIsEditClick] = useState(false)
+    const [comment, setComment] = useState<string>("")
+    const [selectedStars, setSelectedStars] = useState(4);
   const router = useRouter();
+  
+  useEffect(() => {
+    console.log("Updated isEditClick:", isEditClick);
+  }, [isEditClick]);
+  
+
 
   const CategoryItem = ({ name, id }: { name: string; id: number }) => {
     return <Link href={`/product/category/${id}`} className='p-2 mx-2 bg-lime-950 justify-center hover:text-amber-300 hover:underline'>{name}</Link>;
@@ -124,20 +133,21 @@ const ProductDetail = () => {
     if (id) {
       const fetchReviews = async () => {
         try {
-          const reviewData = await getReviewsById(Number(id));
+          const reviewData = await getReviewsById(Number(id),paginations.currentPage);
           console.log('Review Data:', reviewData);
           setReviews(reviewData.reviews);
           setMyReviews(reviewData.myReviews)
           setMyReviewsPermission(reviewData.myReviewPermission)
           setTotalRating(reviewData.ratingScore ? reviewData.ratingScore : null)
           setPaginations(reviewData.Pagination)
+          console.log('Editstatus:', isEditClick)
         } catch (error) {
           console.error(error);
         }
       };
       fetchReviews();
     }
-  }, [id, myReviewPermission]);
+  }, [id, myReviewPermission,paginations.currentPage]);
 
   if (loading) return <p>Loading...</p>;
 
@@ -212,12 +222,24 @@ const ProductDetail = () => {
                       {totalRating % 1 !== 0 && <StarHalf className="text-yellow-400 w-5 h-5" />}
                     </div>
                   </div>
-                  <div className="justify-self-end ">Total 23 reviews.</div>
+                  <div className="justify-self-end ">Total {paginations.totalReviews} reviews.</div>
                 </div>
               )}
-              <ReviewArea reviews={reviews} myReviews={myReviews} myReviewPermission={myReviewPermission} />
+<ReviewArea
+  reviews={reviews}
+  myReviews={myReviews}
+  myReviewPermission={myReviewPermission}
+  isEditClick={isEditClick} 
+  setIsEditClick={setIsEditClick} 
+  comment={comment}
+   setComment={setComment}
+   selectedStars={selectedStars}
+    setSelectedStars={setSelectedStars}
+/>
+
               <div className="flex flex-row gap-4 items-center justify-center mt-4">
                 <ChevronLeft
+                onClick={handlePrevPage}
                   className="transition-transform duration-200 hover:scale-125 cursor-pointer"
                   size={40}
                 />
@@ -225,6 +247,7 @@ const ProductDetail = () => {
                   Page {paginations.currentPage} / {paginations.totalPages}
                 </div>
                 <ChevronRight
+                onClick={handleNextPage}
                   className="transition-transform duration-200 hover:scale-125 cursor-pointer"
                   size={40}
                 />

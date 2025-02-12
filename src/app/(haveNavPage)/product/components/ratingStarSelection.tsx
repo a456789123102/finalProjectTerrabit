@@ -24,8 +24,8 @@ const RatingStarSelection: React.FC<RatingStarSelectionProps> = ({ maxStars, sel
 
     const emoteIcons = {
         0: <Angry className="w-8 h-8 text-red-600" />,   // หน้าโกรธ
-        1: <Frown className="w-8 h-8 text-orange-500" />, // หน้าบึ้ง
-        2: <Meh className="w-8 h-8 text-yellow-500" />,   // หน้านิ่ง
+        1: <Angry className="w-8 h-8 text-orange-500" />, // หน้าบึ้ง
+        2: <Frown className="w-8 h-8 text-yellow-500" />,   // หน้านิ่ง
         3: <Meh className="w-8 h-8 text-green-500" />,    // Meh
         4: <Smile className="w-8 h-8 text-blue-500" />,   // หน้ายิ้ม
         5: <Laugh className="w-8 h-8 text-purple-500" />  // หัวเราะ

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StarRating from '@/app/components/starRating';
 import { useUserStore } from '@/store/zustand';
 import { useRouter } from 'next/navigation';
 import PersonalReviewBox from './personalReviewBox';
+import { SquarePen } from 'lucide-react';
 
 interface Review {
     id: number;
@@ -11,8 +12,31 @@ interface Review {
     comments: string;
     updatedAt: string;
 }
-function ReviewArea({ reviews, myReviews, myReviewPermission }) {
+function ReviewArea({
+    reviews,
+    myReviews,
+    myReviewPermission,
+    isEditClick,
+    setIsEditClick,
+    comment,
+    setComment,
+    selectedStars,
+     setSelectedStars,
+}: {
+    reviews: Review[];
+    myReviews?: any;
+    myReviewPermission: boolean;
+    isEditClick: boolean;
+    setIsEditClick: (value: boolean) => void;
+    comment: string;
+    setComment:  (value: string) => void;
+    selectedStars: number;
+    setSelectedStars: (value: number) => void;
+}) {
+
     const router = useRouter();
+
+
     const handleLoginClick = () => {
         const currentPath = encodeURIComponent(window.location.pathname);
         router.push(`/login?redirect=${currentPath}`);
@@ -25,33 +49,60 @@ function ReviewArea({ reviews, myReviews, myReviewPermission }) {
 
             <div className="bg-gray-50 text-slate-800 rounded-[4px] h-auto p-1 gap-4">
                 <div className="p-3 w-full border border-gray-300 bg-white">
-                    {myReviews !== null ? (
-                        <div className='p-1'>
-                            <div className='flex flex-row gap-2 items-baseline'>
-                                <div className="font-semibold text-slate-900 text-xl ">{myReviews.userName}</div>
-                                <div className="flex flex-row">
-                                    <StarRating rating={myReviews.rating} />
+                    {myReviews ? (
+                        isEditClick ? (
+                            <PersonalReviewBox 
+                            mode="edit" 
+                            myReviews={myReviews} 
+                            setIsEditClick={setIsEditClick} 
+                            comment={comment} 
+                            setComment={setComment} 
+                            selectedStars={selectedStars} 
+                            setSelectedStars={setSelectedStars}
+                          />
+                          
+                        ) : (
+                            <div className="p-1 border border-yellow-400 relative">
+                                <div className="flex flex-row gap-2 items-baseline">
+                                    <div className="font-semibold text-slate-900 text-xl">{myReviews.userName}</div>
+                                    <div className="flex flex-row">
+                                        <StarRating rating={myReviews.rating} />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='text-[0.75rem] text-slate-500 mb-2'>  {new Date(myReviews.updatedAt).toLocaleString("en-GB", {
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: false,
-                            }).replace(",", "")}</div>
-                            <div className="text-slate-700 min-h-20 overflow-hidden break-words whitespace-normal">
-                                {myReviews.comments}
-                            </div>
+                                <div className="text-[0.75rem] text-slate-500 mb-2">
+                                    {new Date(myReviews.updatedAt)
+                                        .toLocaleString("en-GB", {
+                                            year: "numeric",
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hour12: false,
+                                        })
+                                        .replace(",", "")}
+                                </div>
+                                <div className="text-slate-700 min-h-20 overflow-hidden break-words whitespace-normal">
+                                    {myReviews.comments}
+                                </div>
+                                <SquarePen
+                                    className="absolute top-2 right-2 cursor-pointer hover:text-yellow-500"
+                                    onClick={() => {
+                                        console.log("Before setting isEditClick:", isEditClick);
+                                        setIsEditClick(true);
+                                        console.log("After setting isEditClick:", isEditClick);
+                                    }}
+                                />
 
-                        </div>
-                    ) : myReviewPermission ? (
-                        <PersonalReviewBox />
+                            </div>
+                        )
                     ) : username ? (
-                        <div className="text-gray-600 text-center italic">
-                            You need to purchase this product before leaving a review.
-                        </div>
+                        myReviewPermission ? (
+                            <PersonalReviewBox mode="create" setIsEditClick={setIsEditClick} /> //  ไม่มีรีวิว + มีสิทธิ์รีวิว
+                        ) : (
+                            <div className="text-gray-600 text-center italic">
+                                You need to purchase this product before leaving a review.
+                            </div> //  ไม่มีรีวิว + ไม่มีสิทธิ์รีวิว
+                        )
                     ) : (
                         <div className="text-gray-600 text-center italic text-[0.9rem]">
                             Please{" "}
@@ -65,6 +116,7 @@ function ReviewArea({ reviews, myReviews, myReviewPermission }) {
                         </div>
                     )}
                 </div>
+
             </div>
             {reviews.length > 0 ? (
                 reviews.map((review: Review) => (
@@ -77,14 +129,14 @@ function ReviewArea({ reviews, myReviews, myReviewPermission }) {
                                 </div>
                             </div>
                             <div className='text-[0.75rem] text-slate-500 mb-2 '>
-                            {new Date(review.updatedAt).toLocaleString("en-GB", {
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: false,
-                            }).replace(",", "")}
+                                {new Date(review.updatedAt).toLocaleString("en-GB", {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: false,
+                                }).replace(",", "")}
                             </div>
                             <div className="text-slate-600 min-h-20">{review.comments}</div>
                         </div>

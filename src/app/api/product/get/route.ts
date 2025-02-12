@@ -4,30 +4,8 @@ import { get } from "../../const";
 export async function GET(req: NextRequest) {
   try {
     const token = req.cookies.get("token")?.value;
-    const searchParams = req.nextUrl.searchParams;
-
-    // ดึงค่าพารามิเตอร์ search และ category
-    const search = searchParams.get('search') || undefined;
-    const category = searchParams.get('category') || undefined;
-    const page = searchParams.get('page') || undefined;
-    const pageSize = searchParams.get('pageSize') || undefined;
-
-    // ส่งพารามิเตอร์ไปยัง backend เฉพาะเมื่อมีค่า
-    const params: any = {};
-    if (search) {
-      params.search = search;
-    }
-    if (category) {
-      params.category = [parseInt(category)];
-    }if(page){
-      params.page = parseInt(page);
-    }
-    if(pageSize){
-      params.pageSize = parseInt(pageSize);
-    }
-
     // ส่งพารามิเตอร์ไปยัง backend จริง
-    const res = await get('/api/product', token, params);
+    const res = await get(`/api/product?${req.nextUrl.searchParams.toString()}`, token);
 
     const data = await res.json();
     return NextResponse.json(data); // ส่งข้อมูลกลับเป็น JSON
