@@ -2,10 +2,10 @@
 
 import React, { useMemo, useState } from 'react';
 import { useTheme } from '@/app/context/themeContext';
-import PaginationControls from '../components/PaginationControls';
-import useFetchOrders from '../hooks/orders/useFetchOrders';
+import PaginationControls from '../../components/PaginationControls';
+import useFetchOrders from '../../hooks/orders/useFetchOrders';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import DataTable from '../components/dataTable';
+import DataTable from '../../components/dataTable';
 import Image from 'next/image';
 import StatusSelectDropdown from './components/statusSelectDropdown';
 import Swal from 'sweetalert2';

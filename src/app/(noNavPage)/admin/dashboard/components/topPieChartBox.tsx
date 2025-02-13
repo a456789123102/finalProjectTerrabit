@@ -24,8 +24,8 @@ const TopPieChartBox: React.FC<TopPieChartBoxProps> = ({ chartsData, keyData, he
           <div className="text-[1.4rem]">{newAmount}</div>
           <div className={`text-[0.75rem] flex flex-row items-baseline gap-1 ${wow < 0 ? "text-red-400" : "text-green-400"}`}>
             {wow < 0 ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="size-3">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
-</svg>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+            </svg>
               : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="size-3">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
               </svg>}
@@ -38,7 +38,7 @@ const TopPieChartBox: React.FC<TopPieChartBoxProps> = ({ chartsData, keyData, he
       <div className="w-full" >
         <AreaChartNogridComponent
           data={chartsData}
-          keyData={keyData} 
+          keyData={keyData}
           color={color}
         />
       </div>

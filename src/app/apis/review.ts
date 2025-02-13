@@ -47,3 +47,13 @@ export const updateReview = async (
     throw error;
   }
 }
+
+export const getWeeklyRatingForCharts = async () => {
+  try {
+    const res = await axios.get(`/api/reviews/charts/getWeeklyRatingForCharts`);
+    return res.data;
+  } catch (error) {
+    console.error("error fetching order", error);
+    throw error;
+  }
+}

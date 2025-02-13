@@ -1,5 +1,6 @@
 import { useTheme } from '@/app/context/themeContext';
 import React from 'react';
+import SideMenu from './SideMenu';
 
 interface AdminSidebarProps {
   isSidebarVisible: boolean;
@@ -15,11 +16,13 @@ function AdminSidebar({ isSidebarVisible,isScrollDown }: AdminSidebarProps) {
         ${isScrollDown ? 'top-0 z-40 fixed' : 'top-12 absolute'}
         ${isSidebarVisible ? 'block' : 'hidden '}`}
     >
-       <div className='h-20 w-full border' style={{ backgroundColor: themeColors.base}}>Base</div>
+      <SideMenu />
+      <div className='h-20 w-full border' style={{ backgroundColor: themeColors.base}}>Base</div>
        <div className='h-20 w-full border' style={{ backgroundColor: themeColors.bg}}>bg</div>
       <div className='h-20 w-full border' style={{ backgroundColor: themeColors.primary}}>Primary</div>
       <div className='h-20 w-full border' style={{ backgroundColor: themeColors.secondary}}>Secondary</div>
       <div className='h-20 w-full border' style={{ backgroundColor: themeColors.tertiary}}>tertiary</div>
+
     </div>
   );
 }

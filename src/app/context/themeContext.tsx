@@ -11,6 +11,7 @@ interface ThemeContextType {
         secondary: string;
         tertiary: string;
         text: string;
+        hoverText: string;
         bg: string;
         base: string;
     }
@@ -29,14 +30,16 @@ export const ThemeProvider = ({children}: {children: ReactNode}) => {
         primary: '#F1F5F9',     // Light background color
         secondary: '#E2E8F0',   // Light secondary color
         tertiary: '#CBD5E1',     // Light tertiary color
-        text: '#000000',         // Black text color
+        text: '#000000', // Black text color
+        hoverText: '#0000FF',  //blue
         bg: '#F8FAFC',         // สีแถบ navbar สำหรับ theme light
         base: "#FFFFFF",
       } : {
         primary: '#1F2937',       // Gray 800
         secondary: '#374151',     // Gray 700
         tertiary: '#4B5563',       // Gray 600
-        text: '#FFFFFF',           // ขาว
+        text: '#E6E6E6',           // เทา
+        hoverText: '#FFFFFF',  //ขาว
         bg: '#111827',         // Gray 900
         base: "#030712",
       };

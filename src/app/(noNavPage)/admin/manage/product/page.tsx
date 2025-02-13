@@ -1,10 +1,10 @@
 'use client';
 import React, { useState, useMemo } from "react";
 import { useTheme } from '@/app/context/themeContext';
-import PaginationControls from '../components/PaginationControls';
-import DataTable from "../components/dataTable";
-import SearchAndFilterBar from "../components/SearchAndFilterBar";
-import useFetchProducts from "../hooks/products/useFetchProducts";
+import PaginationControls from '../../components/PaginationControls';
+import DataTable from "../../components/dataTable";
+import SearchAndFilterBar from "../../components/SearchAndFilterBar";
+import useFetchProducts from "../../hooks/products/useFetchProducts";
 import {
   getCoreRowModel,
   useReactTable

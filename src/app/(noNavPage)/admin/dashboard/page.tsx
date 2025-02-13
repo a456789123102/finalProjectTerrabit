@@ -10,31 +10,6 @@ function AdminPage() {
                 <div className="grid grid-cols-4 gap-4 p-6 w-full"
                     style={{ backgroundColor: themeColors.bg }}
                 >
-                    {/* Top row */}
-                    {/* <div className="col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="p-4 border flex flex-col border-gray-300" style={{ backgroundColor: themeColors.primary }}>
-                            <div>Total Sales</div>
-                            <div className="flex flex-row flex-wrap items-baseline gap-1">
-                                <div className="text-[1.4rem]">4,786</div>
-                                <div className="text-[0.75rem] text-green-400">12%</div>
-                                <div className="text-[0.75rem] text-gray-400">since last week</div>
-                            </div>
-                        </div>
-                        <div className="p-4 border flex flex-col border-gray-300" style={{ backgroundColor: themeColors.primary }}>
-                            <div>Total Incomes</div>
-                            <div className="flex flex-row flex-wrap items-baseline gap-1">
-                                <div className="text-[1.4rem]">159,787,745</div>
-                                <div className="text-red-400 text-[0.75rem]">-0.34%</div>
-                                <div className="text-gray-400 text-[0.75rem]">since last week</div>
-                            </div>
-                        </div>
-                        <div className="p-4 border border-gray-300" style={{ backgroundColor: themeColors.primary }}>
-                            <div>Total Orders</div>
-                        </div>
-                        <div className="p-4 border border-gray-300" style={{ backgroundColor: themeColors.primary }}>
-                            <div>Total Sales Revenue</div>
-                        </div>
-                    </div> */}
                     <TopDashboard />
                     {/* Overview of Revenue and Profit */}
                     <div className="col-span-4 p-4 border border-gray-300" style={{ backgroundColor: themeColors.primary }}>
