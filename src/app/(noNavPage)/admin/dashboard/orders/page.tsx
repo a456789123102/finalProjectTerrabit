@@ -1,12 +1,11 @@
-"use client"
-import React, { useState } from 'react'
-import ChartFiltersPanel from '../../components/ChartFiltersPanel';
-import useFetchOrderForCharts from '../../hooks/orders/useFetchgetOrderForCharts';
-import LineChartComponent from '../../components/charts/LineChartComponent';
-import { useTheme } from '@/app/context/themeContext';
-import PieChartComponent from '../../components/charts/PieChartComponent';
-
-import RadialBarChartComponents from '../../components/charts/RadialBarChartComponents';
+"use client";
+import React, { useState, useEffect } from "react";
+import ChartFiltersPanel from "../../components/ChartFiltersPanel";
+import useFetchOrderForCharts from "../../hooks/orders/useFetchgetOrderForCharts";
+import LineChartComponent from "../../components/charts/LineChartComponent";
+import { useTheme } from "@/app/context/themeContext";
+import PieChartComponent from "../../components/charts/PieChartComponent";
+import RadialBarChartComponents from "../../components/charts/RadialBarChartComponents";
 
 function orderCharts() {
   const { themeColors } = useTheme();
@@ -19,42 +18,69 @@ function orderCharts() {
   });
 
   const [endDate, setEndDate] = useState<Date>(new Date());
-  const [tempStartDate, setTempStartDate] = useState<Date>(
-    startDate
-  );
-  const [tempEndDate, setTempEndDate] = useState<Date>(
-    endDate
-  );
+  const [tempStartDate, setTempStartDate] = useState<Date>(startDate);
+  const [tempEndDate, setTempEndDate] = useState<Date>(endDate);
   const [chartKeys, setChartKeys] = useState<string[]>(["totalOrders"]);
+  const [errMessages, setErrMessages] = useState("");
 
   const colorsPie = ["#82ca9d", "#8884d8", "#ffc658", "#ff7300"];
 
-  const handleConfirm = () => {
+  const checkIntervalLength = (): boolean => {
+    const maxEndDate = new Date(tempStartDate);
+    let errorMessage = "";
 
+    if (tempInterval === "daily") {
+      maxEndDate.setMonth(maxEndDate.getMonth() + 1);
+      if (tempEndDate > maxEndDate) {
+        errorMessage = "The end date exceeds the maximum limit of 1 month for the daily interval.";
+      }
+    } else if (tempInterval === "weekly") {
+      maxEndDate.setMonth(maxEndDate.getMonth() + 6);
+      if (tempEndDate > maxEndDate) {
+        errorMessage = "The end date exceeds the maximum limit of 6 months for the weekly interval.";
+      }
+    } else if (tempInterval === "monthly") {
+      maxEndDate.setFullYear(maxEndDate.getFullYear() + 2);
+      if (tempEndDate > maxEndDate) {
+        errorMessage = "The end date exceeds the maximum limit of 2 years for the monthly interval.";
+      }
+    }
+
+    setErrMessages(errorMessage);
+    return errorMessage === "";
+  };
+  useEffect(() => {
+    checkIntervalLength()
+    console.log("error msg: " + errMessages)
+  },[tempEndDate,tempStartDate,tempInterval])
+  
+  
+
+  const handleConfirm = () => {
+    const isValid = checkIntervalLength(); 
+    if (!isValid) {
+      return; 
+    }
     setStartDate(tempStartDate);
     setEndDate(tempEndDate);
     setInterval(tempInterval);
-    console.log(`startDate: ${startDate} endDate: ${endDate} interval:${interval}`);
 
-
+    console.log(`✅ Confirmed! startDate: ${tempStartDate}, endDate: ${tempEndDate}, interval: ${tempInterval}`);
   };
 
   const { chartsData, total, comparativeGrowth, loading, error } = useFetchOrderForCharts(interval, startDate, endDate);
-
-  // 🔹 ใช้ chartKeys เพื่อกรองข้อมูลที่ต้องการ
   const pieChartsData = chartKeys.map((key, index) => ({
     name: key,
-    value: total[key as keyof typeof total] || 0, // ป้องกัน undefined
+    value: total[key as keyof typeof total] || 0,
     color: colorsPie[index % colorsPie.length],
   }));
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-
   const getChartKeys = () => {
     if (chartsData.length > 0) {
-      return Object.keys(chartsData[0]).filter(key => key !== "label");
+      return Object.keys(chartsData[0]).filter((key) => key !== "label");
     }
     return [];
   };
@@ -68,12 +94,11 @@ function orderCharts() {
   };
   const title = intervalTitleMap[interval] || "Order Growth Comparison";
 
-
   return (
     <div className='min--screen w-full'
       style={{ backgroundColor: themeColors.bg }}
     >
-      <div className='w-full border-y-2 flex flex-row gap-5 p-2 px-5 items-center my-7 '
+      <div className='w-full border border-gray-300 flex flex-row gap-5 p-2 px-5 items-center my-7 '
         style={{ backgroundColor: themeColors.base }}
       >
         <ChartFiltersPanel
@@ -87,6 +112,7 @@ function orderCharts() {
           chartKeys={chartKeys} // ตรวจสอบว่า tempChartKeys ไม่เป็น undefined
           setChartKeys={setChartKeys}
           options={options}
+          errMessages={errMessages}
         />
       </div>
       <div>
