@@ -116,7 +116,7 @@ function ProductTable() {
               >
                 Delete
               </button>
-              <Link href={`/admin/product/${row.original.id}/edit`} className="bg-purple-500 text-white px-2 py-1">Edit</Link>
+              <Link href={`/admin/manage/product/${row.original.id}/edit`} className="bg-purple-500 text-white px-2 py-1">Edit</Link>
             </div>
           );
         }

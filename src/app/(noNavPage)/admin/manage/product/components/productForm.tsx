@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import CategorySelect from '../../../../(haveNavPage)/product/components/categoryCard';
+import CategorySelect from '../../../../../(haveNavPage)/product/components/categoryCard';
 import { getProductById } from '@/app/apis/product';
 import Image from 'next/image';
 import { uploadProductImage,deleteImage } from '@/app/apis/productImage';
@@ -49,7 +49,7 @@ const [existingImageDetail2Id, setExistingImageDetail2Id] = useState<number | nu
 
         setName(product.name || '');
         setPrice(product.price || '');
-        setDiscount(product.discount *100 || 0);
+        setDiscount(product.discount || 0);
         setQuantity(product.quantity || '');
         setDescription(product.description || '');
 

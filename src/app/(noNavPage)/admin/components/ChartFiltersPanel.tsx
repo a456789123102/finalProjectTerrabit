@@ -31,7 +31,7 @@ const ChartFiltersPanel = ({ interval, setInterval, startDate, setStartDate, end
           />
         </div>
       </div>
-      <button className='bg-gray-400 p-2 hover:bg-gray-500 mx-2 border font-semibold rounded-md px-4' onClick={handleConfirm}>Confirm</button>
+      <button className='bg-blue-500 p-2 hover:bg-blue-600 mx-2 border font-semibold rounded-md px-4 text-gray-100' onClick={handleConfirm}>Confirm</button>
     </div>
 
   );
