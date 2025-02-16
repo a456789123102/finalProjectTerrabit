@@ -43,7 +43,7 @@ const StatusSelectDropdown = ({ status, setStatus }: StatusSelectDropdownProps) 
   placeholder={"Select order status..."}
   options={statuses}
   value={selectedOptions}
-  className="text-sm text-black w-[200px] h-[40px]" // กำหนดขนาดคงที่
+  className="text-sm text-black w-[200px] h-10" // กำหนดขนาดคงที่
   onChange={handleChange}
   getOptionValue={(option) => option.key}
   getOptionLabel={(option) => option.label}

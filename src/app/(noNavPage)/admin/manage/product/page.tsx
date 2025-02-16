@@ -155,46 +155,47 @@ function ProductTable() {
 
   const handleColumnToggle = (column) => {
     setColumnKeysFiltered(prev => {
-      if (prev.includes(column)) {
-        return prev.filter(item => item !== column);
-      } else {
-        return [...prev, column];
-      }
+      let updatedColumns = prev.includes(column)
+        ? prev.filter(item => item !== column) // ถ้าเลือกซ้ำให้ลบออก
+        : [...prev.filter(item => item !== "Actions"), column]; // เพิ่ม column โดยไม่ให้ "Actions" ถูกแทรกตรงกลาง
+  
+      return [...updatedColumns, "Actions"]; // ใส่ "Actions" ไว้ท้ายสุดเสมอ
     });
   };
+  
 
   return (
     <div
-      className="min-h-screen p-7 flex flex-col justify-start items-center gap-5"
+      className="min-h-screen my-7 flex flex-col justify-start items-center gap-5"
       style={{ backgroundColor: themeColors.bg, color: themeColors.text }}
     >
-      <div className="w-full flex justify-between items-center border p-4">
-        <div className="flex-1">
-          <SearchAndFilterBar
-            tempSearchQuery={tempSearchQuery}
-            setTempSearchQuery={setTempSearchQuery}
-            handleSearchQuery={handleSearchQuery}
-            columnKeys={columnKeys}
-            columnKeysFiltered={columnKeysFiltered}
-            handleColumnToggle={handleColumnToggle}
-            totalItems={pagination.totalProducts}
-            fromSearch={searchQuery}
-          />
-        </div>
+      <div className="w-full flex justify-end items-center border-gray-300 border-y px-7"
+        style={{ backgroundColor: themeColors.base }}
+      >
+        <SearchAndFilterBar
+          tempSearchQuery={tempSearchQuery}
+          setTempSearchQuery={setTempSearchQuery}
+          handleSearchQuery={handleSearchQuery}
+          columnKeys={columnKeys}
+          columnKeysFiltered={columnKeysFiltered}
+          handleColumnToggle={handleColumnToggle}
+          totalItems={pagination.totalProducts}
+          fromSearch={searchQuery}
+        />
         <Link
-          className="  px-4 py-2 hover:text-yellow-600 border bg-blue-500 text-white rounded-[4px]"
+          className="  px-4 py-2 h-10 hover:text-yellow-300 text-[0.8rem]  bg-blue-500 text-white rounded-[4px]"
           href={`/admin/product/create`}
         >
           <div className="flex flex-row items-center gap-1">
             <SquarePlus />
-            <div>Create Product</div>
+            <div>Create</div>
           </div>
         </Link>
       </div>
-      <div className="w-full"  >
+      <div className="px-10"  >
         <DataTable table={table} />
       </div>
-      <div className="min-w-full">
+      <div className="">
         <PaginationControls
           pagination={pagination}
           handlePrevPage={handlePrevPage}

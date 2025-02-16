@@ -17,7 +17,7 @@ const TopPieChartBox: React.FC<TopPieChartBoxProps> = ({ chartsData, keyData, he
   const newWow = `${(wow * 100).toFixed(2)}%`;
 
   return (
-    <div className=" border flex flex-col border-gray-300 h-36" style={{ backgroundColor: themeColors.base }}>
+    <div className=" border flex flex-col border-gray-300 h-36 relative" style={{ backgroundColor: themeColors.base }}>
       <div className="p-4">
         <div>{headerText}</div>
         <div className="flex flex-row flex-wrap items-baseline gap-2">
@@ -35,7 +35,7 @@ const TopPieChartBox: React.FC<TopPieChartBoxProps> = ({ chartsData, keyData, he
           <div className="text-[0.75rem] text-gray-400">since last week</div>
         </div>
       </div>
-      <div className="w-full" >
+      <div className="w-full absolute bottom-0" >
         <AreaChartNogridComponent
           data={chartsData}
           keyData={keyData}

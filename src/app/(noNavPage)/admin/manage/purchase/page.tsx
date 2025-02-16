@@ -10,6 +10,8 @@ import Image from 'next/image';
 import StatusSelectDropdown from './components/statusSelectDropdown';
 import Swal from 'sweetalert2';
 import { updateOrderStatus } from '@/app/apis/order';
+import { Search } from 'lucide-react';
+import SearchAndFilterBar from '../../components/SearchAndFilterBar';
 
 // Define the types for your orders
 type Order = {
@@ -43,13 +45,13 @@ function PurchaseTable() {
         totalPages: 1,
         totalOrders: 0,
     });
-  const [forceFetch, setForceFetch] = useState(false); 
+    const [forceFetch, setForceFetch] = useState(false);
 
-  const orders: Order[] = useFetchOrders(status, forceFetch, searchQuery, pagination, setPagination) ?? [];
+    const orders: Order[] = useFetchOrders(status, forceFetch, searchQuery, pagination, setPagination) ?? [];
 
-  console.log("orders:", orders);
-  console.log("pagi:", pagination ?? { page: "undefined", pageSize: "undefined" });
-  
+    console.log("orders:", orders);
+    console.log("pagi:", pagination ?? { page: "undefined", pageSize: "undefined" });
+
 
     const [columnKeysFiltered, setColumnKeysFiltered] = useState<string[]>([
         'id',
@@ -73,17 +75,17 @@ function PurchaseTable() {
                 console.error(`Invalid status: ${currentStatus}. Expected 'awaiting_confirmation' or 'awaiting_rejection'`);
                 throw new Error(`Invalid status: ${currentStatus}`);
             }
-    
+
             const updatedStatus = 'order_rejected';
             console.log(`Order ${orderId} rejected from status ${currentStatus} with new status: ${updatedStatus}`);
-    
+
             const res = await updateOrderStatus(orderId, updatedStatus);
-    
+
             // ตรวจสอบผลลัพธ์จาก API ใหม่
             if (!res || res.status !== 200) {
                 throw new Error(`Failed to update status for Order ID ${orderId}`);
             }
-    
+
             console.log(`Order ${orderId} status updated successfully to: ${updatedStatus}`);
         } catch (error) {
             console.error('Failed to reject status', error);
@@ -96,12 +98,12 @@ function PurchaseTable() {
                 console.error(`Invalid status: ${currentStatus}`);
                 return;
             }
-    
+
             let updatedStatus = currentStatus === 'awaiting_confirmation' ? "order_approved" : "order_cancelled";
-    
+
             console.log(`Updating Order ${orderId} -> ${updatedStatus}`);
             const res = await updateOrderStatus(orderId, updatedStatus);
-    
+
             if (!res || res?.status !== 200) {
                 console.error(`Failed to update Order ID ${orderId}`);
                 Swal.fire({
@@ -111,7 +113,7 @@ function PurchaseTable() {
                 });
                 return;
             }
-    
+
             console.log(`Order ${orderId} updated successfully.`);
             Swal.fire({
                 icon: 'success',
@@ -120,7 +122,7 @@ function PurchaseTable() {
                 timer: 2000,
                 showConfirmButton: false,
             });
-    
+
             // ✅ อัปเดตข้อมูลใหม่หลังเปลี่ยนสถานะสำเร็จ
             setForceFetch(prev => !prev);
         } catch (error) {
@@ -132,93 +134,93 @@ function PurchaseTable() {
             });
         }
     };
-    
-      
-  const handleConfirm = async () => {
-    const result = await Swal.fire({
-        title: 'Are you sure?',
-        text: `Do you want to ${actionType} the selected orders?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, proceed!',
-        cancelButtonText: 'No, cancel!',
-        background: themeColors.primary,
-        color: themeColors.text,
-    });
 
-    if (!result.isConfirmed) {
-        Swal.fire({
-            position: 'center',
-            icon: 'info',
-            title: 'Action Cancelled',
-            text: 'No changes were made.',
-            showConfirmButton: false,
-            timer: 2000,
+
+    const handleConfirm = async () => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: `Do you want to ${actionType} the selected orders?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, proceed!',
+            cancelButtonText: 'No, cancel!',
+            background: themeColors.primary,
+            color: themeColors.text,
         });
-        return;
-    }
 
-    try {
-        const failedOrders: string[] = [];
-
-        // ใช้ for...of เพื่อจัดการ asynchronous อย่างถูกต้อง
-        for (const [orderIdStr, isSelected] of Object.entries(selectedOrders)) {
-            if (isSelected) {
-                const orderId = parseInt(orderIdStr, 10);
-                const order = orders.find((o) => o.id === orderId);
-
-                if (!order) {
-                    console.warn(`Order ID ${orderId} not found.`);
-                    failedOrders.push(orderIdStr);
-                    continue;
-                }
-
-                try {
-                    if (actionType === 'approve') {
-                        await handleApprove(orderId, order.status); // รอให้ handleApprove เสร็จสิ้น
-                    } else if (actionType === 'reject') {
-                        await handleReject(orderId, order.status); // รอให้ handleReject เสร็จสิ้น
-                    }
-                } catch (error) {
-                    console.error(`Failed to update Order ID ${orderId}:`, error);
-                    failedOrders.push(orderIdStr);
-                }
-            }
+        if (!result.isConfirmed) {
+            Swal.fire({
+                position: 'center',
+                icon: 'info',
+                title: 'Action Cancelled',
+                text: 'No changes were made.',
+                showConfirmButton: false,
+                timer: 2000,
+            });
+            return;
         }
 
-        if (failedOrders.length > 0) {
+        try {
+            const failedOrders: string[] = [];
+
+            // ใช้ for...of เพื่อจัดการ asynchronous อย่างถูกต้อง
+            for (const [orderIdStr, isSelected] of Object.entries(selectedOrders)) {
+                if (isSelected) {
+                    const orderId = parseInt(orderIdStr, 10);
+                    const order = orders.find((o) => o.id === orderId);
+
+                    if (!order) {
+                        console.warn(`Order ID ${orderId} not found.`);
+                        failedOrders.push(orderIdStr);
+                        continue;
+                    }
+
+                    try {
+                        if (actionType === 'approve') {
+                            await handleApprove(orderId, order.status); // รอให้ handleApprove เสร็จสิ้น
+                        } else if (actionType === 'reject') {
+                            await handleReject(orderId, order.status); // รอให้ handleReject เสร็จสิ้น
+                        }
+                    } catch (error) {
+                        console.error(`Failed to update Order ID ${orderId}:`, error);
+                        failedOrders.push(orderIdStr);
+                    }
+                }
+            }
+
+            if (failedOrders.length > 0) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Some Orders Failed',
+                    text: `The following orders could not be updated: ${failedOrders.join(', ')}`,
+                    showConfirmButton: true,
+                });
+            } else {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Success',
+                    text: `Orders have been successfully ${actionType}d.`,
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+            }
+
+            // บังคับดึงข้อมูลใหม่
+            setForceFetch((prev) => !prev);
+        } catch (error) {
+            console.error('Error updating orders:', error);
             Swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: 'Some Orders Failed',
-                text: `The following orders could not be updated: ${failedOrders.join(', ')}`,
+                title: 'Update Failed',
+                text: 'An error occurred while updating the orders. Please try again.',
                 showConfirmButton: true,
             });
-        } else {
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Success',
-                text: `Orders have been successfully ${actionType}d.`,
-                showConfirmButton: false,
-                timer: 3000,
-            });
         }
+    };
 
-        // บังคับดึงข้อมูลใหม่
-        setForceFetch((prev) => !prev);
-    } catch (error) {
-        console.error('Error updating orders:', error);
-        Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: 'Update Failed',
-            text: 'An error occurred while updating the orders. Please try again.',
-            showConfirmButton: true,
-        });
-    }
-};
-      
     const handleSelectAll = () => {
         const selectableOrders = orders
             .filter((order) => ['awaiting_confirmation', 'awaiting_rejection'].includes(order.status))
@@ -314,40 +316,62 @@ function PurchaseTable() {
 
     const handlePrevPage = () => {
         if (pagination.page > 1) {
-          setPagination(prev => ({ ...prev, page: prev.page - 1 }));
+            setPagination(prev => ({ ...prev, page: prev.page - 1 }));
         }
-      };
-    
-      const handleNextPage = () => {
+    };
+
+    const handleNextPage = () => {
         if (pagination.page < pagination.totalPages) {
-          setPagination(prev => ({ ...prev, page: prev.page + 1 }));
+            setPagination(prev => ({ ...prev, page: prev.page + 1 }));
         }
-      };
-    
-      const handleSearchQuery = (e) => {
+    };
+
+    const handleSearchQuery = (e) => {
         e.preventDefault();
         setSearchQuery(tempSearchQuery);
         setPagination(prev => ({ ...prev, page: 1 }));
-      };
-    
-      const handlePageSizeChange = (newPageSize: number) => {
+    };
+
+    const handlePageSizeChange = (newPageSize: number) => {
         setPagination((prev) => ({
-          ...prev,
-          pageSize: newPageSize,
-          page: 1, 
+            ...prev,
+            pageSize: newPageSize,
+            page: 1,
         }));
-        console.log('newPageSize:',newPageSize);
+        console.log('newPageSize:', newPageSize);
+    };
+
+    const handleColumnToggle = (column) => {
+        setColumnKeysFiltered(prev => {
+          let updatedColumns = prev.includes(column)
+            ? prev.filter(item => item !== column) // ถ้าเลือกซ้ำให้ลบออก
+            : [...prev.filter(item => item !== "Actions"), column]; // เพิ่ม column โดยไม่ให้ "Actions" ถูกแทรกตรงกลาง
+      
+          return [...updatedColumns, "Actions"]; // ใส่ "Actions" ไว้ท้ายสุดเสมอ
+        });
       };
+      
 
     return (
         <div
-            className="min-h-screen p-7 flex flex-col justify-start items-center gap-5"
+            className="min-h-screen flex flex-col my-7 justify-start items-center gap-5"
             style={{ backgroundColor: themeColors.bg, color: themeColors.text }}
         >
-            <div className="w-full flex justify-between items-center border p-4">
-                <div>header section</div>
-
-                <div className="flex flex-row gap-2 text-[0.8rem] items-center">
+            {/* top search filter */}
+            <div className="w-full flex justify-end items-center border-gray-300 border-y px-7"
+                style={{ backgroundColor: themeColors.base }}
+            >
+                <SearchAndFilterBar
+                    tempSearchQuery={tempSearchQuery}
+                    setTempSearchQuery={setTempSearchQuery}
+                    handleSearchQuery={handleSearchQuery}
+                    columnKeys={columnKeys}
+                    columnKeysFiltered={columnKeysFiltered}
+                    handleColumnToggle={handleColumnToggle}
+                    totalItems={pagination.totalOrders}
+                    fromSearch={searchQuery}
+                />
+                <div className="flex flex-row gap-2 text-[0.8rem] items-center w-1/2">
                     <StatusSelectDropdown status={status} setStatus={setStatus} />
                     <div className="flex flex-row items-center gap-1">
                         <input
@@ -378,7 +402,9 @@ function PurchaseTable() {
                     </button>
                 </div>
             </div>
-            <div>
+
+
+            <div className='px-10'>
                 {orders.length ? (
                     <DataTable table={table} />
                 ) : (
@@ -388,11 +414,11 @@ function PurchaseTable() {
                 )}
             </div>
             <PaginationControls
-          pagination={pagination}
-          handlePrevPage={handlePrevPage}
-          handleNextPage={handleNextPage}
-          handlePageSizeChange={handlePageSizeChange}
-        />
+                pagination={pagination}
+                handlePrevPage={handlePrevPage}
+                handleNextPage={handleNextPage}
+                handlePageSizeChange={handlePageSizeChange}
+            />
         </div>
     );
 }
