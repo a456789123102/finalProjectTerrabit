@@ -12,13 +12,14 @@ import {
 import Swal from 'sweetalert2';
 import Link from 'next/link';
 import { deleteProduct } from "@/app/apis/product";
+import { SquarePlus } from "lucide-react";
 
 function ProductTable() {
   const { themeColors } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [tempSearchQuery, setTempSearchQuery] = useState("");
   const [category, setCategory] = useState('');
-  const [forceFetch, setForceFetch] = useState(false); 
+  const [forceFetch, setForceFetch] = useState(false);
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 10,
@@ -26,11 +27,11 @@ function ProductTable() {
     totalProducts: 0,
   });
   const [columnKeysFiltered, setColumnKeysFiltered] = useState([
-    'id', 'name', 'price', 'discount', 'finalPrice', 'quantity', 'ProductCategory', "Actions"
+    'id', 'name', 'price', 'discount', 'finalPrice', 'quantity', "ProductCategory", "Actions"
   ]);
 
   const products = useFetchProducts(searchQuery, category, pagination, setPagination, forceFetch);
-
+  console.log("Products: ", products)
   const handlePrevPage = () => {
     if (pagination.page > 1) {
       setPagination(prev => ({ ...prev, page: prev.page - 1 }));
@@ -76,13 +77,13 @@ function ProductTable() {
         // บังคับให้รีเฟรชข้อมูลใหม่
         setForceFetch((prev) => !prev);
 
-    Swal.fire({
-  position: "center",
-  icon: "success",
-  title: `Product Id ${id} deleted successfully`,
-  showConfirmButton: false,
-  timer: 1500
-});
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `Product Id ${id} deleted successfully`,
+          showConfirmButton: false,
+          timer: 1500
+        });
       } catch (error) {
         console.error("Error deleting product:", error);
         Swal.fire('Error!', 'Failed to delete the product.', 'error');
@@ -101,30 +102,50 @@ function ProductTable() {
       accessorKey: key,
       cell: ({ row }) => {
         const value = row.original[key];
+
         if (key === "ProductCategory" && Array.isArray(value)) {
           return <span>{value.map((item) => item.category?.name).join(", ")}</span>;
         }
         if (key === "discount") {
           return <span>{value}%</span>;
         }
-        if (key === "Actions") {
+        if (key === "Image") {
           return (
-            <div className="flex flex-row  justify-center gap-1">
+            <div className="flex justify-center">
+              {Array.isArray(value) && value.length > 0 ? (
+                <img
+                  src={value[0]?.imageUrl} // ✅ ดึงรูปแรกออกมาแสดง
+                  alt={row.original.name}
+                  width={50} // ✅ กำหนดขนาดภาพ
+                  height={50}
+                  className="rounded-md shadow-md object-cover"
+                />
+              ) : (
+                <span>No Image</span> // ✅ กรณีไม่มีรูปภาพ
+              )}
+            </div>
+          );
+        } if (key === "Actions") {
+          return (
+            <div className="flex flex-row justify-center gap-1">
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 text-white px-2 py-1"
               >
                 Delete
               </button>
-              <Link href={`/admin/manage/product/${row.original.id}/edit`} className="bg-purple-500 text-white px-2 py-1">Edit</Link>
+              <Link href={`/admin/manage/product/${row.original.id}/edit`} className="bg-purple-500 text-white px-2 py-1">
+                Edit
+              </Link>
             </div>
           );
         }
+
         return value;
       },
-      // ลบ enableSorting
     }));
   }, [columnKeysFiltered]);
+
 
   const table = useReactTable({
     data: products,
@@ -156,31 +177,16 @@ function ProductTable() {
             columnKeys={columnKeys}
             columnKeysFiltered={columnKeysFiltered}
             handleColumnToggle={handleColumnToggle}
-            totalProduct={pagination.totalProducts}
+            totalItems={pagination.totalProducts}
             fromSearch={searchQuery}
           />
         </div>
         <Link
-          className="  px-4 py-2 hover:text-yellow-600 border"
+          className="  px-4 py-2 hover:text-yellow-600 border bg-blue-500 text-white rounded-[4px]"
           href={`/admin/product/create`}
-          style={{ backgroundColor: themeColors.tertiary }}
         >
-          <div className="flex flex-row items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              className="w-5 h-5 mr-1"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-
+          <div className="flex flex-row items-center gap-1">
+            <SquarePlus />
             <div>Create Product</div>
           </div>
         </Link>

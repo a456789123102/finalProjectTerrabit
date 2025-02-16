@@ -57,3 +57,38 @@ export const getWeeklyRatingForCharts = async () => {
     throw error;
   }
 }
+export const getAllReviews = async ( 
+  search:string ,
+  orderBy:"asc" | "desc",
+  orderWith:string,
+  isPublished:string,
+  page:string,
+  pageSize:string,
+) => {
+try {
+  const params = new URLSearchParams();
+  if (search) {
+    params.append("search", search);
+  }
+  if (orderBy) {
+    params.append("orderBy", orderBy);
+  }
+  if (orderWith) {
+    params.append("orderWith", orderWith);
+  }
+  if (isPublished) {
+    params.append("isPublished", isPublished);
+  }
+  if (page) {
+    params.append("page", page);
+  }
+  if (pageSize) {
+    params.append("pageSize", pageSize);
+  }
+  const res = await axios.get(`/api/reviews/all`, { params });
+return res.data
+} catch (error) {
+  console.error("Err when fetch reviews in apis",error)
+  throw error;
+}
+}
