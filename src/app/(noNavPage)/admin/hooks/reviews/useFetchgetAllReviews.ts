@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { getAllReviews } from "@/app/apis/review";
 
 interface PaginationType {
-  currentPage: number;
+  page: number;
   totalPages: number;
   pageSize: number;
   totalReviews: number;
@@ -40,7 +40,7 @@ function useFetchgetAllReviews({
           orderBy ?? "desc",                 
           orderWith ?? "createdAt",          
           isPublished !== undefined ? String(isPublished) : "", 
-          pagination?.currentPage?.toString() ?? "1",   
+          pagination?.page?.toString() ?? "1",   
           pagination?.pageSize?.toString() ?? "10" 
         );
         console.log("reviews all response: ",response)
@@ -57,7 +57,7 @@ function useFetchgetAllReviews({
       setLoading(false);
     };
     fetchReviews();
-  }, [search, orderBy, orderWith, isPublished,pagination?.currentPage, pagination?.pageSize]); 
+  }, [search, orderBy, orderWith, isPublished,pagination?.page, pagination?.pageSize]); 
 
   return { reviews, loading, error };
 }

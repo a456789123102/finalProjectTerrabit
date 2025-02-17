@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useMemo } from "react";
 import { useTheme } from '@/app/context/themeContext';
-import PaginationControls from '../../components/PaginationControls';
+import PaginationControls from "../../components/PaginationControls"; 
+
 import DataTable from "../../components/dataTable";
 import SearchAndFilterBar from "../../components/SearchAndFilterBar";
 import useFetchProducts from "../../hooks/products/useFetchProducts";
@@ -32,30 +33,11 @@ function ProductTable() {
 
   const products = useFetchProducts(searchQuery, category, pagination, setPagination, forceFetch);
   console.log("Products: ", products)
-  const handlePrevPage = () => {
-    if (pagination.page > 1) {
-      setPagination(prev => ({ ...prev, page: prev.page - 1 }));
-    }
-  };
-
-  const handleNextPage = () => {
-    if (pagination.page < pagination.totalPages) {
-      setPagination(prev => ({ ...prev, page: prev.page + 1 }));
-    }
-  };
 
   const handleSearchQuery = (e) => {
     e.preventDefault();
     setSearchQuery(tempSearchQuery);
     setPagination(prev => ({ ...prev, page: 1 }));
-  };
-
-  const handlePageSizeChange = (newPageSize: number) => {
-    setPagination((prev) => ({
-      ...prev,
-      pageSize: newPageSize,
-      page: 1, // Reset to first page when pageSize changes
-    }));
   };
 
   const handleDelete = async (id) => {
@@ -198,9 +180,8 @@ function ProductTable() {
       <div className="">
         <PaginationControls
           pagination={pagination}
-          handlePrevPage={handlePrevPage}
-          handleNextPage={handleNextPage}
-          handlePageSizeChange={handlePageSizeChange}
+         setPagination={setPagination}
+
         />
       </div>
     </div>

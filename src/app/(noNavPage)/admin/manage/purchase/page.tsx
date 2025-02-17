@@ -314,43 +314,22 @@ function PurchaseTable() {
         getCoreRowModel: getCoreRowModel(),
     });
 
-    const handlePrevPage = () => {
-        if (pagination.page > 1) {
-            setPagination(prev => ({ ...prev, page: prev.page - 1 }));
-        }
-    };
-
-    const handleNextPage = () => {
-        if (pagination.page < pagination.totalPages) {
-            setPagination(prev => ({ ...prev, page: prev.page + 1 }));
-        }
-    };
-
     const handleSearchQuery = (e) => {
         e.preventDefault();
         setSearchQuery(tempSearchQuery);
         setPagination(prev => ({ ...prev, page: 1 }));
     };
 
-    const handlePageSizeChange = (newPageSize: number) => {
-        setPagination((prev) => ({
-            ...prev,
-            pageSize: newPageSize,
-            page: 1,
-        }));
-        console.log('newPageSize:', newPageSize);
-    };
-
     const handleColumnToggle = (column) => {
         setColumnKeysFiltered(prev => {
-          let updatedColumns = prev.includes(column)
-            ? prev.filter(item => item !== column) // ถ้าเลือกซ้ำให้ลบออก
-            : [...prev.filter(item => item !== "Actions"), column]; // เพิ่ม column โดยไม่ให้ "Actions" ถูกแทรกตรงกลาง
-      
-          return [...updatedColumns, "Actions"]; // ใส่ "Actions" ไว้ท้ายสุดเสมอ
+            let updatedColumns = prev.includes(column)
+                ? prev.filter(item => item !== column) // ถ้าเลือกซ้ำให้ลบออก
+                : [...prev.filter(item => item !== "Actions"), column]; // เพิ่ม column โดยไม่ให้ "Actions" ถูกแทรกตรงกลาง
+
+            return [...updatedColumns, "Actions"]; // ใส่ "Actions" ไว้ท้ายสุดเสมอ
         });
-      };
-      
+    };
+
 
     return (
         <div
@@ -415,9 +394,7 @@ function PurchaseTable() {
             </div>
             <PaginationControls
                 pagination={pagination}
-                handlePrevPage={handlePrevPage}
-                handleNextPage={handleNextPage}
-                handlePageSizeChange={handlePageSizeChange}
+                setPagination={setPagination}
             />
         </div>
     );
