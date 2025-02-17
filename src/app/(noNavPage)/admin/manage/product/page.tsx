@@ -55,8 +55,6 @@ function ProductTable() {
     if (result.isConfirmed) {
       try {
         await deleteProduct(id);
-
-        // บังคับให้รีเฟรชข้อมูลใหม่
         setForceFetch((prev) => !prev);
 
         Swal.fire({
@@ -138,8 +136,8 @@ function ProductTable() {
   const handleColumnToggle = (column) => {
     setColumnKeysFiltered(prev => {
       let updatedColumns = prev.includes(column)
-        ? prev.filter(item => item !== column) // ถ้าเลือกซ้ำให้ลบออก
-        : [...prev.filter(item => item !== "Actions"), column]; // เพิ่ม column โดยไม่ให้ "Actions" ถูกแทรกตรงกลาง
+        ? prev.filter(item => item !== column) 
+        : [...prev.filter(item => item !== "Actions"), column]; 
   
       return [...updatedColumns, "Actions"]; // ใส่ "Actions" ไว้ท้ายสุดเสมอ
     });
@@ -151,7 +149,7 @@ function ProductTable() {
       className="min-h-screen my-7 flex flex-col justify-start items-center gap-5"
       style={{ backgroundColor: themeColors.bg, color: themeColors.text }}
     >
-      <div className="w-full flex justify-end items-center border-gray-300 border-y px-7"
+      <div className="w-full flex justify-end items-center border-gray-300 border-y  gap-1 px-7"
         style={{ backgroundColor: themeColors.base }}
       >
         <SearchAndFilterBar

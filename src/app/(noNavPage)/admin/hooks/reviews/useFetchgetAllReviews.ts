@@ -11,11 +11,12 @@ interface PaginationType {
 
 interface FetchReviewsParams {
   search?: string;
-  orderBy?: "asc" | "desc";
+  orderBy?: "asc" | "desc"| undefined;
   orderWith?: string;
-  isPublished?: boolean;
-  pagination?: PaginationType; // ✅ ใช้ Type ที่ชัดเจน
-  setPagination?: React.Dispatch<React.SetStateAction<PaginationType>>; // ✅ ใช้ Dispatch ของ React
+  isPublished?: boolean |null;
+  pagination?: PaginationType; 
+  forceFetch?: boolean; 
+  setPagination?: React.Dispatch<React.SetStateAction<PaginationType>>; 
 }
 
 function useFetchgetAllReviews({
@@ -24,6 +25,7 @@ function useFetchgetAllReviews({
   orderWith,
   isPublished,
   pagination,
+  forceFetch,
   setPagination, // ✅ ทำให้ Optional
 }: FetchReviewsParams) {
   const [reviews, setReviews] = useState([]);
@@ -57,7 +59,7 @@ function useFetchgetAllReviews({
       setLoading(false);
     };
     fetchReviews();
-  }, [search, orderBy, orderWith, isPublished,pagination?.page, pagination?.pageSize]); 
+  }, [search, orderBy, orderWith, isPublished,pagination?.page, pagination?.pageSize,forceFetch]); 
 
   return { reviews, loading, error };
 }

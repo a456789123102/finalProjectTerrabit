@@ -40,7 +40,7 @@ const PaginationControls = ({ pagination, setPagination }) => {
               page: 1,
             }))
           }
-          className="p-1 border rounded"
+          className="p-1 border rounded text-gray-800"
         >
           <option value={10}>10</option>
           <option value={20}>20</option>

@@ -46,7 +46,7 @@ export const updateReview = async (
     console.error("Axios error:", error);
     throw error;
   }
-}
+};
 
 export const getWeeklyRatingForCharts = async () => {
   try {
@@ -56,39 +56,48 @@ export const getWeeklyRatingForCharts = async () => {
     console.error("error fetching order", error);
     throw error;
   }
-}
-export const getAllReviews = async ( 
-  search:string ,
-  orderBy:"asc" | "desc",
-  orderWith:string,
-  isPublished:string,
-  page:string,
-  pageSize:string,
+};
+export const getAllReviews = async (
+  search: string,
+  orderBy: "asc" | "desc",
+  orderWith: string,
+  isPublished: string,
+  page: string,
+  pageSize: string
 ) => {
-try {
-  const params = new URLSearchParams();
-  if (search) {
-    params.append("search", search);
+  try {
+    const params = new URLSearchParams();
+    if (search) {
+      params.append("search", search);
+    }
+    if (orderBy) {
+      params.append("orderBy", orderBy);
+    }
+    if (orderWith) {
+      params.append("orderWith", orderWith);
+    }
+    if (isPublished && isPublished !== "null") {
+      params.append("isPublished", isPublished);
+    }
+    if (page) {
+      params.append("page", page);
+    }
+    if (pageSize) {
+      params.append("pageSize", pageSize);
+    }
+    const res = await axios.get(`/api/reviews/all`, { params });
+    return res.data;
+  } catch (error) {
+    console.error("Err when fetch reviews in apis", error);
+    throw error;
   }
-  if (orderBy) {
-    params.append("orderBy", orderBy);
+};
+
+export const changePublishedReviewStatus = async (id: number) => {
+  try {
+    const res = await axios.patch(`/api/reviews/changeStatus/${id}`);
+    return res.data;
+  } catch (error) {
+    throw error;
   }
-  if (orderWith) {
-    params.append("orderWith", orderWith);
-  }
-  if (isPublished) {
-    params.append("isPublished", isPublished);
-  }
-  if (page) {
-    params.append("page", page);
-  }
-  if (pageSize) {
-    params.append("pageSize", pageSize);
-  }
-  const res = await axios.get(`/api/reviews/all`, { params });
-return res.data
-} catch (error) {
-  console.error("Err when fetch reviews in apis",error)
-  throw error;
-}
-}
+};
