@@ -36,7 +36,6 @@ function useFetchgetAllReviews({
     const fetchReviews = async () => {
       setLoading(true);
       try {
-        // ✅ ดึงข้อมูลรีวิวจาก API
         const response = await getAllReviews(
           search ?? "",                      
           orderBy ?? "desc",                 

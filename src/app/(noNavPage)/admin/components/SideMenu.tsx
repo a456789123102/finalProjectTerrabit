@@ -39,7 +39,7 @@ const menuItems: MenuItem[] = [
         items: [
             { title: "Purchase Orders", href: "/admin/manage/purchase" },
             { title: "Products", href: "/admin/manage/product" },
-            { title: "Feedback (not done)", href: "/admin/manage/feedbacks" },
+            { title: "Feedback ", href: "/admin/manage/feedbacks" },
             { title: "Users(not)", href: "/admin/manage/users" }
         ]
     },

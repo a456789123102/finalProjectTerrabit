@@ -1,20 +1,65 @@
 import { getAllUsers } from "@/app/apis/user";
 import { useState, useEffect } from "react";
 
-const useFetchUsers = (searchQuery,pagination, setPagination, forceFetch,sortBy,sortOrder) => {
-const [users, setUsers] = useState([]);
-const fetchUserList = async () => {
-    try {
-        const usersData = await getAllUsers(searchQuery,pagination.page,pagination.pageSize,sortBy);
-        setUsers(usersData.users);
-    } catch (error) {
-        console.error("Error fetching Users",error);
-    }
+interface PaginationType {
+  page: number;
+  totalPages: number;
+  pageSize: number;
+  totalUsers: number;
 }
 
-useEffect(() => {
-    fetchUserList();
-}, [searchQuery, pagination.page, pagination.pageSize, forceFetch, sortBy,sortOrder]);
-return users;
+interface FetchParams {
+  search?: string;
+  orderBy?: string | undefined;
+  orderWith?: string;
+  isActive?: boolean | undefined;
+  pagination?: PaginationType;
+  forceFetch?: boolean;
+  setPagination?: React.Dispatch<React.SetStateAction<PaginationType>>;
 }
+
+const useFetchUsers = ({
+  search,
+  orderBy,
+  orderWith,
+  isActive,
+  pagination,
+  forceFetch,
+  setPagination,
+}: FetchParams) => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchUserList = async () => {
+    setLoading(true);
+    try {
+      const usersData = await getAllUsers(
+        search,
+        orderBy,
+        orderWith,
+        isActive,
+        pagination?.page?.toString(),
+        pagination?.pageSize?.toString()
+      );
+      setUsers(usersData.users);
+      if (setPagination) {
+        setPagination(usersData.pagination);
+      }
+      setError(null);
+    } catch (error) {
+      console.error("Error fetching Users", error);
+      setError("Failed to fetch users.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserList();
+  }, [search, orderBy, orderWith, isActive, pagination?.page, pagination?.pageSize, forceFetch]);
+
+  return { users, loading, error };
+};
+
 export default useFetchUsers;

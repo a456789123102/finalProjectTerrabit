@@ -17,26 +17,33 @@ export const me = async () => {
 /////////////////////////////////////////////////
 export const getAllUsers = async (
   search?: string,
-  page?: string,
-  pageSize?: string,
-  sortBy?: string,
-  sortOrder?:string,
+  orderBy?:string,
+    orderWith?:string,
+    isActive?:boolean,
+    page?:string,
+    pageSize?:string
 ) => {
   try {
     const params = new URLSearchParams();
-    if (page) {
-      params.append("page", page);
+    if (search) {
+      params.append("search", search);
     }
-    if (pageSize) {
-      params.append("pageSize", pageSize);
+    if (orderBy) {
+      params.append("orderBy", orderBy);
     }
-    if (sortBy) {
-        params.append("sortBy", sortBy);
+    if (orderWith) {
+        params.append("orderWith", orderWith);
       }
-      if (sortOrder) {
-        params.append("sortOrder", sortOrder);
+      if (isActive ) {
+        params.append("isActive", String(isActive));
       }
-    const res = await axios.get("/api/users/usersInfo", { params: params });//+
+      if (page ) {
+        params.append("page", page);
+      }
+      if (pageSize) {
+        params.append("pageSize", pageSize);
+      }
+    const res = await axios.get("/api/users/usersInfo", { params: params });
     return res.data;
   } catch (error) {
     throw error;
@@ -52,4 +59,13 @@ export const  fetchgetWeeklyUserForCharts = async () => {
     console.error("error fetching order", error);
     throw error;
   }
+}
+/////////////////////////////
+export const changeIsActiveStatus = async(id:number) => {
+try {
+  const res = await axios.patch(`/api/users/${id}/changeIsActiveStatus`)
+  return res.data;
+} catch (error) {
+  throw error;
+}
 }

@@ -132,13 +132,17 @@ function page() {
     setSearchQuery(tempSearchQuery);
     setPagination(prev => ({ ...prev, page: 1 }));
   };
-  const handleColumnToggle = (column) => {
-    setColumnKeysFiltered((prev) =>
-      prev.includes(column)
-        ? prev.filter((item) => item !== column) // ลบ column ออก
-        : [...prev, column] // เพิ่ม column เข้าไป
-    );
+  
+  const handleColumnToggle = (column:string) => {
+    setColumnKeysFiltered((prev) => {
+      const updatedColumns = prev.includes(column)
+        ? prev.filter((item) => item !== column) 
+        : [...prev.filter((item) => item !== "isPublished"), column, "isPublished"]; 
+  
+      return [...new Set(updatedColumns)];
+    });
   };
+  
 
 
   return (

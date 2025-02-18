@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
   try {
     const token = req.cookies.get("token")?.value;
     const res = await get(
-      `/api/user/userInfo?${req.nextUrl.searchParams.toString()}`,
+      `/api/user/usersInfo?${req.nextUrl.searchParams.toString()}`,
       token
     );
     const data = await res.json();
