@@ -97,13 +97,20 @@ function ReviewArea({
                         )
                     ) : username ? (
                         myReviewPermission ? (
-                            <PersonalReviewBox mode="create" setIsEditClick={setIsEditClick} /> //  ไม่มีรีวิว + มีสิทธิ์รีวิว
+                          <PersonalReviewBox
+                            mode="create"
+                            setIsEditClick={setIsEditClick}
+                            comment={comment}
+                            setComment={setComment}
+                            selectedStars={selectedStars}
+                            setSelectedStars={setSelectedStars}
+                          />
                         ) : (
-                            <div className="text-gray-600 text-center italic">
-                                You need to purchase this product before leaving a review.
-                            </div> //  ไม่มีรีวิว + ไม่มีสิทธิ์รีวิว
+                          <div className="text-gray-600 text-center italic">
+                            You need to purchase this product before leaving a review.
+                          </div>
                         )
-                    ) : (
+                      ) :  (
                         <div className="text-gray-600 text-center italic text-[0.9rem]">
                             Please{" "}
                             <button

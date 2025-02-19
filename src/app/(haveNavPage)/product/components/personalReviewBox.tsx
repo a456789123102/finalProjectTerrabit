@@ -45,7 +45,6 @@ function PersonalReviewBox({
       if (mode === "create") {
         const res = await createReview(productId, selectedStars, comment);
         console.log("Created review:", res);
-        window.location.reload();
       } else if (mode === "edit") {
         console.log("edited");
         const res = await updateReview(productId, selectedStars, comment);

@@ -110,3 +110,13 @@ export const fetchgetWeeklySaleForCharts = async () => {
     throw error;
   }
 }
+////////////////////////////////////////////////////////////////
+export const  getYearlySaleForCharts = async () => {
+  try {
+    const res = await axios.get(`/api/order/charts/getYearlySaleForCharts`);
+    return res.data;
+  } catch (error) {
+    console.error("error fetching order", error);
+    throw error;
+  }
+}

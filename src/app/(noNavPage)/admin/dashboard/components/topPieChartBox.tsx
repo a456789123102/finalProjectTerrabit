@@ -6,16 +6,16 @@ type TopPieChartBoxProps = {
   headerText: string;
   amount: number;
   wow: number;
-  chartsData: string[];
-  keyData: string; // ✅ ต้องเป็น string
+  chartsData: object[]; // ✅ เปลี่ยนจาก string[] เป็น object[]
+  keyData: string;
   color: string;
 };
+
 
 const TopPieChartBox: React.FC<TopPieChartBoxProps> = ({ chartsData, keyData, headerText, amount, wow, color }) => {
   const { theme, themeColors } = useTheme();
   const newAmount = Number(amount.toFixed(0)).toLocaleString();
   const newWow = `${(wow * 100).toFixed(2)}%`;
-
   return (
     <div className=" border flex flex-col border-gray-300 h-36 relative" style={{ backgroundColor: themeColors.base }}>
       <div className="p-4">

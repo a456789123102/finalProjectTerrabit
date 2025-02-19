@@ -1,6 +1,8 @@
 'use client'
 import { useTheme } from "@/app/context/themeContext";
 import TopDashboard from "./components/topDashboard";
+import RatingBox from "./components/RatingBox";
+import SalesChartsBox from "./components/salesChartsBox";
 
 function AdminPage() {
     const { theme, themeColors } = useTheme();
@@ -12,32 +14,43 @@ function AdminPage() {
                 >
                     <TopDashboard />
                     {/* Overview of Revenue and Profit */}
-                    <div className="col-span-4 p-4 border border-gray-300" style={{ backgroundColor: themeColors.primary }}>
-                        <div className=" mb-4">Overview of Revenue and Profit</div>
+                    <div className="col-span-4 " style={{ backgroundColor: themeColors.primary }}>
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                             {/* Sub-grid for the graph and summary */}
-                            <div className="p-4 lg:col-span-2 border border-gray-300" style={{ backgroundColor: themeColors.secondary }}>
-                                <p>This Year Sales: $35,789</p>
-                                <p>This Year Profits: $9,265</p>
-                                <p>This Year Sales Revenue: $4,678</p>
-                                <div className="h-40 mt-4" style={{ backgroundColor: themeColors.tertiary }}>Graph Placeholder</div>
-                            </div>
-
-                            {/* Monthly Sales Growth */}
-                            <div className=" border rounded-[4px] shadow-lg  border-gray-300 " style={{ backgroundColor: themeColors.secondary }}>
-                                <div className=" p-4 border-b border-gray-300">MONTHLY SALES GROWTH</div>
-                                <div className="flex flex-row justify-between items-center p-4">
-                                    <div className="flex flex-col">
-                                        <div className="text-[1rem]">Sales Revenue</div>
-                                        <div className="flex flex-row gap-1 items-baseline">
-                                            <div className="text-[1.4rem] ">$5,89,268</div>
-                                            <div className="text-[0.75rem] text-red-500">This months</div>
+                            {/* <div className="rounded-[4px] lg:col-span-2 border border-gray-300" style={{ backgroundColor: themeColors.base }}>
+                                <div className="p-3 border-b border-gray-300 font-medium text-[1.4rem]">OVERVIEW ORDER AND INCOMES</div>
+                                <div className="p-4">
+                                    <div className="flex flex-row justify-between">
+                                        <div>
+                                            <div className="text-0.9rem ">This Year Sales</div>
+                                            <div className=" flex flex-row items-baseline gap-1">
+                                                <div className="text-[1.4rem]">4,500</div>
+                                                <div className="text-red-500 text-[0.8rem]">- 0.9%</div>
+                                                <div className="text-gray-400 text-[0.8rem]">last year</div>
+                                            </div>
                                         </div>
-
+                                        <div>
+                                            <div className="text-0.9rem ">This Year Incomes</div>
+                                            <div className=" flex flex-row items-baseline gap-1">
+                                                <div className="text-[1.4rem]">4,50000</div>
+                                                <div className="text-red-500 text-[0.8rem]">- 20.04%</div>
+                                                <div className="text-gray-400 text-[0.8rem]">last year</div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="text-0.9rem ">Refound rate</div>
+                                            <div className=" flex flex-row items-baseline gap-1">
+                                                <div className="text-[1.4rem]">12.14%</div>
+                                                <div className="text-green-500 text-[0.8rem]">20.04%</div>
+                                                <div className="text-gray-400 text-[0.8rem]">last year</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="h-36 mt-4 items-center p-2" style={{ backgroundColor: themeColors.tertiary }}>25% Growth Pie charts</div>
+                                    <div className="h-40 mt-4" style={{ backgroundColor: themeColors.tertiary }}>Graph Placeholder</div>
                                 </div>
-                            </div>
+                            </div> */}
+                            <SalesChartsBox />
+                            <RatingBox />
                         </div>
                     </div>
 

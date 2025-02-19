@@ -17,7 +17,6 @@ const PieProgress: React.FC<PieProgressProps> = ({ value }) => {
 
   return (
     <div className="relative flex justify-center items-center">
-      {/* ✅ Pie Chart */}
       <PieChart width={150} height={150}>
         <Pie
           data={data}

@@ -40,7 +40,7 @@ const menuItems: MenuItem[] = [
             { title: "Purchase Orders", href: "/admin/manage/purchase" },
             { title: "Products", href: "/admin/manage/product" },
             { title: "Feedback ", href: "/admin/manage/feedbacks" },
-            { title: "Users(not)", href: "/admin/manage/users" }
+            { title: "Users", href: "/admin/manage/users" }
         ]
     },
 ]
@@ -74,8 +74,6 @@ const SideMenu: React.FC = () => {
                         {item.titleIcons}
                         <div>{item.title}</div>
                     </div>
-
-                    {/* 🔹 แสดงเมนูย่อยเฉพาะที่เปิดอยู่ */}
                     {openMenus.includes(index) && (
                         <div className='w-full'>
                             {item.items.map((subItem, subIndex) => (

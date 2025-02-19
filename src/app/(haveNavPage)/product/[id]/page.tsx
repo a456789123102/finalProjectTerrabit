@@ -58,11 +58,6 @@ const ProductDetail = () => {
     const [comment, setComment] = useState<string>("")
     const [selectedStars, setSelectedStars] = useState(4);
   const router = useRouter();
-  
-  useEffect(() => {
-    console.log("Updated isEditClick:", isEditClick);
-  }, [isEditClick]);
-  
 
 
   const CategoryItem = ({ name, id }: { name: string; id: number }) => {
@@ -116,7 +111,7 @@ const ProductDetail = () => {
       const fetchProduct = async () => {
         try {
           const productData = await getProductById(Number(id));
-          console.log('Product Data:', productData);  // พิมพ์ข้อมูลที่ได้รับมาจาก API
+          console.log("Product Data Fetched");  // พิมพ์ข้อมูลที่ได้รับมาจาก API
           setProduct(productData);
         } catch (error) {
           console.error(error);
@@ -134,7 +129,7 @@ const ProductDetail = () => {
       const fetchReviews = async () => {
         try {
           const reviewData = await getReviewsById(Number(id),paginations.currentPage);
-          console.log('Review Data:', reviewData);
+          console.log('Review Data Fetched');
           setReviews(reviewData.reviews);
           setMyReviews(reviewData.myReviews)
           setMyReviewsPermission(reviewData.myReviewPermission)
@@ -147,7 +142,7 @@ const ProductDetail = () => {
       };
       fetchReviews();
     }
-  }, [id, myReviewPermission,paginations.currentPage]);
+  }, [id,paginations.currentPage]);
 
   if (loading) return <p>Loading...</p>;
 
@@ -232,10 +227,11 @@ const ProductDetail = () => {
   isEditClick={isEditClick} 
   setIsEditClick={setIsEditClick} 
   comment={comment}
-   setComment={setComment}
-   selectedStars={selectedStars}
-    setSelectedStars={setSelectedStars}
+  setComment={setComment}
+  selectedStars={selectedStars}
+  setSelectedStars={setSelectedStars}
 />
+
 
               <div className="flex flex-row gap-4 items-center justify-center mt-4">
                 <ChevronLeft
