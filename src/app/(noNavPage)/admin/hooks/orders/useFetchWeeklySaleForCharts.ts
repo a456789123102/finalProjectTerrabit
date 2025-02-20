@@ -9,7 +9,6 @@ function useFetchWeeklySaleForCharts() {
 
     const fetchOrderData = async() => {
         const data =  await fetchgetWeeklySaleForCharts();
-        console.log('Fetched data:', data);  // ทดสอบการ log ข้อมูล เพื่อทดสอบการใช้ API ใน component อื่น��
         setOrderChartsData(data.data);
         setTotalOrders(data.totalOrders);
         setLastWowOrders(data.lastWowOrders);
@@ -18,13 +17,6 @@ function useFetchWeeklySaleForCharts() {
     };
     useEffect(() =>{
         fetchOrderData();
-        console.log(
-            'ChartsData:', orderChartsData,
-            'TotalOrders:', totalOrders,
-            'LastWowOrders:', lastWowOrders,
-            'TotalIncome:', totalIncome,
-            'LastWowIncomes:', lastWowIncomes,
-        )
     },[])
     return { orderChartsData, totalOrders, lastWowOrders, totalIncome, lastWowIncomes };
 }

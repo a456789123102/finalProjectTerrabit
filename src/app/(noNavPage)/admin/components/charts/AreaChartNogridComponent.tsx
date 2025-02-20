@@ -17,10 +17,6 @@ const AreaChartNogridComponent = ({ data, keyData, color }) => {
     return () => window.removeEventListener("resize", updateChartSize);
   }, []);
 
-  console.log("AreaChartNogridComponent chartsData:", JSON.stringify(data, null, 2));
-  console.log("Key Data in AreaChartNogridComponent:", keyData);
-  console.log("First Data Entry:", data[0]);
-
   return (
     <div ref={chartContainerRef} className="w-full overflow-visible">
       <AreaChart width={chartWidth} height={55} data={data}>

@@ -14,7 +14,7 @@ function SalesChartsBox() {
     ];
     return (
         <div className="rounded-[4px] lg:col-span-2 border border-gray-300" style={{ backgroundColor: themeColors.base }}>
-            <div className="p-3 border-b border-gray-300 font-medium text-[1.4rem]">OVERVIEW ORDER AND INCOMES</div>
+            <div className="p-3 border-b border-gray-300 font-medium text-[1.3rem]">OVERVIEW ORDER AND INCOMES</div>
             <div className="p-4">
                 <div className="flex flex-row justify-around">
                     {mapData.map((data, index) => (
@@ -22,11 +22,11 @@ function SalesChartsBox() {
                             <div className="text-0.9rem ">{data.key}</div>
                             <div className="flex flex-row items-baseline gap-1">
                                 <div className="text-[1.4rem]">{data.value.thisYear}</div>
-                                {data.value.compareGrowth < 0 ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="size-3 text-red-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                                {data.value.compareGrowth < 0 ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-3 text-red-400">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
                                 </svg>
-                                    : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="size-3 text-green-400">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
+                                    : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-3 text-green-400">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
                                     </svg>}
                                 <div className={`${data.value.compareGrowth > 0 ? "text-green-400" : "text-red-400"} text-[0.8rem] flex flex-row`}><Number>{data.value.compareGrowth * 100}</Number> %</div>
                                 <div className="text-gray-400 text-[0.8rem]">last year</div>

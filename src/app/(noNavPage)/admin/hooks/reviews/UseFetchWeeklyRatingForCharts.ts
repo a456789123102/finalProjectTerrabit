@@ -11,7 +11,6 @@ function UseFetchWeeklyRatingForCharts() {
 const fetchData = async () => {
     try {
       const data = await getWeeklyRatingForCharts();
-      console.log("Fetched review data:", data);
       setReviewChartsData(data.data);
       setTotalReviewer(data.totalReviewer);
       setTotalRating(data.totalRating);

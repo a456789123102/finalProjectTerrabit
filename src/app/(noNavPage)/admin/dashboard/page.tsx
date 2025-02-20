@@ -3,6 +3,7 @@ import { useTheme } from "@/app/context/themeContext";
 import TopDashboard from "./components/topDashboard";
 import RatingBox from "./components/RatingBox";
 import SalesChartsBox from "./components/salesChartsBox";
+import TopSellerBox from "./components/topSellerBox";
 
 function AdminPage() {
     const { theme, themeColors } = useTheme();
@@ -22,7 +23,7 @@ function AdminPage() {
                     </div>
 
                     {/* Sales Funnel */}
-                    <div className="col-span-4 grid grid-cols-1 lg:grid-cols-4 gap-4 p-4 border border-gray-300" style={{ backgroundColor: themeColors.primary }}>
+                    {/* <div className="col-span-4 grid grid-cols-1 lg:grid-cols-4 gap-4 p-4 border border-gray-300" style={{ backgroundColor: themeColors.primary }}>
                         <div className="border border-gray-300" style={{ backgroundColor: themeColors.secondary }}>
                             <p>Opportunities: 3,678</p>
                         </div>
@@ -35,34 +36,17 @@ function AdminPage() {
                         <div className="p-4 border border-gray-300" style={{ backgroundColor: themeColors.secondary }}>
                             <p>More Funnel Data...</p>
                         </div>
+                    </div> */}
+
+                    <TopSellerBox />
+                    <div className="col-span-4  border-gray-300" >
+                        <div className='grid grid-cols-2 gap-2 h-48'>
+                            <div className='p-4 border border-gray-300' style={{ backgroundColor: themeColors.base }}>new user</div>
+                            <div className='p-4 border border-gray-300' style={{ backgroundColor: themeColors.base }}>new job assigner</div>
+                           
+                        </div>
                     </div>
 
-                    {/* Overview of Sales Summary */}
-                    <div className="col-span-4 p-4 border border-gray-300" style={{ backgroundColor: themeColors.primary }}>
-                        <div className="text-lg font-bold mb-4">Overview of Sales Summary</div>
-                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-                            <div className="p-4 border border-gray-300" style={{ backgroundColor: themeColors.secondary }}>
-                                <p>Total Revenue: $38,925</p>
-                            </div>
-                            <div className="p-4 border border-gray-300" style={{ backgroundColor: themeColors.secondary }}>
-                                <p>Total Tax: $3,926</p>
-                            </div>
-                            <div className="p-4 border border-gray-300" style={{ backgroundColor: themeColors.secondary }}>
-                                <p>Total Income: 73%</p>
-                            </div>
-                            <div className="p-4 border border-gray-300" style={{ backgroundColor: themeColors.secondary }}>
-                                <p>Total Loss: 45%</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-span-4 p-4 border border-gray-300" style={{ backgroundColor: themeColors.primary }}>
-                        <div className='grid grid-cols-3 gap-2 h-48'>
-                            <div className='p-4 border border-gray-300' style={{ backgroundColor: themeColors.secondary }}>new user</div>
-                            <div className='p-4 border border-gray-300' style={{ backgroundColor: themeColors.secondary }}>new job assigner</div>
-                            <div className='p-4 border border-gray-300' style={{ backgroundColor: themeColors.secondary }}>new job assigner</div>
-                        </div>
-                    </div>
-                    <div className='col-span-4 p-4 h-72 border border-gray-300' style={{ backgroundColor: themeColors.primary }}>Product Sales Details</div>
                 </div>
             </div>
         </div>

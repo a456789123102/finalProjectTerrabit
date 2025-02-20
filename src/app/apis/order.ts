@@ -120,3 +120,19 @@ export const  getYearlySaleForCharts = async () => {
     throw error;
   }
 }
+/////////////////////////////////////////////////////////////////
+export const getTopSellerItems = async (interval?: string, startDate?: Date, endDate?: Date, orderBy?: string, length?: number) => {
+  try {
+    const params = new URLSearchParams();
+    if (interval) params.append("interval", interval);
+    if (startDate) params.append("startDate", startDate.toISOString());
+    if (endDate) params.append("endDate", endDate.toISOString());
+    if (orderBy) params.append("orderBy", orderBy);
+    if (length) params.append("length", length.toString());
+    console.log("Params sent to API:", params.toString());
+    const res = await axios.get(`/api/order/charts/getTopSellerItems`, { params })
+    return res.data; 
+  } catch (error) {
+throw error;
+  }
+};

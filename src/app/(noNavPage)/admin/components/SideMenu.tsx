@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AppWindow } from "lucide-react"
+import { AppWindow, ChartLine } from "lucide-react"
 import Link from 'next/link'
 import { usePathname } from 'next/navigation' // ใช้ Next.js API ดึง path
 import { useTheme } from '@/app/context/themeContext';
@@ -22,7 +22,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
     {
         title: "Dashboard",
-        titleIcons: <AppWindow />,
+        titleIcons: <ChartLine />,
         titleHref: "/dashboard",
         items: [
           { title: "OverAll", href: "/admin/dashboard" },
@@ -62,13 +62,11 @@ const SideMenu: React.FC = () => {
     };
 
     return (
-        <div className='mt-5 text-sm w-full border flex justify-center flex-col items-center'>
+        <div className='mt-5 text-sm w-full flex justify-center flex-col items-center'>
             {menuItems.map((item, index) => (
-                <div key={index} className='flex flex-col  border w-full items-center '>
-                    {/* 🔹 Title คลิกเพื่อเปิด/ปิดเมนู */}
+                <div key={index} className='flex flex-col  border-y w-full items-center '>
                     <div 
-                        className='text-[1rem] flex flex-row gap-2 items-center p-2  w-full cursor-pointer border-gray-300'
-                        style={{ backgroundColor: themeColors.secondary,}}
+                        className='text-[1rem] flex flex-row gap-2 items-center p-3  w-full cursor-pointer  bg-blue-400 border-2 border-blue-600 text-white'
                         onClick={() => toggleMenu(index)} 
                     >
                         {item.titleIcons}
@@ -78,8 +76,8 @@ const SideMenu: React.FC = () => {
                         <div className='w-full'>
                             {item.items.map((subItem, subIndex) => (
                                 <div 
-                                    className={`py-2 px-11 w-full border ${
-                                        pathname === subItem.href ? "border-blue-500 font-bold" : "border-b-gray-300"
+                                    className={`py-2 text-[0.9rem] px-11 w-full ${
+                                        pathname === subItem.href ? "border border-blue-400 font-bold" : " border-b  border-gray-200"
                                     }`}
                                     style={{color:pathname === subItem.href ? themeColors.hoverText:themeColors.text}}
                                     key={subIndex}

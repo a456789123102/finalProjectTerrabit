@@ -49,8 +49,8 @@ function TopDashboard() {
   return (
     <div className="col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ">
       {/* Income first */}
-      {Data.map((d) => (
-        <div className="h-auto ">
+      {Data.map((d,i) => (
+        <div className="h-auto " key={i}>
           <TopPieChartBox
             chartsData={d.chartsData}
             keyData={d.keyData}

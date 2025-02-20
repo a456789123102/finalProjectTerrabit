@@ -35,7 +35,6 @@ function useFetchgetYearlySalesForCharts() {
   const fetchSalesData = async () => {
     try {
       const data = await getYearlySaleForCharts();
-      console.log("Fetched sales data:", data);
       setChartsData(data.data);
       setTotalOrders(data.totalOrders);
       setTotalSales(data.totalSales);

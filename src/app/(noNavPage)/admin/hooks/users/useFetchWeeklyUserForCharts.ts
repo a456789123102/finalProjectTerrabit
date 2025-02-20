@@ -9,9 +9,6 @@ function useFetchWeeklyUserForCharts() {
 
   const fetchData = async () => {
     const data = await fetchgetWeeklyUserForCharts();
-    console.log("Fetched user data: "
-      + JSON.stringify(data, null, 2)
-    );
     setUserChartsData(data.data);
     setTotalUsers(data.totalUsers);
     setLastWowUsers(data.wow);
