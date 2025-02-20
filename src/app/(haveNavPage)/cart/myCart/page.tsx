@@ -5,18 +5,19 @@ import ProductCart from "../components/productCart";
 import { useCartStore } from '@/store/cartStore';
 import { deleteCart, clearCart, checkoutCart, myCarts } from '@/app/apis/carts';
 import { useRouter } from "next/navigation";
+import { useUserStore } from '@/store/zustand';
 function MyCart() {
   const [products, setProducts] = useState([]);
   const setCartItemCount = useCartStore((state) => state.setCartItemCount);
-  const cartItemCount = useCartStore((state) => state.cartItemCount); // ดึงค่า cartItemCount จาก Zustand Store
+  const cartItemCount = useCartStore((state) => state.cartItemCount);
   const router = useRouter();
-
+  const { username } = useUserStore();
   const [totalPrice, setTotalPrice] = useState(0);
 
-  // ฟังก์ชันที่ใช้ดึงข้อมูลสินค้าในตะกร้า
+
   const fetchProductCart = async () => {
     try {
-      const cartData = await myCarts(); // myCarts คืน Array โดยตรง
+      const cartData = await myCarts();
       console.log("Fetched cartData:", cartData);
 
       if (Array.isArray(cartData)) {
@@ -36,6 +37,11 @@ function MyCart() {
   };
 
   useEffect(() => {
+    if(!username){
+      const path = window.location.pathname
+      router.push(`/login?redirect=${path}`)
+      return;
+    }
     fetchProductCart();
   }, []);
 
@@ -85,12 +91,12 @@ function MyCart() {
           </div>
         </div>
         {products.map((product, index) => (
-  <ProductCart
-  key={index}
-  cart={product}
-  onDelete={() => handleDeleteCart(product.id)}
-  onFetchData={fetchProductCart} // ใช้ชื่อ onFetchData ตรงกัน
-/>
+          <ProductCart
+            key={index}
+            cart={product}
+            onDelete={() => handleDeleteCart(product.id)}
+            onFetchData={fetchProductCart} // ใช้ชื่อ onFetchData ตรงกัน
+          />
         ))}
       </div>
       <div className="fixed bottom-0 w-5/6 bg-white  text-center flex flex-row p-4 justify-end items-center min-w-[544px] border">

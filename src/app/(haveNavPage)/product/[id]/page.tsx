@@ -61,7 +61,7 @@ const ProductDetail = () => {
 
 
   const CategoryItem = ({ name, id }: { name: string; id: number }) => {
-    return <Link href={`/product/category/${id}`} className='p-2 mx-2 bg-lime-950 justify-center hover:text-amber-300 hover:underline'>{name}</Link>;
+    return <Link href={`/product?category=${id}`} className='p-2 mx-2 bg-lime-950 justify-center hover:text-amber-300 hover:underline'>{name}</Link>;
   };
   const handleIncreaseClick = () => {
     if (product && AddQuantity < product.quantity) {

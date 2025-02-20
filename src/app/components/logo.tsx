@@ -15,31 +15,37 @@ function Logo() {
 
   useEffect(() => {
     if (!username) {
-      // ถ้าไม่มี username ใน store ให้ลองดึงข้อมูลจาก API หรือทำการ redirect ไปหน้า login
       me()
         .then((data) => {
           setUser(data);  // เซ็ตข้อมูลผู้ใช้
         })
         .catch(() => {
-          //router.push("/login");  // ถ้าผิดพลาดก็ให้ไปที่หน้า login
         });
     }
   }, [username, setUser, router]);  // ตรวจสอบเมื่อ username เปลี่ยน
 
   return (
-    <Text className='flex flex-row justify-between w-screen h-8 px-5 bg-[#181C14]'>
-      <Link href={'/'} className='text-yellow-500 hover:text-yellow-300 cursor-pointer' >
-        Terrabit pixel Studio
-      </Link>
-      {username ? (
-        <div className='flex items-center space-x-4'>
-          <UserMenu /> {/* แสดง UserMenu ถ้ามี username */}
-          {isAdmin && <AdminMenu />} {/* แสดง AdminMenu ถ้าเป็น admin */}
-        </div>
-      ) : (
-        <Link href="/login" className="text-yellow-500 hover:underline">login</Link>
-      )}
-    </Text>
+<Text className='flex flex-row justify-between w-screen h-10 px-5 bg-[#181C14] text-yellow-500 text-[0.9rem] items-center'>
+  <Link href={'/'} className='hover:text-yellow-300 cursor-pointer text-[1.4rem]'>
+    Terrabit Pixel Studio
+  </Link>
+  
+  {/* ✅ แก้ไข: เพิ่ม flex ใน div นี้ */}
+  <div className='flex flex-row items-baseline justify-around'>
+    {username ? (
+      <div className='flex flex-row items-baseline gap-2'>
+<div className='flex flex-row items-center'>
+<div>Welcome! {username}</div>
+<UserMenu /> 
+</div>
+        {isAdmin && <AdminMenu />} {/* แสดง AdminMenu ถ้าเป็น admin */}
+      </div>
+    ) : (
+      <Link href="/login" className="hover:underline">login</Link>
+    )}
+  </div>
+</Text>
+
   );
 }
 

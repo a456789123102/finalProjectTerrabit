@@ -4,37 +4,40 @@ import { useUserStore } from "@/store/zustand";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 import { useRouter } from 'next/navigation'; // Import useRouter สำหรับการนำทาง
 import { logout } from "../apis/auth";
+import {User} from "lucide-react"
+
+import { useState } from "react";
 
 export default function UserMenu() {
   const router = useRouter();
   const { username, clearUser } = useUserStore();
+    const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout();
-    clearUser();  // ล้างข้อมูลผู้ใช้จาก store
-    router.push("/login"); // เปลี่ยนหน้าไปที่หน้า login
+    clearUser(); 
   };
 
   const items = [
     {
       key: "profile",
-      label: "My Profile",
-      path: "/user/account/profile" // เส้นทางเมื่อคลิก "My Profile"
+      label: "My Profile (not done)",
+      path: "/user/account/profile" 
     },
     {
       key: "My Purchase",
       label: "My Purchase",
-      path: "/user/purchase" // เส้นทางเมื่อคลิก "My Purchase"
+      path: "/user/purchase"
     },
     {
-      key: "Notification",
-      label: "Notification",
-      path: "/notification" // เส้นทางเมื่อคลิก "Notification"
+      key: "Notification ",
+      label: "Notification (not do)",
+      path: "/notification"
     },
     {
       key: "Logout",
       label: "Logout",
-      onClick: handleLogout // ฟังก์ชัน logout
+      onClick: handleLogout 
     }
   ];
 
@@ -43,18 +46,29 @@ export default function UserMenu() {
   };
 
   return (
-    <div className="flex flex-row items-center text-yellow-600 h-full justify-end">
-      <Dropdown >
+    <div className="flex flex-row items-center text-yellow-500 hover:bg-orange-100">
+    <Dropdown isOpen={isOpen}>
         <DropdownTrigger>
-          <Button variant="bordered">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className=" size-6 hover:size-7  hover:bg-orange-100 cursor-pointer w-full flex justify-center items-center">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-            </svg>
+          <Button variant="bordered"
+           onMouseEnter={() => {
+            setIsOpen(true);
+          }}
+          onMouseLeave={() => {
+            setIsOpen(false);
+          }}
+           >
+<User />
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           aria-label="Dynamic Actions"
           className="bg-white text-yellow-600 shadow-md py-2"
+          onMouseEnter={() => {
+            setIsOpen(true);
+          }}
+          onMouseLeave={() => {
+            setIsOpen(false);
+          }}
         >
           {items.map((item) => (
             <DropdownItem

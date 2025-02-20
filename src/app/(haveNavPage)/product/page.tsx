@@ -5,8 +5,11 @@ import ProductCard from './components/productCard';
 import CategorySelect from './components/categoryCard';
 import Text from '@/app/components/text';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 const ProductList = () => {
+  const searchParams = useSearchParams();
+const categoryFromUrl = searchParams.get('category');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -17,6 +20,12 @@ const ProductList = () => {
     totalPages: 1,
     totalProducts: 0,
   });
+
+  useEffect(() => {
+    if (categoryFromUrl) {
+      setCategory(categoryFromUrl); 
+    }
+  }, [categoryFromUrl]);
 
   const fetchProductList = useCallback(async () => {
     setLoading(true);
@@ -69,8 +78,15 @@ const ProductList = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 min-h-screen bg-white">
-      <h1 className="text-2xl font-bold mb-4">Our products</h1>
+    <div className="container mx-auto p-4 min-h-screen bg-gray-50 mt-7">
+     <div>
+     <div className="text-2xl font-bold mb-4">We have {pagination.totalProducts} products </div>
+     {search &&
+     <div className='flex flex-row gap-1'>
+       <div>from searching: </div>
+       <div className='text-gray-700'>{search}</div>
+      </div>}
+     </div>
       <Text className="p-1 mb-4">
         <form onSubmit={handleSearch} className="flex space-x-4">
           <input
@@ -91,7 +107,7 @@ const ProductList = () => {
             type="submit"
             className="bg-[#1B4242] text-white px-4 py-2 rounded hover:bg-[#387478] hover:text-amber-400"
           >
-            ค้นหา
+           Search
           </button>
         </form>
       </Text>

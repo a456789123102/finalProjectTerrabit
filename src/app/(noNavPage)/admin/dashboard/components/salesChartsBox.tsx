@@ -2,7 +2,7 @@ import React from 'react'
 import useFetchgetYearlySalesForCharts from '../../hooks/orders/useFetchgetYearlySalesForCharts'
 import { useTheme } from "@/app/context/themeContext";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
-
+import Number from "@/app/components/Number";
 
 function SalesChartsBox() {
     const { theme, themeColors } = useTheme();
@@ -28,7 +28,7 @@ function SalesChartsBox() {
                                     : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="size-3 text-green-400">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
                                     </svg>}
-                                <div className={`${data.value.compareGrowth > 0 ? "text-green-400" : "text-red-400"} text-[0.8rem]`}>{data.value.compareGrowth * 100} %</div>
+                                <div className={`${data.value.compareGrowth > 0 ? "text-green-400" : "text-red-400"} text-[0.8rem] flex flex-row`}><Number>{data.value.compareGrowth * 100}</Number> %</div>
                                 <div className="text-gray-400 text-[0.8rem]">last year</div>
                             </div>
                         </div>

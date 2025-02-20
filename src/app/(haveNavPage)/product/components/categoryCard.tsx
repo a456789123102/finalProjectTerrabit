@@ -5,9 +5,9 @@ import { getAllcategory } from '@/app/apis/category';
 const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [defaultOptions, setDefaultOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]); // 🔹 เก็บค่า `{ value, label }` ที่ถูกต้อง
 
-  // Fetch categories on component mount
+  // Fetch categories เมื่อ Component โหลด
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -17,28 +17,34 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
           label: cat.name,
         }));
         setCategories(formattedCategories);
-  
-        // อัปเดต selectedCategories ตามค่า default
-        if (selectedCategories.length > 0) {
-          setCategory(selectedCategories); // กำหนดค่าใน setCategory
-        }
       } catch (error) {
         console.error("Error fetching categories:", error);
       } finally {
         setIsLoading(false);
       }
     };
-  
     fetchCategories();
   }, []);
-  
+
+  useEffect(() => {
+    if (categories.length > 0 && selectedCategories.length > 0) {
+      const matchedCategories = categories.filter((cat) => selectedCategories.includes(cat.value));
+      setSelectedOptions(matchedCategories);
+    }
+  }, [categories, selectedCategories]);
 
   const handleChange = (selectedOption) => {
     const selectedValues = isMulti
       ? selectedOption ? selectedOption.map(option => option.value) : []
       : selectedOption ? selectedOption.value : '';
+
     setCategory(selectedValues);
+    setSelectedOptions(selectedOption); // 🔹 อัปเดต state ให้ตรงกับ React-Select
   };
+
+  console.log("🚀 categories:", categories);
+  console.log("✅ selectedCategories (Raw):", selectedCategories);
+  console.log("🎯 Selected Options for Select:", selectedOptions);
 
   return (
     <div className='text-sm'>
@@ -51,7 +57,7 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
         isSearchable={true}
         onChange={handleChange}
         placeholder={isLoading ? "Loading categories..." : "Select Category"}
-        value={categories.filter((cat) => selectedCategories.includes(cat.value))} // ใช้ value แทน defaultValue
+        value={selectedOptions} 
       />
     </div>
   );

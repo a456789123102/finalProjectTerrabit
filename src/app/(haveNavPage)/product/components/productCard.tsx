@@ -37,8 +37,9 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   const handleCatClick = (categoryId: number) => {
-    router.push(`/product/category/${categoryId}`);
+    router.push(`/product?category=${categoryId}`);
   };
+  
 
   return (
     <div className="border p-4  hover:bg-[#ECDFCC] flex flex-col gap-2 bg-white h-full ">
@@ -50,7 +51,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 
       <div className="w-full h-[250px] overflow-hidden rounded-lg shadow-lg">
         <Image
-          className="object-cover w-full h-full cursor-pointer"
+          className="object-contain w-full h-full cursor-pointer"
           src={productImage}
           alt="Cover Image"
           width={300}

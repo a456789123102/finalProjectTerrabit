@@ -9,13 +9,13 @@ export default function AdminMenu() {
   const items = [
     {
       key: "Dashboards",
-      label: "All web Data",
+      label: "Dashboards",
       path: "/admin/dashboard" 
     },
     {
-      key: "Products",
-      label: "",
-      path: "admin/product" 
+      key: "ProductManagement",
+      label: "Product Management",
+      path: "/admin/manage/product" 
     },
     {
       key: "addProductImage",
@@ -23,9 +23,9 @@ export default function AdminMenu() {
       path: "/product/create/image" 
     },
     {
-        key: "CreateCategory",
-        label: "Create Category",
-        path: "/product/category/create"
+        key: "Order Management",
+        label: "OrderManagement",
+        path: "/admin/manage/purchase"
       },
 
   ];
@@ -37,7 +37,7 @@ export default function AdminMenu() {
   
 
   return (
-    <div className="text-yellow-600 hover:bg-orange-100 cursor-pointer">
+    <div className="text-yellow-500 hover:bg-orange-100 cursor-pointer">
       <Dropdown isOpen={isOpen}>
         <DropdownTrigger>
           <Button variant="bordered"
@@ -52,9 +52,8 @@ export default function AdminMenu() {
           </Button>
         </DropdownTrigger>
         <DropdownMenu
-          disabledKeys={["addProductImage", "delete"]}
           aria-label="Dynamic Actions"
-          className="bg-[#040D12] text-yellow-600  shadow-md "
+          className="bg-[#040D12] text-yellow-500  shadow-md "
           onMouseEnter={() => {
             setIsOpen(true);
           }}
@@ -66,7 +65,7 @@ export default function AdminMenu() {
             <DropdownItem
               key={item.key}
               color={item.key === "delete" ? "danger" : "default"}
-              className="hover:bg-orange-100"
+              className="hover:bg-orange-100 hover:text-yellow-900 p-1"
               onPress={() => handleAction(item.path)} 
             >
               {item.label}
