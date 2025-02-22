@@ -43,6 +43,7 @@ const useFetchUsers = ({
         pagination?.pageSize?.toString()
       );
       setUsers(usersData.users);
+      console.log("user Data :",users)
       if (setPagination) {
         setPagination(usersData.pagination);
       }

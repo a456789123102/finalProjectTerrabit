@@ -2,6 +2,7 @@
 import { updateAddress } from '@/app/apis/address';
 import AddressForm from '../../components/addressForm';
 import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface AddressData {
   recipientName: string;
@@ -12,6 +13,7 @@ interface AddressData {
 }
 
 function EditAddressPage() {
+  const router = useRouter();
   const { id } = useParams() as { id: string };
     const handleSubmit = async (addressData:AddressData) => {
         if (!addressData.recipientName || !addressData.street || !addressData.city || !addressData.state || !addressData.zipCode) {
@@ -30,6 +32,7 @@ function EditAddressPage() {
                 addressData.state,
                 addressData.zipCode);
                 console.log('address updated response:', response);
+                router.push("/address/myAddress")
         } catch (error) {
             console.error('Error updating Address:', error);
         }

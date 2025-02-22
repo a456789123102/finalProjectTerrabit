@@ -10,7 +10,7 @@ export async function PATCH(req: NextRequest,{params}: {params:{id:string}}) {
         }
         const res = await patch(`/api/user/${id}/changeIsActiveStatus`,{}, token);
         const data = await res.json();
-        return NextResponse.json(data);
+        return NextResponse.json(data,{status:res.status});
     } catch (error) {
         return NextResponse.json({ error: "Server error" }, { status: 500 });
     }

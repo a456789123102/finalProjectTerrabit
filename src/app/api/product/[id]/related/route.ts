@@ -34,7 +34,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
     const data = await res.json();
 
-    return NextResponse.json(data);
+    return NextResponse.json(data,{status:res.status});
   } catch (error) {
     console.error("Error handling related products:", error);
     return NextResponse.json(

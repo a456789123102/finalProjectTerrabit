@@ -14,7 +14,7 @@ import { patch } from "@/app/api/const";
 
         const res = await patch(`/api/address/myAddress/${id}/update`, body, token);
         const data = await res.json();
-        return NextResponse.json(data);
+        return NextResponse.json(data,{status:res.status});
     }catch (error) {
         console.error("Server error:", error);
         return NextResponse.json({ error: "update address failed" }, { status: 500 });

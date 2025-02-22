@@ -21,8 +21,13 @@ export default function UserMenu() {
   const items = [
     {
       key: "profile",
-      label: "My Profile (not done)",
+      label: "Profile (not done)",
       path: "/user/account/profile" 
+    },
+    {
+      key: "MyCarts",
+      label: "My Carts",
+      path: "/cart/myCart"
     },
     {
       key: "My Purchase",
@@ -30,9 +35,9 @@ export default function UserMenu() {
       path: "/user/purchase"
     },
     {
-      key: "Notification ",
-      label: "Notification (not do)",
-      path: "/notification"
+      key: "MyAddresses",
+      label: "My Addresses",
+      path: "/address/myAddress"
     },
     {
       key: "Logout",

@@ -10,6 +10,7 @@ import { useSearchParams } from 'next/navigation';
 const ProductList = () => {
   const searchParams = useSearchParams();
 const categoryFromUrl = searchParams.get('category');
+const searchFromUrl = searchParams.get('search');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -24,8 +25,10 @@ const categoryFromUrl = searchParams.get('category');
   useEffect(() => {
     if (categoryFromUrl) {
       setCategory(categoryFromUrl); 
+    }if(searchFromUrl){
+setSearch(searchFromUrl)
     }
-  }, [categoryFromUrl]);
+  }, [categoryFromUrl,searchFromUrl]);
 
   const fetchProductList = useCallback(async () => {
     setLoading(true);

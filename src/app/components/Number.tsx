@@ -9,7 +9,7 @@ type Props = {
 function Number({ children, className }: PropsWithChildren<Props>) {
   return (
     <div className={`${className}`}>
-      {Math.round(children *100)/100}
+      {Math.round(children *100)/100} 
     </div>
   );
 }

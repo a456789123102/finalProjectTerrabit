@@ -12,7 +12,7 @@ export async function POST(
 
     const res = await post(`/api/reviews/${id}/create`, body, token);
     const data = await res.json();
-    return NextResponse.json(data);
+    return NextResponse.json(data,{status:res.status});
     
   } catch (error) {
     console.error("Server error:", error);

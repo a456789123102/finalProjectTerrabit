@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const res = await post('/api/auth/register', body);
         const data = await res.json();
-        return NextResponse.json(data);
+        return NextResponse.json(data,{status:res.status});
     } catch (error) {
         console.error("Server error:", error);
         return NextResponse.json({ error: "เกิดข้อผิดพลาดในการลงทะเบียน" }, { status: 500 });

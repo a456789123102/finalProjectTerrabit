@@ -6,6 +6,7 @@ import { getProductById } from '@/app/apis/product';
 import Image from 'next/image';
 import { uploadProductImage,deleteImage } from '@/app/apis/productImage';
 import Swal from "sweetalert2";
+import { useTheme } from '@/app/context/themeContext';
 
 interface ProductFormProps {
   onSubmit: (productData: any) => Promise<void>;
@@ -34,6 +35,8 @@ const ProductForm = ({ onSubmit, productId, mode }: ProductFormProps) => {
   const [existingCoverImageId, setExistingCoverImageId] = useState<number | null>(null);
 const [existingImageDetail1Id, setExistingImageDetail1Id] = useState<number | null>(null);
 const [existingImageDetail2Id, setExistingImageDetail2Id] = useState<number | null>(null);
+
+  const {themeColors} = useTheme();
 
   const fetchProductData = async () => {
     if (mode === 'edit' ) {
@@ -169,17 +172,17 @@ fetchProductData()
   }
 
   return (
-    <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-md min-w-full">
+    <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-6 rounded-lg shadow-md min-w-full"  style={{ backgroundColor: themeColors.base }}>
       <div className="min-w-full flex flex-row">
         {/* Left Section: Form Inputs */}
-        <div className={`border ${mode === 'create' ? 'w-full' : 'w-1/2'}`}>
-          <h2 className="text-xl font-bold text-center text-gray-800 mb-4">
+        <div className={` ${mode === 'create' ? 'w-full' : 'w-1/2'}`}>
+          <h2 className="text-xl font-bold text-center  mb-4">
             {mode === 'create' ? 'Create New Product' : 'Edit Product'}
           </h2>
           <div className="flex flex-col mb-4">
-            <label className="font-medium text-gray-600">Product Name:</label>
+            <label className="font-medium ">Product Name:</label>
             <input
-              className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="px-4 py-2 border border-gray-300 text-black rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -187,9 +190,9 @@ fetchProductData()
             />
           </div>
           <div className="flex flex-col mb-4">
-            <label className="font-medium text-gray-600">Price:</label>
+            <label className="font-medium ">Price:</label>
             <input
-              className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="px-4 py-2 border border-gray-300 rounded text-black mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="number"
               value={price}
               onChange={(e) => setPrice(Number(e.target.value) || '')}
@@ -197,9 +200,9 @@ fetchProductData()
             />
           </div>
           <div className="flex flex-col mb-4">
-            <label className="font-medium text-gray-600">Discount (%):</label>
+            <label className="font-medium ">Discount (%):</label>
             <input
-              className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="px-4 py-2 border border-gray-300 text-black rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="number"
               min="0"
               max="100"
@@ -208,9 +211,9 @@ fetchProductData()
             />
           </div>
           <div className="flex flex-col mb-4">
-            <label className="font-medium text-gray-600">Quantity:</label>
+            <label className="font-medium ">Quantity:</label>
             <input
-              className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="px-4 py-2 border border-gray-300 text-black rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="number"
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value) || '')}
@@ -220,7 +223,7 @@ fetchProductData()
           <div className="flex flex-col mb-4">
             <label className="font-medium text-gray-600">Description:</label>
             <textarea
-              className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300 resize-y"
+              className="px-4 py-2 border border-gray-300 rounded mt-1 text-black focus:outline-none focus:ring-2 focus:ring-blue-300 resize-y"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}

@@ -13,8 +13,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
         const res = await patch(`/api/product/${id}/edit`, body, token); // ส่ง token ไปใน header
         const data = await res.json(); 
-        console.log("Data from API:", data);
-        return NextResponse.json(data);
+        return NextResponse.json(data,{status:res.status});
         
     } catch (error) {
         console.error("Server error:", error);

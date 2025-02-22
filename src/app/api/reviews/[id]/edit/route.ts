@@ -14,7 +14,7 @@ export async function PATCH(
     const res = await patch(`/api/reviews/${id}/edit`, body, token); 
     const data = await res.json();
 
-    return NextResponse.json(data);
+    return NextResponse.json(data,{status:res.status});
   } catch (error) {
     console.error("Server error:", error);
     return NextResponse.json({ error: "Update review failed" }, { status: 500 });

@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
       token
     );
     const data = await res.json();
-    return NextResponse.json(data);
+    return NextResponse.json(data,{status:res.status});
   } catch (error) {
     console.error("Error fetching users from backend", error);
     return NextResponse.error();

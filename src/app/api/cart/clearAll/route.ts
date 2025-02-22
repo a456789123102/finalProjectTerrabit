@@ -9,7 +9,7 @@ try {
     }
     const res = await deleteRequest(`/api/cart/clearAll`, token);
 const data = await res.json();
-return NextResponse.json(data);
+return NextResponse.json(data,{status:res.status});
 } catch (error) {
     return NextResponse.json({message: "ClearAll failed",error }, { status: 500 });
 }

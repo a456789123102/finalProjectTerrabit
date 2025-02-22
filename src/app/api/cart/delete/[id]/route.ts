@@ -12,7 +12,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         const res = await deleteRequest(`/api/cart/delete/${id}`, token);
 const data = await res.json();
 
-        return NextResponse.json(data);
+return NextResponse.json(data,{status:res.status});
 
     } catch (error) {
         console.error("Server error:", error);

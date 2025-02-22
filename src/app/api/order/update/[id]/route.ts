@@ -12,7 +12,7 @@ export async function PATCH(req: NextRequest,{params}: { params: { id: string } 
 
         const res = await patch(`/api/order/update/${id}`, body, token);
         const data = await res.json();
-        return NextResponse.json(data);
+        return NextResponse.json(data,{status:res.status});
     } catch (error) {
         console.error("Server error:", error);
         return NextResponse.json({ error: "Update order failed" }, { status: 500 });

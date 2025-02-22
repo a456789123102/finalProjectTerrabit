@@ -5,24 +5,24 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/zustand';
 import AdminMenu from './adminMenu';
 import UserMenu from './userMenu';
-import { me } from '../apis/user'; // API ที่ใช้ดึงข้อมูลผู้ใช้
+import { me } from '../apis/user'; 
 import Link from 'next/link';
 import Text from './text';
 
 function Logo() {
   const router = useRouter();
-  const { username, isAdmin, setUser } = useUserStore();  // เช็คสถานะ username และ isAdmin
+  const { username, isAdmin, setUser } = useUserStore();  
 
   useEffect(() => {
     if (!username) {
       me()
         .then((data) => {
-          setUser(data);  // เซ็ตข้อมูลผู้ใช้
+          setUser(data);  
         })
         .catch(() => {
         });
     }
-  }, [username, setUser, router]);  // ตรวจสอบเมื่อ username เปลี่ยน
+  }, [username, setUser, router]);  
 
   return (
 <Text className='flex flex-row justify-between w-screen h-10 px-5 bg-[#181C14] text-yellow-500 text-[0.9rem] items-center'>

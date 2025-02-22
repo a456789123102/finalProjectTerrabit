@@ -30,7 +30,7 @@ function ImageSwiper({ images }) {
                   alt={image.alt || `Slide ${index + 1}`}
                   width={800}
                   height={500}
-                  className="block h-full w-full object-cover max-h-[400px]"
+                  className="block h-full w-full object-contain max-h-[400px]"
                   priority={index === 0}
                 />
               </div>

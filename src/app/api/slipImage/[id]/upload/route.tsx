@@ -17,7 +17,7 @@ export const config = {
         const token = req.cookies.get("token")?.value;
         const res = await post(`/api/slipImage/${id}/upload`, formData, token);
         const data = await res.json();
-        return NextResponse.json(data);
+        return NextResponse.json(data,{status:res.status});
 
     } catch (error) {
         console.error("Server error:", error);

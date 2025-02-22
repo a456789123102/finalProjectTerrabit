@@ -4,6 +4,7 @@ import TopDashboard from "./components/topDashboard";
 import RatingBox from "./components/RatingBox";
 import SalesChartsBox from "./components/salesChartsBox";
 import TopSellerBox from "./components/topSellerBox";
+import NewUserBox from "./components/newUserBox";
 
 function AdminPage() {
     const { theme, themeColors } = useTheme();
@@ -41,7 +42,7 @@ function AdminPage() {
                     <TopSellerBox />
                     <div className="col-span-4  border-gray-300" >
                         <div className='grid grid-cols-2 gap-2 h-48'>
-                            <div className='p-4 border border-gray-300' style={{ backgroundColor: themeColors.base }}>new user</div>
+                        <NewUserBox/>
                             <div className='p-4 border border-gray-300' style={{ backgroundColor: themeColors.base }}>new job assigner</div>
                            
                         </div>

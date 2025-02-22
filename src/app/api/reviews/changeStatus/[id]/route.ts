@@ -7,7 +7,7 @@ export async function PATCH(req: NextRequest,{params}:{params:{id:string}}) {
         const token = req.cookies.get("token")?.value;
         const res = await patch(`/api/reviews/changeStatus/${id}`,{},token);
         const data = await res.json();
-        return NextResponse.json(data);
+        return NextResponse.json(data,{status:res.status});
     } catch (error) {
         return NextResponse.json({error:"change review status failed"},{status:500})
     }

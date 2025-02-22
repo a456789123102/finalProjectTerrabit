@@ -151,7 +151,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
   return (
     <div className="flex flex-col items-center gap-3 min-w-[590px]">
       <div className="self-start p-2 bg-white w-full pl-5">Checkout Section</div>
-      <div className="bg-gray-100 w-5/6 justify-center flex flex-col mt-5 p-6 m-4 border">
+      <div className="bg-gray-100 w-5/6 justify-center flex flex-col mt-5 p-6 m-4">
       <div className="flex flex-row bg-white justify-between w-full shadow-sm">
           {statuses.map((item) => (
             <button
@@ -173,7 +173,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                 key={order.id}
                 className="shadow-sm p-3 flex flex-row justify-between min-h-20 bg-white"
               >
-                <div className="border p-2 w-1/4 flex flex-col justify-between">
+                <div className="border-x-2 p-2 w-1/4 flex flex-col justify-between">
                   <div>
                     <div className="flex flex-row p-2 gap-3">
                       <div className=" flex flex-row gap-2">
@@ -183,7 +183,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                     </div>
                     <div className=" text-slate-700 text-[0.7rem]">
                       {order.items.map((item) => (
-                        <div key={item.id} className="border-b gap-2 flex flex-row">
+                        <div key={item.id} className="border-b-2 gap-2 flex flex-row">
                           <div className="text-black">{item.productName},</div> <div>Quantity: {item.quantity}, Price: {item.price}</div>
                         </div>
                       ))}
@@ -196,7 +196,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                   </div>
 
                 </div>
-                <div className="border w-1/4 p-2 gap-1 ">
+                <div className="border-r-2 w-1/4 p-2 gap-1 ">
                   <SlipSection
                     order={order}
                     isModalOpen={isModalOpen}
@@ -206,7 +206,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                     handleClearSlipImage={handleClearSlipImage}
                   />
                 </div>
-                <div className="border w-1/4 p-3 flex flex-col gap-2">
+                <div className="border-r-2 w-1/4 p-3 flex flex-col gap-2">
                   {
                     order.addressesId && order.status !== "awaiting_slip_upload" && order.status !== "awaiting_confirmation" ? (
                       <div>
@@ -231,7 +231,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                   }
 
                 </div>
-                <div className="border w-1/4 p-3">
+                <div className="border-r-2 w-1/4 p-3">
                   <div className="text-[1.1rem] mb-2 font-bold">Action:</div>
                   <div className="text-[0.8rem] text-white">
                     {order.status === "awaiting_slip_upload" ? (

@@ -5,11 +5,13 @@ import ProductForm from '../../components/productForm';
 import { useUserStore } from '@/store/zustand';
 import { useParams, useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
+import { useTheme } from '@/app/context/themeContext';
 
 const EditProductPage = () => {
   const { isAdmin } = useUserStore();
   const { id } = useParams();
   const router = useRouter();
+  const {themeColors } = useTheme();
 
   const productId = parseInt(id, 10);
   console.log("Product ID from URL params:", productId);
@@ -70,8 +72,8 @@ const EditProductPage = () => {
   };
 
   return (
-    <div className='w-full h-screen flex flex-col items-center justify-center bg-[#FCFAEE]'>
-      <div className='p-5 flex justify-center flex-col items-center w-full max-w-3xl max-h-[99%] min-w-96 overflow-auto'>
+    <div className='w-full h-screen flex flex-col items-center justify-center'  style={{ backgroundColor: themeColors.primary }}>
+      <div className='p-5 flex justify-center flex-col items-center w-full max-w-3xl max-h-[99%] min-w-96 overflow-auto' >
         {isAdmin ? (
           <ProductForm onSubmit={handleSubmit} productId={productId} mode='edit' />
         ) : (
