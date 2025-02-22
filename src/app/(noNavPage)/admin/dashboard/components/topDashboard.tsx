@@ -20,6 +20,7 @@ function TopDashboard() {
       keyData: "totalIncome",
       color: "#0ba82a",
       headerText: "Total Income",
+      unit:"THB",
       amount: totalIncome, // ✅ ใช้ค่าที่ดึงมาได้
       wow: lastWowIncomes,
     }, {
@@ -27,6 +28,7 @@ function TopDashboard() {
       keyData: "totalOrders",
       color: "#FFAD60",
       headerText: "Total Orders",
+      unit:"Orders",
       amount: totalOrders, // ✅ ใช้ค่าที่ดึงมาได้
       wow: lastWowOrders,
     }, {
@@ -34,6 +36,7 @@ function TopDashboard() {
       keyData: "total",
       color: "#06c1b5",
       headerText: "Total Users",
+      unit:"Users",
       amount: totalUsers,
       wow: lastWowUsers,
     },{
@@ -41,6 +44,7 @@ function TopDashboard() {
       keyData: "totalUserRatings",
       color: "#c6b809",
       headerText: "Total Paticipations",
+      unit:"Comments",
       amount: totalReviewer,
       wow: lastWowReviewer,
     }
@@ -58,6 +62,7 @@ function TopDashboard() {
             amount={d.amount}
             wow={d.wow}
             color={d.color}
+            unit={d.unit}
           />
         </div>
 

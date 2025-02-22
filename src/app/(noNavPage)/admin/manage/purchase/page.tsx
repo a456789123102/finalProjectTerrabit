@@ -38,7 +38,7 @@ function PurchaseTable() {
     const [selectedOrders, setSelectedOrders] = useState<SelectedOrders>({});
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [tempSearchQuery, setTempSearchQuery] = useState<string>('');
-    const [actionType, setActionType] = useState<'approve' | 'reject'>('reject'); // Default action type
+    const [actionType, setActionType] = useState<string>("");
     const [pagination, setPagination] = useState<PaginationState>({
         page: 1,
         pageSize: 10,
@@ -89,7 +89,7 @@ function PurchaseTable() {
             console.log(`Order ${orderId} status updated successfully to: ${updatedStatus}`);
         } catch (error) {
             console.error('Failed to reject status', error);
-            throw error; // ส่ง error ไปให้ handleConfirm จัดการ
+            throw error;
         }
     };
     const handleApprove = async (orderId: number, currentStatus: string) => {
@@ -274,6 +274,22 @@ function PurchaseTable() {
                         };
                         return new Date(dateStr).toLocaleDateString(undefined, options);
                     };
+                    
+
+                    return <div>{formatDate(value as string)}</div>;
+                }
+                if (key === 'updatedAt') {
+                    const formatDate = (dateStr: string) => {
+                        const options: Intl.DateTimeFormatOptions = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        };
+                        return new Date(dateStr).toLocaleDateString(undefined, options);
+                    };
+                    
 
                     return <div>{formatDate(value as string)}</div>;
                 }
@@ -324,9 +340,9 @@ function PurchaseTable() {
         setColumnKeysFiltered(prev => {
             let updatedColumns = prev.includes(column)
                 ? prev.filter(item => item !== column) // ถ้าเลือกซ้ำให้ลบออก
-                : [...prev.filter(item => item !== "Actions"), column]; // เพิ่ม column โดยไม่ให้ "Actions" ถูกแทรกตรงกลาง
+                : [...prev.filter(item => item !== "Select"), column,"Select"]; // เพิ่ม column โดยไม่ให้ "Actions" ถูกแทรกตรงกลาง
 
-            return [...updatedColumns, "Actions"]; // ใส่ "Actions" ไว้ท้ายสุดเสมอ
+            return updatedColumns; // ใส่ "Actions" ไว้ท้ายสุดเสมอ
         });
     };
 
@@ -367,12 +383,16 @@ function PurchaseTable() {
                     </div>
                     <select
                         value={actionType}
-                        onChange={(e) => setActionType(e.target.value as 'approve' | 'reject')}
+                        onChange={(e) => setActionType(e.target.value)}
                         className="border p-2 rounded text-black"
                     >
+                        <option value="" disabled>
+                           Action...
+                        </option>
                         <option value="approve">Approve</option>
                         <option value="reject">Reject</option>
                     </select>
+
                     <button
                         onClick={handleConfirm}
                         className="ml-3 bg-blue-500 text-white px-4 py-2 rounded"

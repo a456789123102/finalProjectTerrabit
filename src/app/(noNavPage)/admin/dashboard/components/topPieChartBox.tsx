@@ -9,10 +9,11 @@ type TopPieChartBoxProps = {
   chartsData: object[]; // ✅ เปลี่ยนจาก string[] เป็น object[]
   keyData: string;
   color: string;
+  unit:string;
 };
 
 
-const TopPieChartBox: React.FC<TopPieChartBoxProps> = ({ chartsData, keyData, headerText, amount, wow, color }) => {
+const TopPieChartBox: React.FC<TopPieChartBoxProps> = ({ chartsData, keyData, headerText, amount, wow, color,unit }) => {
   const { theme, themeColors } = useTheme();
   const newAmount = Number(amount.toFixed(0)).toLocaleString();
   const newWow = `${(wow * 100).toFixed(2)}%`;
@@ -22,6 +23,7 @@ const TopPieChartBox: React.FC<TopPieChartBoxProps> = ({ chartsData, keyData, he
         <div>{headerText}</div>
         <div className="flex flex-row flex-wrap items-baseline gap-2">
           <div className="text-[1.4rem]">{newAmount}</div>
+          <div className="text-[0.9rem]">{unit}</div>
           <div className={`text-[0.75rem] flex flex-row items-baseline gap-1 ${wow < 0 ? "text-red-400" : "text-green-400"}`}>
             {wow < 0 ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-3">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
