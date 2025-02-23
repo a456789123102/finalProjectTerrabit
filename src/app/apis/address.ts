@@ -4,18 +4,20 @@ import axios from "axios";
 export const createAddress = async (
   recipientName: string,
   currentAddress: string,
-  city: string,
-  state: string,
+  provinceName: string,
+  amphureName: string,
+  tambonName: string,
   zipCode: string,
   mobileNumber: string,
-  email?: string,
+  email?: string
 ) => {
   try {
     const res = await axios.post("/api/address/create", {
       recipientName,
       currentAddress,
-      city,
-      state,
+      provinceName,
+      amphureName,
+      tambonName,
       zipCode,
       mobileNumber,
       email,
@@ -30,18 +32,20 @@ export const updateAddress = async (
   id: string,
   recipientName: string,
   currentAddress: string,
-  city: string,
-  state: string,
+  provinceName: string,
+  amphureName: string,
+  tambonName: string,
   zipCode: string,
   mobileNumber: string,
-  email?: string,
+  email?: string
 ) => {
   try {
     const res = await axios.patch(`/api/address/myAddress/${id}/update`, {
       recipientName,
       currentAddress,
-      city,
-      state,
+      provinceName,
+      amphureName,
+      tambonName,
       zipCode,
       mobileNumber,
       email,
@@ -61,7 +65,7 @@ export const getOwnAddress = async () => {
   }
 };
 
-export const getOneAddress = async (id) => {
+export const getOneAddress = async (id:number) => {
   try {
     const res = await axios.get(`/api/address/myAddress/${id}`);
     return res.data;
@@ -70,7 +74,7 @@ export const getOneAddress = async (id) => {
   }
 };
 
-export const deleteAddress = async (id) => {
+export const deleteAddress = async (id:number) => {
   try {
     const res = await axios.delete(`/api/address/myAddress/${id}/delete`);
     return res.data;
@@ -78,3 +82,30 @@ export const deleteAddress = async (id) => {
     throw error;
   }
 };
+
+export const getProvince = async () => {
+  try {
+    const res = await axios.get(`/api/address/province`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getAmphure = async (id:number) => {
+  try {
+    const res = await axios.get(`/api/address/${id}/amphure`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getTambon = async (id:number) => {
+  try {
+    const res = await axios.get(`/api/address/${id}/tambon`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}

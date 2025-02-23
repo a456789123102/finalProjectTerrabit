@@ -27,11 +27,12 @@ interface Address {
   id: number;
   recipientName: string;
   currentAddress: string;
-  city: string;
-  state: string;
+  provinceName: string;
+  amphureName: string;
+  tambonName: string;
   zipCode: string;
-  email?: string;
   mobileNumber: string;
+  email?: string;
 }
 
 interface Status {
@@ -215,7 +216,14 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                         <div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>
                         {(() => {
                           const curradd = addresses.find((address) => address.id === order.addressesId)
-                          return curradd ? <div className="text-[0.8rem] text-slate-800">{curradd.recipientName}, {curradd.currentAddress}, {curradd.city}, {curradd.state}, {curradd.zipCode}</div> : <div>No address found</div>;
+                          return curradd ? (
+                            <div className="text-[0.8rem] text-slate-800">
+                              {curradd.recipientName}, {curradd.currentAddress}, {curradd.tambonName}, {curradd.amphureName}, {curradd.provinceName}, {curradd.zipCode}
+                            </div>
+                          ) : (
+                            <div>No address found</div>
+                          );
+                          
                         })()
                         }
                       </div>

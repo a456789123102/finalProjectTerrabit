@@ -8,8 +8,9 @@ import { createAddress } from "../../../apis/address";
 interface AddressData {
   recipientName: string;
   currentAddress: string;
-  city: string;
-  state: string;
+  provinceName: string;
+  amphureName: string;
+  tambonName: string;
   zipCode: string;
   mobileNumber: string;
   email?: string;
@@ -23,10 +24,11 @@ function CreateAddressPage() {
     if (
       !addressData.recipientName ||
       !addressData.currentAddress ||
-      !addressData.city ||
-      !addressData.state ||
+      !addressData.provinceName ||
+      !addressData.amphureName ||
+      !addressData.tambonName ||
       !addressData.zipCode ||
-      !addressData.mobileNumber 
+      !addressData.mobileNumber
     ) {
       setAlertMessage("All fields are required.");
       return;
@@ -36,11 +38,12 @@ function CreateAddressPage() {
       const response = await createAddress(
         addressData.recipientName,
         addressData.currentAddress,
-        addressData.city,
-        addressData.state,
+        addressData.provinceName,
+        addressData.amphureName,
+        addressData.tambonName,
         addressData.zipCode,
         addressData.mobileNumber,
-        addressData.email || ""  
+        addressData.email || ""
       );
 
       if (response) {
@@ -59,10 +62,11 @@ function CreateAddressPage() {
     <div className="w-full h-screen flex flex-col justify-center items-center relative">
       {alertMessage && (
         <div
-          className={` fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 p-7 rounded shadow-lg ${alertMessage.includes("successfully")
+          className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 p-7 rounded shadow-lg ${
+            alertMessage.includes("successfully")
               ? "bg-green-100 text-green-700"
               : "bg-red-100 text-red-700"
-            }`}
+          }`}
         >
           {alertMessage}
         </div>
@@ -71,7 +75,6 @@ function CreateAddressPage() {
         <AddressForm onSubmit={handleSubmit} mode="create" />
       </div>
     </div>
-
   );
 }
 

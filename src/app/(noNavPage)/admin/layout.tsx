@@ -16,7 +16,7 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (username === undefined) {
-      console.log("⏳ กำลังโหลด Zustand state...");
+      console.log("⏳ Loading Zustand state...");
       return; 
     }
 
@@ -24,11 +24,14 @@ function Layout({ children }: { children: React.ReactNode }) {
       console.log("🔴 User not logged in. Redirecting...");
       const currentPath = encodeURIComponent(window.location.pathname);
       router.replace(`/login?redirect=${currentPath}`);
+    } else if (!isAdmin) {
+      console.log("🚫 User is not an admin. Redirecting to home...");
+      router.replace("/"); // 🔥 ถ้าไม่ใช่ Admin ให้เด้งไปหน้าหลัก
     } else {
-      console.log("✅ Authenticated, rendering page.");
+      console.log("✅ Authenticated as Admin, rendering page.");
       setIsCheckingAuth(false);
     }
-  }, [username, router]);
+  }, [username, isAdmin, router]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,7 +42,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  if (isCheckingAuth) return <p>Loading...</p>; // ✅ ป้องกัน Flickering
+  if (isCheckingAuth) return <p>Loading...</p>;
 
   return (
     <ThemeProvider>

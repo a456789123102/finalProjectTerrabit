@@ -1,19 +1,20 @@
 'use client'; // ใช้คำสั่งนี้ที่บรรทัดแรก
 
 import React, { useEffect, useState } from 'react';
-import { getOwnAddress,deleteAddress } from '@/app/apis/address'; // Make sure to replace 'path-to-getOwnAddress' with the actual path
-import { useRouter } from 'next/navigation'; 
+import { getOwnAddress, deleteAddress } from '@/app/apis/address'; // Make sure to replace 'path-to-getOwnAddress' with the actual path
+import { useRouter } from 'next/navigation';
+import { MapPinPlus } from "lucide-react"
 
 interface Address {
     id: number;
     recipientName: string;
     currentAddress: string;
-    city: string;
-    state: string;
+    provinceName: string;
+    amphureName: string;
+    tambonName: string;
     zipCode: string;
-    country: string;
     mobileNumber: string;
-    email?:string;
+    email?: string;
 }
 
 function MyAddress() {
@@ -26,16 +27,16 @@ function MyAddress() {
             try {
                 const response = await getOwnAddress();
                 console.log('Fetched address:', response);
-               setAddress(response.address);
+                setAddress(response.address);
             } catch (error) {
                 console.error('Error fetching address:', error);
             }
         };
         fetchAddress();
     }, []);
-    const addressAmount = address.length;
+    const addressAmount = address ? address.length : 0;
     const handleEditClick = (id: number) => {
-       router.push(`/address/${id}/edit`);
+        router.push(`/address/${id}/edit`);
     }
 
     const handleDeleteClick = async (id: number) => {
@@ -60,69 +61,79 @@ function MyAddress() {
 
     return (
         <div className='w-full h-screen flex justify-center items-center relative'>
-                  {alertMessage && (
-        <div
-          className={` fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 p-7 rounded shadow-lg ${alertMessage.includes("successfully")
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-            }`}
-        >
-          {alertMessage}
-        </div>
-      )}
+            {alertMessage && (
+                <div
+                    className={` fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 p-7 rounded shadow-lg ${alertMessage.includes("successfully")
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                        }`}
+                >
+                    {alertMessage}
+                </div>
+            )}
             <div className='w-3/5 min-w-96 bg-slate-100 flex flex-col p-7 mt-20 min-h-screen '>
                 <div className='flex flex-row justify-between font-bold py-3'>
-                <div className='text-xl '>You have {addressAmount} Addresses</div>
-                <div className='p-2 bg-slate-600 text-white cursor-pointer hover:bg-slate-800 flex flex-row gap-1' onClick={() => router.push('/address/create')}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6 " >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <div className=''>Add new Address</div>
-                </div>
+                    <div className='text-xl '>You have {addressAmount} Addresses</div>
+                    <div className='p-3 bg-slate-600 text-white cursor-pointer rounded-[4px] hover:bg-slate-800 flex flex-row gap-2' onClick={() => router.push('/address/create')}>
+                        <MapPinPlus />
+                        <div className=''>Add new Address</div>
+                    </div>
                 </div>
                 {addressAmount > 0 ?
                     <div>
                         {address.map((addr) => (
-                            <div key={addr.id} className='border-2 p-4 mb-4 hover:bg-zinc-200 flex flex-row'>
-<div className="w-full flex flex-col">
-  {/* Recipient Name */}
-  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
-    <div className="sm:w-1/4 text-right font-bold">Recipient Name:</div>
-    <div className="sm:w-3/4 sm:pl-2">{addr.recipientName}</div>
-  </div>
-  {/* Current Address */}
-  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
-    <div className="sm:w-1/4 text-right font-bold">Current Address:</div>
-    <div className="sm:w-3/4 sm:pl-2">{addr.currentAddress}</div>
-  </div>
-  {/* City */}
-  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
-    <div className="sm:w-1/4 text-right font-bold">City:</div>
-    <div className="sm:w-3/4 sm:pl-2">{addr.city}</div>
-  </div>
-  {/* State */}
-  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
-    <div className="sm:w-1/4 text-right font-bold">State:</div>
-    <div className="sm:w-3/4 sm:pl-2">{addr.state}</div>
-  </div>
-  {/* Zip Code */}
-  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
-    <div className="sm:w-1/4 text-right font-bold">Zip Code:</div>
-    <div className="sm:w-3/4 sm:pl-2">{addr.zipCode}</div>
-  </div>
-  {/* Phone Number */}
-  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
-    <div className="sm:w-1/4 text-right font-bold">Phone Number:</div>
-    <div className="sm:w-3/4 sm:pl-2">{addr.mobileNumber}</div>
-  </div>
-  {/* E-mail (if exists) */}
-  {addr.email && (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
-      <div className="sm:w-1/4 text-right font-bold">E-mail:</div>
-      <div className="sm:w-3/4 sm:pl-2">{addr.email}</div>
-    </div>
-  )}
-</div>
+                            <div key={addr.id} className='border-2 p-4 mb-4 bg-white hover:bg-zinc-50 flex flex-row'>
+                                <div className="w-full flex flex-col">
+                                    {/* Recipient Name */}
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                        <div className="sm:w-1/4 text-right font-bold">Recipient Name:</div>
+                                        <div className="sm:w-3/4 sm:pl-2">{addr.recipientName}</div>
+                                    </div>
+
+                                    {/* Current Address */}
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                        <div className="sm:w-1/4 text-right font-bold">Current Address:</div>
+                                        <div className="sm:w-3/4 sm:pl-2">{addr.currentAddress}</div>
+                                    </div>
+
+                                    {/* Tambon (Subdistrict) */}
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                        <div className="sm:w-1/4 text-right font-bold">Subdistrict (Tambon):</div>
+                                        <div className="sm:w-3/4 sm:pl-2">{addr.tambonName}</div>
+                                    </div>
+
+                                    {/* Amphure (District) */}
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                        <div className="sm:w-1/4 text-right font-bold">District (Amphure):</div>
+                                        <div className="sm:w-3/4 sm:pl-2">{addr.amphureName}</div>
+                                    </div>
+
+                                    {/* Province */}
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                        <div className="sm:w-1/4 text-right font-bold">Province:</div>
+                                        <div className="sm:w-3/4 sm:pl-2">{addr.provinceName}</div>
+                                    </div>
+
+                                    {/* Zip Code */}
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                        <div className="sm:w-1/4 text-right font-bold">Zip Code:</div>
+                                        <div className="sm:w-3/4 sm:pl-2">{addr.zipCode}</div>
+                                    </div>
+
+                                    {/* Phone Number */}
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                        <div className="sm:w-1/4 text-right font-bold">Phone Number:</div>
+                                        <div className="sm:w-3/4 sm:pl-2">{addr.mobileNumber}</div>
+                                    </div>
+
+                                    {/* E-mail (if exists) */}
+                                    {addr.email && (
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                            <div className="sm:w-1/4 text-right font-bold">E-mail:</div>
+                                            <div className="sm:w-3/4 sm:pl-2">{addr.email}</div>
+                                        </div>
+                                    )}
+                                </div>
 
 
 
@@ -136,7 +147,7 @@ function MyAddress() {
                                             viewBox="0 0 24 24"
                                             strokeWidth="1.5"
                                             stroke="currentColor"
-                                            className="size-7 cursor-pointer"
+                                            className="size-7 cursor-pointer hover:text-yellow-700"
                                         >
                                             <path
                                                 strokeLinecap="round"
