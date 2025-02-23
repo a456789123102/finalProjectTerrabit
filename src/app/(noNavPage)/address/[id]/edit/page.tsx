@@ -6,17 +6,19 @@ import { useRouter } from 'next/navigation';
 
 interface AddressData {
   recipientName: string;
-  street: string;
+  currentAddress: string;
   city: string;
   state: string;
   zipCode: string;
+  mobileNumber: string;
+  email?: string;
 }
 
 function EditAddressPage() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
     const handleSubmit = async (addressData:AddressData) => {
-        if (!addressData.recipientName || !addressData.street || !addressData.city || !addressData.state || !addressData.zipCode) {
+        if (!addressData.recipientName || !addressData.currentAddress || !addressData.city || !addressData.state || !addressData.zipCode || !addressData.mobileNumber) {
             console.error("All fields are required");
             return; 
           }
@@ -27,10 +29,13 @@ function EditAddressPage() {
             const response = await updateAddress(
                 id,
                 addressData.recipientName, 
-                addressData.street, 
+                addressData.currentAddress, 
                 addressData.city,
                 addressData.state,
-                addressData.zipCode);
+                addressData.zipCode,
+                addressData.mobileNumber,
+                addressData.email? addressData.email : undefined 
+              );
                 console.log('address updated response:', response);
                 router.push("/address/myAddress")
         } catch (error) {

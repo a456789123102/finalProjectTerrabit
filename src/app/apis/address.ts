@@ -3,18 +3,22 @@ import axios from "axios";
 
 export const createAddress = async (
   recipientName: string,
-  street: string,
+  currentAddress: string,
   city: string,
   state: string,
-  zipCode: string
+  zipCode: string,
+  mobileNumber: string,
+  email?: string,
 ) => {
   try {
     const res = await axios.post("/api/address/create", {
       recipientName,
-      street,
+      currentAddress,
       city,
       state,
       zipCode,
+      mobileNumber,
+      email,
     });
     return res.data;
   } catch (error) {
@@ -25,18 +29,22 @@ export const createAddress = async (
 export const updateAddress = async (
   id: string,
   recipientName: string,
-  street: string,
+  currentAddress: string,
   city: string,
   state: string,
-  zipCode: string
+  zipCode: string,
+  mobileNumber: string,
+  email?: string,
 ) => {
   try {
     const res = await axios.patch(`/api/address/myAddress/${id}/update`, {
       recipientName,
-      street,
+      currentAddress,
       city,
       state,
       zipCode,
+      mobileNumber,
+      email,
     });
     return res.data;
   } catch (error) {

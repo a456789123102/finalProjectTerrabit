@@ -4,10 +4,12 @@ import Link from "next/link";
 interface Address {
   id: number;
   recipientName: string;
-  street: string;
+  currentAddress: string;
   city: string;
   state: string;
   zipCode: string;
+  mobileNumber: string;
+  email?: string;
 }
 
 interface AddressDropdownProps {
@@ -32,7 +34,7 @@ const AddressDropdown: React.FC<AddressDropdownProps> = ({
           <Button variant="bordered" className="w-full block">
             <div className="text-slate-900 border text-[0.7rem] w-full whitespace-normal break-words text-left">
               {selectedAddressObj
-                ? `${selectedAddressObj.recipientName}, ${selectedAddressObj.street}, ${selectedAddressObj.city}, ${selectedAddressObj.state}, ${selectedAddressObj.zipCode}`
+                ? `${selectedAddressObj.recipientName}, ${selectedAddressObj.currentAddress}, ${selectedAddressObj.city}, ${selectedAddressObj.state}, ${selectedAddressObj.zipCode}`
                 : "Select an address"}
             </div>
           </Button>
@@ -46,7 +48,7 @@ const AddressDropdown: React.FC<AddressDropdownProps> = ({
                 onPress={() => handleSelectAddress(orderId, address.id)} // ใช้ onPress แทน onClick
                 className="bg-gray-100 border-b py-2 text-[0.7rem] my-1 w-full p-2 hover:bg-gray-200 text-slate-700"
               >
-                {`${address.recipientName}, ${address.street}, ${address.city}, ${address.state}, ${address.zipCode}`}
+                {`${address.recipientName}, ${address.currentAddress}, ${address.city}, ${address.state}, ${address.zipCode},${address.mobileNumber},${address.email}`}
               </DropdownItem>
             ))}
           <DropdownItem key="create-address" className="bg-gray-100 py-2 text-[0.8rem] text-blue-600 font-semibold">

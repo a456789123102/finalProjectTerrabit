@@ -2,6 +2,7 @@
 import { getOneAddress } from '@/app/apis/address';
 import { useState, useEffect } from 'react';
 import { useParams} from 'next/navigation';
+import { setEngine } from 'crypto';
 
 interface AddressFormProps {
   onSubmit: (addressData: any) => Promise<void>;
@@ -10,10 +11,12 @@ interface AddressFormProps {
 
 function AddressForm({ onSubmit, mode }: AddressFormProps) {
   const [recipientName, setRecipientName] = useState("");
-  const [street, setStreet] = useState("");
+  const [currentAddress, setCurrentAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [email, setEmail] = useState("");
 
   const { id } = useParams();
   console.log('id:', id);
@@ -28,10 +31,12 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
             console.log('Fetched address:', address);
             
             setRecipientName(address.recipientName || ""); 
-            setStreet(address.street || ""); 
+            setCurrentAddress(address.currentAddress || ""); 
             setCity(address.city || ""); 
             setState(address.state || ""); 
             setZipCode(address.zipCode || ""); 
+            setMobileNumber(address.mobileNumber || "");
+            setEmail(address.email || "");
           }
         } catch (error) {
           console.error('Error fetching address:', error);
@@ -44,7 +49,7 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const addressData = { recipientName, street, city, state, zipCode };
+    const addressData = { recipientName, currentAddress, city, state, zipCode,mobileNumber, email};
     try {
       await onSubmit(addressData);
     } catch (error) {
@@ -68,12 +73,12 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
         />
       </div>
       <div className='flex flex-col'>
-        <label className="font-medium text-gray-600 pr-3">Street:</label>
+        <label className="font-medium text-gray-600 pr-3">Current Address:</label>
         <input
           className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
           type="text"
-          value={street}
-          onChange={(e) => setStreet(e.target.value)}
+          value={currentAddress}
+          onChange={(e) => setCurrentAddress(e.target.value)}
           required
         />
       </div>
@@ -104,6 +109,26 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
           type="text"
           value={zipCode}
           onChange={(e) => setZipCode(e.target.value)}
+          required
+        />
+      </div>
+      <div className='flex flex-col'>
+        <label className="font-medium text-gray-600 pr-3">Phone Number:</label>
+        <input
+          className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          type="text"
+          value={mobileNumber}
+          onChange={(e) => setMobileNumber(e.target.value)}
+          required
+        />
+      </div>
+      <div className='flex flex-col'>
+        <label className="font-medium text-gray-600 pr-3">E-mail(optional):</label>
+        <input
+          className="px-4 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
       </div>

@@ -7,10 +7,12 @@ import { createAddress } from "../../../apis/address";
 
 interface AddressData {
   recipientName: string;
-  street: string;
+  currentAddress: string;
   city: string;
   state: string;
   zipCode: string;
+  mobileNumber: string;
+  email?: string;
 }
 
 function CreateAddressPage() {
@@ -20,10 +22,11 @@ function CreateAddressPage() {
   const handleSubmit = async (addressData: AddressData) => {
     if (
       !addressData.recipientName ||
-      !addressData.street ||
+      !addressData.currentAddress ||
       !addressData.city ||
       !addressData.state ||
-      !addressData.zipCode
+      !addressData.zipCode ||
+      !addressData.mobileNumber 
     ) {
       setAlertMessage("All fields are required.");
       return;
@@ -32,10 +35,12 @@ function CreateAddressPage() {
     try {
       const response = await createAddress(
         addressData.recipientName,
-        addressData.street,
+        addressData.currentAddress,
         addressData.city,
         addressData.state,
-        addressData.zipCode
+        addressData.zipCode,
+        addressData.mobileNumber,
+        addressData.email || ""  
       );
 
       if (response) {

@@ -26,10 +26,12 @@ interface Order {
 interface Address {
   id: number;
   recipientName: string;
-  street: string;
+  currentAddress: string;
   city: string;
   state: string;
   zipCode: string;
+  email?: string;
+  mobileNumber: string;
 }
 
 interface Status {
@@ -213,7 +215,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                         <div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>
                         {(() => {
                           const curradd = addresses.find((address) => address.id === order.addressesId)
-                          return curradd ? <div className="text-[0.8rem] text-slate-800">{curradd.recipientName}, {curradd.street}, {curradd.city}, {curradd.state}, {curradd.zipCode}</div> : <div>No address found</div>;
+                          return curradd ? <div className="text-[0.8rem] text-slate-800">{curradd.recipientName}, {curradd.currentAddress}, {curradd.city}, {curradd.state}, {curradd.zipCode}</div> : <div>No address found</div>;
                         })()
                         }
                       </div>
@@ -221,10 +223,10 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                       <div>
                         {order.addressesId ? (<div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>) : (<div className="text-red-700 text-[1.1rem] mb-2 font-bold">Please Select an address:</div>)}
                         <AddressDropdown
-                          addresses={addresses} // Array of addresses
-                          selectedAddress={order.addressesId} // ID of the selected address
-                          orderId={order.id} // ID of the order
-                          handleSelectAddress={handleSelectAddress} // Callback function to handle address selection
+                          addresses={addresses} 
+                          selectedAddress={order.addressesId} 
+                          orderId={order.id}
+                          handleSelectAddress={handleSelectAddress} 
                         />
                       </div>
                     )

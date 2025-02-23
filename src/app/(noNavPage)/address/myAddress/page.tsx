@@ -7,10 +7,13 @@ import { useRouter } from 'next/navigation';
 interface Address {
     id: number;
     recipientName: string;
+    currentAddress: string;
     city: string;
     state: string;
     zipCode: string;
     country: string;
+    mobileNumber: string;
+    email?:string;
 }
 
 function MyAddress() {
@@ -81,12 +84,48 @@ function MyAddress() {
                     <div>
                         {address.map((addr) => (
                             <div key={addr.id} className='border-2 p-4 mb-4 hover:bg-zinc-200 flex flex-row'>
-                                <div className='w-full flex flex-col'>
-                                    <div className='flex flex-row gap-2'><div className="font-bold">Recipient Name :</div> <div>{addr.recipientName}</div></div>
-                                    <div className='flex flex-row gap-2'><div className="font-bold">City :</div> <div>{addr.city}</div></div>
-                                    <div className='flex flex-row gap-2'><div className="font-bold">State :</div> <div>{addr.state}</div></div>
-                                    <div className='flex flex-row gap-2'><div className="font-bold">Zip Code :</div> <div>{addr.zipCode}</div></div>
-                                </div>
+<div className="w-full flex flex-col">
+  {/* Recipient Name */}
+  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
+    <div className="sm:w-1/4 text-right font-bold">Recipient Name:</div>
+    <div className="sm:w-3/4 sm:pl-2">{addr.recipientName}</div>
+  </div>
+  {/* Current Address */}
+  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
+    <div className="sm:w-1/4 text-right font-bold">Current Address:</div>
+    <div className="sm:w-3/4 sm:pl-2">{addr.currentAddress}</div>
+  </div>
+  {/* City */}
+  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
+    <div className="sm:w-1/4 text-right font-bold">City:</div>
+    <div className="sm:w-3/4 sm:pl-2">{addr.city}</div>
+  </div>
+  {/* State */}
+  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
+    <div className="sm:w-1/4 text-right font-bold">State:</div>
+    <div className="sm:w-3/4 sm:pl-2">{addr.state}</div>
+  </div>
+  {/* Zip Code */}
+  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
+    <div className="sm:w-1/4 text-right font-bold">Zip Code:</div>
+    <div className="sm:w-3/4 sm:pl-2">{addr.zipCode}</div>
+  </div>
+  {/* Phone Number */}
+  <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
+    <div className="sm:w-1/4 text-right font-bold">Phone Number:</div>
+    <div className="sm:w-3/4 sm:pl-2">{addr.mobileNumber}</div>
+  </div>
+  {/* E-mail (if exists) */}
+  {addr.email && (
+    <div className="flex flex-col sm:flex-row items-start sm:items-center py-1">
+      <div className="sm:w-1/4 text-right font-bold">E-mail:</div>
+      <div className="sm:w-3/4 sm:pl-2">{addr.email}</div>
+    </div>
+  )}
+</div>
+
+
+
                                 <div className="flex flex-col items-center justify-between space-y-2">
 
                                     {/* Edit Icon */}
