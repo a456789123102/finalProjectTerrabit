@@ -1,11 +1,13 @@
-import type { strict } from "assert";
 import axios from "axios";
 
 export const createAddress = async (
   recipientName: string,
   currentAddress: string,
+  provinceId: number,
   provinceName: string,
+  amphureId: number,
   amphureName: string,
+  tambonId: number,
   tambonName: string,
   zipCode: string,
   mobileNumber: string,
@@ -15,8 +17,11 @@ export const createAddress = async (
     const res = await axios.post("/api/address/create", {
       recipientName,
       currentAddress,
+      provinceId,
       provinceName,
+      amphureId,
       amphureName,
+      tambonId,
       tambonName,
       zipCode,
       mobileNumber,
@@ -32,8 +37,11 @@ export const updateAddress = async (
   id: string,
   recipientName: string,
   currentAddress: string,
+  provinceId: number,
   provinceName: string,
+  amphureId: number,
   amphureName: string,
+  tambonId: number,
   tambonName: string,
   zipCode: string,
   mobileNumber: string,
@@ -43,8 +51,11 @@ export const updateAddress = async (
     const res = await axios.patch(`/api/address/myAddress/${id}/update`, {
       recipientName,
       currentAddress,
+      provinceId,
       provinceName,
+      amphureId,
       amphureName,
+      tambonId,
       tambonName,
       zipCode,
       mobileNumber,
@@ -55,6 +66,7 @@ export const updateAddress = async (
     throw error;
   }
 };
+
 
 export const getOwnAddress = async () => {
   try {

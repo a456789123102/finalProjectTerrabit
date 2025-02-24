@@ -8,8 +8,11 @@ import { createAddress } from "../../../apis/address";
 interface AddressData {
   recipientName: string;
   currentAddress: string;
+  provinceId: number;
   provinceName: string;
+  amphureId: number;
   amphureName: string;
+  tambonId: number;
   tambonName: string;
   zipCode: string;
   mobileNumber: string;
@@ -24,13 +27,20 @@ function CreateAddressPage() {
     if (
       !addressData.recipientName ||
       !addressData.currentAddress ||
+      !addressData.provinceId ||
       !addressData.provinceName ||
+      !addressData.amphureId ||
       !addressData.amphureName ||
+      !addressData.tambonId ||
       !addressData.tambonName ||
       !addressData.zipCode ||
       !addressData.mobileNumber
     ) {
       setAlertMessage("All fields are required.");
+
+      setTimeout(() => {
+        setAlertMessage(null);
+      },3000)
       return;
     }
 
@@ -38,8 +48,11 @@ function CreateAddressPage() {
       const response = await createAddress(
         addressData.recipientName,
         addressData.currentAddress,
+        addressData.provinceId,
         addressData.provinceName,
+        addressData.amphureId,
         addressData.amphureName,
+        addressData.tambonId,
         addressData.tambonName,
         addressData.zipCode,
         addressData.mobileNumber,
@@ -57,7 +70,6 @@ function CreateAddressPage() {
       console.error("Error creating Address:", error);
     }
   };
-
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center relative">
       {alertMessage && (

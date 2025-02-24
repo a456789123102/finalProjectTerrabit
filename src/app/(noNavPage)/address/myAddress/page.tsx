@@ -1,7 +1,7 @@
 'use client'; // ใช้คำสั่งนี้ที่บรรทัดแรก
 
 import React, { useEffect, useState } from 'react';
-import { getOwnAddress, deleteAddress } from '@/app/apis/address'; // Make sure to replace 'path-to-getOwnAddress' with the actual path
+import { getOwnAddress, deleteAddress } from '@/app/apis/address'; 
 import { useRouter } from 'next/navigation';
 import { MapPinPlus } from "lucide-react"
 
@@ -27,13 +27,28 @@ function MyAddress() {
             try {
                 const response = await getOwnAddress();
                 console.log('Fetched address:', response);
-                setAddress(response.address);
+                
+                if (response?.addresses) {
+                    setAddress(response.addresses);
+                    console.log('Updated address (inside fetch):', response.addresses);
+                } else {
+                    console.warn(" API response ไม่มี addresses:", response);
+                }
             } catch (error) {
                 console.error('Error fetching address:', error);
             }
         };
         fetchAddress();
     }, []);
+    
+    
+    
+
+    useEffect(() => {
+        console.log('Updated address:', address);
+    }, [address]);
+    
+
     const addressAmount = address ? address.length : 0;
     const handleEditClick = (id: number) => {
         router.push(`/address/${id}/edit`);
@@ -83,7 +98,7 @@ function MyAddress() {
                     <div>
                         {address.map((addr) => (
                             <div key={addr.id} className='border-2 p-4 mb-4 bg-white hover:bg-zinc-50 flex flex-row'>
-                                <div className="w-full flex flex-col">
+                                <div className="w-full flex flex-col gap-1">
                                     {/* Recipient Name */}
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center">
                                         <div className="sm:w-1/4 text-right font-bold">Recipient Name:</div>
