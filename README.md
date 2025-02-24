@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+First, run the development server: this is only frontend NextJS side. if you want to see full API don't forget to get my backend file too!!
 
 ```bash
 npm run dev
