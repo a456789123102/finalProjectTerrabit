@@ -64,7 +64,6 @@ try {
 }
 
 export const checkoutCart = async () => {
-  console.log("you are here")
   try {
     const res = await axios.post(`/api/cart/checkout`);
     return res.data;

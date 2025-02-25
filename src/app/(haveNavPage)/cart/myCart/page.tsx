@@ -68,7 +68,6 @@ function MyCart() {
 
   const handleCheckout = async () => {
     try {
-      console.log("Checkout here naja")
       await checkoutCart();
       fetchProductCart();
       router.push('/user/purchase')

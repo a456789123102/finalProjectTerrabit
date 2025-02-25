@@ -40,10 +40,8 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
       const fetchAddress = async () => {
         try {
           const response = await getOneAddress(Number(id));
-          console.log("Fetched address:", response);
           if (response.address) {
             const address = response.address[0];
-            console.log("address:", address);
             setRecipientName(address.recipientName || "");
             setCurrentAddress(address.currentAddress || "");
             setProvinceId(address.provinceId);
@@ -77,7 +75,6 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
     fetchProvinces();
   }, []);
 
-  /** โหลดข้อมูลอำเภอเมื่อเลือกจังหวัด */
   useEffect(() => {
     if (provinceId !== null) {
       console.log("Fetching Amphures for Province ID:", provinceId);
@@ -85,8 +82,6 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
         try {
           const response = await getAmphure(provinceId);
           setAmphures(response);
-
-          // ✅ ถ้าเป็นโหมดสร้าง (create) ให้ reset ค่า
           if (mode !== "edit") {
             setAmphureId(null);
             setAmphureName("");
@@ -103,7 +98,6 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
     }
   }, [provinceId]);
 
-  /** โหลดข้อมูลตำบลเมื่อเลือกอำเภอ */
   useEffect(() => {
     if (amphureId !== null) {
       console.log("Fetching Tambons for Amphure ID:", amphureId);
@@ -158,6 +152,8 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
     }
   }, [mode, id]);
 
+ const emailFiltered = isEmailChecked && email ? email: "";
+
   /** บันทึกข้อมูล */
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -172,7 +168,7 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
       tambonName,
       zipCode,
       mobileNumber,
-      email,
+      emailFiltered,
     };
     console.log("Submitting address data:", addressData);
     try {
@@ -286,19 +282,21 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
     </div>
   </div>
 </div>
-<div className="flex items-center gap-2">
+<div className="flex gap-2 flex-col">
+<div className="flex flex-row gap-2">
 <input
   type="checkbox"
   checked={isEmailChecked}
   onChange={() => setIsEmailChecked(!isEmailChecked)}
   className="w-4 h-4"
 />
-<div className="font-medium text-gray-600 whitespace-nowrap">
+<div className="font-medium text-gray-600  text-[0.8rem]">
   Receive Purchase Details via Email
+</div>
 </div>
 {(isEmailChecked || email) && (
   <input 
-    className="p-2 px-5 border border-gray-300" 
+    className="p-2 px-5 border w-2/3 border-gray-300" 
     type="text" 
     value={email} 
     onChange={(e) => setEmail(e.target.value)} 

@@ -48,7 +48,7 @@ const CreateProductPage = () => {
         text: 'Your product has been successfully created.',
         showConfirmButton: false,
       });
-      router.push(`/admin/product/${response.product.id}/edit`);
+      router.push(`/admin/manage/product/${response.product.id}/edit`);
     } catch (error) {
       console.error('Error creating product:', error);
       Swal.fire({

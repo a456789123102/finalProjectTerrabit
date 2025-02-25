@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { myOrder, updateOrderAddress, deleteOrder,cancelOrder } from "@/app/apis/order";
+import { myOrder, updateOrderAddress, deleteOrder, refoundOrder, cancelledOrder } from "@/app/apis/order";
 import { getOwnAddress } from "@/app/apis/address";
 import AddressDropdown from "../components/addressDropdown";
 
 import SlipSection from "../components/slipSection";
 import { deleteImage, uploadSlipImage } from "@/app/apis/slipImage";
+import ActionSection from "../components/ActionSection";
 
 interface OrderItem {
   id: string;
@@ -44,7 +45,7 @@ interface Status {
 function Orders() {
   const [orders, setOrders] = useState<Order[]>([]); // Use Order interface
   const [addresses, setAddresses] = useState<Address[]>([]); // Use Address interface
-  const [status, setStatus] = useState<string>("awaiting_slip_upload"); // Status key
+  const [status, setStatus] = useState<string[]>(["pending_payment_proof"]); // Status key
   const [isModalOpen, setIsModalOpen] = useState(false);
 
 
@@ -69,7 +70,7 @@ function Orders() {
     try {
       const addressItems = await getOwnAddress();
       console.log("Fetched addresses:", JSON.stringify(addressItems, null, 2));
-      setAddresses(addressItems.address); // อัปเดตข้อมูล address
+      setAddresses(addressItems.addresses); // อัปเดตข้อมูล address
     } catch (error) {
       console.error("Error fetching addresses:", error);
     }
@@ -97,69 +98,80 @@ function Orders() {
     }
   }
 
-  const handleClearSlipImage = async (orderId: number,status:string) =>{
-try {
+  const handleClearSlipImage = async (orderId: number, status: string) => {
+    try {
 
-if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
-  const res = await deleteImage(orderId);
-  console.log("clear slipImage",res);
-  fetchOrders();
-}
-} catch (error) {
-  console.error("error clearing slip",error)
-}
+      if (status === "pending_payment_proof" || status === "pending_payment_verification") {
+        const res = await deleteImage(orderId);
+        console.log("clear slipImage", res);
+        fetchOrders();
+      }
+    } catch (error) {
+      console.error("error clearing slip", error)
+    }
   }
 
 
-  const handleOrderCancel = async (orderId:number) => {
+  const handleRefoundOrder = async (orderId: number) => {
     try {
-      console.log("request cancle orderId:", orderId);
-      const res = await cancelOrder(orderId);
+      console.log("request Refound orderId:", orderId);
+      const res = await refoundOrder(orderId);
       console.log("request cancel order:", JSON.stringify(res, null, 2));
       fetchOrders();
-      setStatus("awaiting_rejection");
-    } catch (error) {
-      console.error("Error deleting order:", error);
-  }
-}
-
-  const handleOrderDelete = async (orderId: number) => {
-    try {
-      console.log("orderId:", orderId);
-      const res = await deleteOrder(orderId);
-      console.log("Deleted order:", JSON.stringify(res, null, 2));
-      fetchOrders();
+      setStatus(["pending_refound"]);
     } catch (error) {
       console.error("Error deleting order:", error);
     }
   }
 
+  const handleCancelledOrder = async (orderId: number) => {
+    try {
+      console.log("request Refound orderId:", orderId);
+      const res = await cancelledOrder(orderId);
+      console.log("request cancel order:", JSON.stringify(res, null, 2));
+      fetchOrders();
+      setStatus(["pending_refound"]);
+    } catch (error) {
+      console.error("Error deleting order:", error);
+    }
+  }
+
+  // const handleOrderDelete = async (orderId: number) => {
+  //   try {
+  //     console.log("orderId:", orderId);
+  //     const res = await deleteOrder(orderId);
+  //     console.log("Deleted order:", JSON.stringify(res, null, 2));
+  //     fetchOrders();
+  //   } catch (error) {
+  //     console.error("Error deleting order:", error);
+  //   }
+  // }
+
   const handleImageClick = () => {
-    setIsModalOpen(true); // เปิด Modal
+    setIsModalOpen(true);
   };
 
   const handleModalClose = () => {
-    setIsModalOpen(false); // ปิด Modal
+    setIsModalOpen(false);
   };
 
-  const statuses: Status[] = [
-    { key: "awaiting_slip_upload", label: "To Pay" },
-    { key: "awaiting_confirmation", label: "To Confirmed" },
-    { key: "awaiting_rejection", label: "To Rejected" },
-    { key: "order_approved", label: "Approved" },
-    { key: "order_rejected", label: "Rejected" },
-    { key: "order_cancelled", label: "Cancelled" },
+  const statuses: { key: string[], label: string }[] = [
+    { key: ["pending_payment_proof"], label: "To Pay" },
+    { key: ["pending_payment_verification"], label: "Awaiting Confirm" },
+    { key: ["payment_verified"], label: "Payment Verified" },
+    { key: ["cancelled_by_admin", "cancelled_by_user", "refund_rejected"], label: "Unsuccessful Order" },
+    { key: ["refund_completed"], label: "Refund Completed" },
   ];
 
   return (
     <div className="flex flex-col items-center gap-3 min-w-[590px]">
       <div className="self-start p-2 bg-white w-full pl-5">Checkout Section</div>
       <div className="bg-gray-100 w-5/6 justify-center flex flex-col mt-5 p-6 m-4">
-      <div className="flex flex-row bg-white justify-between w-full shadow-sm">
+        <div className="flex flex-row bg-white justify-between w-full shadow-sm">
           {statuses.map((item) => (
             <button
               key={item.key}
-              className={`p-4 px-6 transition-all duration-300 hover:text-yellow-600 text-[1.1rem] w-full ${status === item.key
+              className={`p-4 px-6 transition-all duration-300 hover:text-yellow-600 text-[1.1rem] w-full ${item.key.every((k) => status.includes(k))
                 ? "border-b-2 border-yellow-600 text-yellow-600"
                 : "border-b-2"
                 }`}
@@ -174,7 +186,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
             orders.map((order) => (
               <div
                 key={order.id}
-                className="shadow-sm p-3 flex flex-row justify-between min-h-20 bg-white"
+                className="font-poppins shadow-sm p-3 flex flex-row justify-between min-h-20 bg-white"
               >
                 <div className="border-x-2 p-2 w-1/4 flex flex-col justify-between">
                   <div>
@@ -211,7 +223,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                 </div>
                 <div className="border-r-2 w-1/4 p-3 flex flex-col gap-2">
                   {
-                    order.addressesId && order.status !== "awaiting_slip_upload" && order.status !== "awaiting_confirmation" ? (
+                    order.addressesId && order.status !== "pending_payment_proof" && order.status !== "pending_payment_verification" ? (
                       <div>
                         <div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>
                         {(() => {
@@ -223,7 +235,7 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                           ) : (
                             <div>No address found</div>
                           );
-                          
+
                         })()
                         }
                       </div>
@@ -231,10 +243,10 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
                       <div>
                         {order.addressesId ? (<div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>) : (<div className="text-red-700 text-[1.1rem] mb-2 font-bold">Please Select an address:</div>)}
                         <AddressDropdown
-                          addresses={addresses} 
-                          selectedAddress={order.addressesId} 
+                          addresses={addresses}
+                          selectedAddress={order.addressesId}
                           orderId={order.id}
-                          handleSelectAddress={handleSelectAddress} 
+                          handleSelectAddress={handleSelectAddress}
                         />
                       </div>
                     )
@@ -242,14 +254,20 @@ if(status === "awaiting_slip_upload"|| status === "awaiting_confirmation"){
 
                 </div>
                 <div className="border-r-2 w-1/4 p-3">
-                  <div className="text-[1.1rem] mb-2 font-bold">Action:</div>
+                  {/* <div className="text-[1.1rem] mb-2 font-bold">Action:</div>
                   <div className="text-[0.8rem] text-white">
-                    {order.status === "awaiting_slip_upload" ? (
+                    {order.status === "pending_payment_proof" ? (
                       <button className="p-2 px-4 bg-red-500 hover:bg-red-400 shadow-md rounded" onClick={() => { handleOrderDelete(order.id) }}>Delete this Order</button>
-                    ) : order.status === "awaiting_confirmation" || order.status === "order_approved" ? 
-                    (<button className="p-2 px-4 bg-orange-500 hover:bg-orange-400  shadow-md rounded" onClick={() => {handleOrderCancel(order.id) }}>Cancel this order.</button>) :
+                    ) : order.status === "pending_payment_verification" || order.status === "payment_verified" ? 
+                    (<button className="p-2 px-4 bg-orange-500 hover:bg-orange-400  shadow-md rounded" onClick={() => {handleRefoundOrder(order.id) }}>Cancel this order.</button>) :
                       <button className="p-2 px-4 bg-red-400 hover:bg-red-500  shadow-md rounded">Undo the cancellation.</button>}
-                  </div>
+                  </div> */}
+                  <ActionSection
+                    order={order}
+                    handleRefoundOrder={handleRefoundOrder}
+                    handleCancelledOrder={handleCancelledOrder}
+                  />
+
                 </div>
               </div>
             ))

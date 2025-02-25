@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@/app/context/themeContext';
 import PaginationControls from '../../components/PaginationControls';
 import useFetchOrders from '../../hooks/orders/useFetchOrders';
@@ -34,7 +34,7 @@ type SelectedOrders = Record<number, boolean>;
 
 function PurchaseTable() {
     const { themeColors } = useTheme();
-    const [status, setStatus] = useState<string[]>([]);
+    const [status, setStatus] = useState<string[]>(["pending_payment_verification"]);
     const [selectedOrders, setSelectedOrders] = useState<SelectedOrders>({});
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [tempSearchQuery, setTempSearchQuery] = useState<string>('');
@@ -46,6 +46,9 @@ function PurchaseTable() {
         totalOrders: 0,
     });
     const [forceFetch, setForceFetch] = useState(false);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     const orders: Order[] = useFetchOrders(status, forceFetch, searchQuery, pagination, setPagination) ?? [];
 
@@ -70,13 +73,13 @@ function PurchaseTable() {
 
     const handleReject = async (orderId: number, currentStatus: string) => {
         try {
-            const validStatus = ['awaiting_confirmation', 'awaiting_rejection'];
+            const validStatus = ['pending_payment_verification', 'pending_refound'];
             if (!validStatus.includes(currentStatus)) {
-                console.error(`Invalid status: ${currentStatus}. Expected 'awaiting_confirmation' or 'awaiting_rejection'`);
+                console.error(`Invalid status: ${currentStatus}.`);
                 throw new Error(`Invalid status: ${currentStatus}`);
             }
 
-            const updatedStatus = 'order_rejected';
+            const updatedStatus = "cancelled_by_admin";
             console.log(`Order ${orderId} rejected from status ${currentStatus} with new status: ${updatedStatus}`);
 
             const res = await updateOrderStatus(orderId, updatedStatus);
@@ -94,12 +97,12 @@ function PurchaseTable() {
     };
     const handleApprove = async (orderId: number, currentStatus: string) => {
         try {
-            if (!['awaiting_confirmation', 'awaiting_rejection'].includes(currentStatus)) {
+            if (!["pending_payment_verification", "pending_refound"].includes(currentStatus)) {
                 console.error(`Invalid status: ${currentStatus}`);
                 return;
             }
 
-            let updatedStatus = currentStatus === 'awaiting_confirmation' ? "order_approved" : "order_cancelled";
+            let updatedStatus = currentStatus === "pending_payment_verification" ? "payment_verified" : "refund_completed";
 
             console.log(`Updating Order ${orderId} -> ${updatedStatus}`);
             const res = await updateOrderStatus(orderId, updatedStatus);
@@ -162,8 +165,6 @@ function PurchaseTable() {
 
         try {
             const failedOrders: string[] = [];
-
-            // ใช้ for...of เพื่อจัดการ asynchronous อย่างถูกต้อง
             for (const [orderIdStr, isSelected] of Object.entries(selectedOrders)) {
                 if (isSelected) {
                     const orderId = parseInt(orderIdStr, 10);
@@ -177,9 +178,9 @@ function PurchaseTable() {
 
                     try {
                         if (actionType === 'approve') {
-                            await handleApprove(orderId, order.status); // รอให้ handleApprove เสร็จสิ้น
+                            await handleApprove(orderId, order.status); // รอให้ handleApprove เสร็จ
                         } else if (actionType === 'reject') {
-                            await handleReject(orderId, order.status); // รอให้ handleReject เสร็จสิ้น
+                            await handleReject(orderId, order.status); // รอให้ handleReject เสร็จ
                         }
                     } catch (error) {
                         console.error(`Failed to update Order ID ${orderId}:`, error);
@@ -223,7 +224,7 @@ function PurchaseTable() {
 
     const handleSelectAll = () => {
         const selectableOrders = orders
-            .filter((order) => ['awaiting_confirmation', 'awaiting_rejection'].includes(order.status))
+            .filter((order) => ["pending_payment_verification","pending_refound"].includes(order.status))
             .reduce<SelectedOrders>((acc, order) => {
                 acc[order.id] = true;
                 return acc;
@@ -236,6 +237,19 @@ function PurchaseTable() {
         setSelectedOrders({});
     };
 
+const handleModelOpen = (src: string) => {
+    setSelectedImage(src);
+    setIsModalOpen(true);
+};
+
+const handleModelClose = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+};
+    useEffect(() => {
+        console.log("Model:",isModalOpen); 
+    },[isModalOpen])
+
     const columns = useMemo(() => {
         return columnKeysFiltered.map((key) => ({
             header: key === 'slipUrl' ? 'Slip Image' : key.charAt(0).toUpperCase() + key.slice(1),
@@ -245,7 +259,16 @@ function PurchaseTable() {
 
                 if (key === 'slipUrl') {
                     return value ? (
-                        <Image src={value as string} width={200} height={200} alt="Slip Image" />
+                        <div>
+                            <Image 
+                                src={value as string} 
+                                width={100} 
+                                height={100} 
+                                alt="Slip Image" 
+                                className="cursor-pointer"
+                                onClick={() => handleModelOpen(value as string)}
+                            />
+                        </div>
                     ) : (
                         <div className="text-red-700">No Image</div>
                     );
@@ -297,7 +320,7 @@ function PurchaseTable() {
                 if (key === 'Select') {
                     return (
                         <div className="flex justify-center">
-                            {['awaiting_confirmation', 'awaiting_rejection'].includes(row.original.status) ? (
+                            {["pending_payment_verification", "pending_refound"].includes(row.original.status) ? (
                                 <input
                                     type="checkbox"
                                     checked={selectedOrders[row.original.id] || false}
@@ -416,6 +439,28 @@ function PurchaseTable() {
                 pagination={pagination}
                 setPagination={setPagination}
             />
+            {isModalOpen && selectedImage && (
+    <div 
+        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50"
+        onClick={handleModelClose}
+    >
+        <div className="relative p-4  rounded-lg">
+            <button
+                className="absolute top-4 right-4 text-white bg-red-500 px-3 py-1 rounded"
+                onClick={handleModelClose}
+            >
+                X
+            </button>
+            <Image
+                src={selectedImage}
+                width={800} 
+                height={800}
+                alt="Expanded Slip Image"
+                className="max-w-full max-h-screen object-contain cursor-pointer"
+            />
+        </div>
+    </div>
+)}
         </div>
     );
 }

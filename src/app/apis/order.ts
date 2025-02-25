@@ -1,12 +1,14 @@
 import axios from "axios";
 
-export const myOrder = async (status: string) => {
+export const myOrder = async (status: string[]) => {
   try {
-    const res = await axios.get(`/api/order/${status}/myOrder`);
+const params = new URLSearchParams();
+    status.forEach((s) => params.append("status", s)); 
+    const res = await axios.get(`/api/order/myOrder`, {params});
     console.log("Response from API:", JSON.stringify(res.data, null, 2)); // Debug API Response
     return res.data; // คาดหวังเป็น Array ตรง ๆ
   } catch (error) {
-    console.error("Error fetching order", error.response || error.message);
+    console.error("Error fetching order");
     throw error;
   }
 };
@@ -33,9 +35,19 @@ export const deleteOrder = async (id: number) => {
   }
 }
 
-export const cancelOrder = async (id: number) => {
+export const cancelledOrder = async (id: number) => {
   try {
-    const statusRequest = "awaiting_rejection";
+    const statusRequest = "cancelled_by_user";
+    const res = await axios.patch(`/api/order/${id}/userUpdateStatus`, { status: statusRequest });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const refoundOrder = async (id: number) => {
+  try {
+    const statusRequest = "pending_refound";
     const res = await axios.patch(`/api/order/${id}/userUpdateStatus`, { status: statusRequest });
     return res.data;
   } catch (error) {

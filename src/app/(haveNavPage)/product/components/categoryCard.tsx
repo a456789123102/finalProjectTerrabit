@@ -47,19 +47,25 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
   console.log("🎯 Selected Options for Select:", selectedOptions);
 
   return (
-    <div className='text-sm'>
-      <Select
-        classNamePrefix="select"
-        options={categories}
-        isMulti={isMulti}
-        isDisabled={isLoading}
-        isClearable={true}
-        isSearchable={true}
-        onChange={handleChange}
-        placeholder={isLoading ? "Loading categories..." : "Select Category"}
-        value={selectedOptions} 
-      />
-    </div>
+<div className='text-sm overflow-visible'>
+  <Select
+    classNamePrefix="select"
+    options={categories}
+    isMulti={isMulti}
+    isDisabled={isLoading}
+    isClearable={true}
+    isSearchable={true}
+    onChange={handleChange}
+    placeholder={isLoading ? "Loading categories..." : "Select Category"}
+    value={selectedOptions}
+    menuPortalTarget={document.body} // แก้ปัญหา dropdown ถูกตัด
+    menuPosition="fixed" // ให้ dropdown อยู่บนสุด
+    styles={{
+      menuPortal: (base) => ({ ...base, zIndex: 9999 }), // ปรับ z-index
+    }}
+  />
+</div>
+
   );
 };
 

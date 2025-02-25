@@ -164,7 +164,7 @@ function ProductTable() {
         />
         <Link
           className="  px-4 py-2 h-10 hover:text-yellow-300 text-[0.8rem]  bg-blue-500 text-white rounded-[4px]"
-          href={`/admin/product/create`}
+          href={`/admin/manage/product/create`}
         >
           <div className="flex flex-row items-center gap-1">
             <SquarePlus />

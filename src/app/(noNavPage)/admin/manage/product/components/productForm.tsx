@@ -52,7 +52,7 @@ const [existingImageDetail2Id, setExistingImageDetail2Id] = useState<number | nu
 
         setName(product.name || '');
         setPrice(product.price || '');
-        setDiscount(product.discount || 0);
+        setDiscount(product.discount*100 || 0);
         setQuantity(product.quantity || '');
         setDescription(product.description || '');
 

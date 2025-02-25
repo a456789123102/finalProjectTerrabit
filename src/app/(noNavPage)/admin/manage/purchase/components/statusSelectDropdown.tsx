@@ -13,20 +13,23 @@ interface StatusSelectDropdownProps {
 
 const StatusSelectDropdown = ({ status, setStatus }: StatusSelectDropdownProps) => {
   const statuses = useMemo(() => [
-    { key: "awaiting_slip_upload", label: "To Pay" },
-    { key: "awaiting_confirmation", label: "To Confirmed" },
-    { key: "awaiting_rejection", label: "To Rejected" },
-    { key: "order_approved", label: "Approved" },
-    { key: "order_rejected", label: "Rejected" },
-    { key: "order_cancelled", label: "Cancelled" },
+    { key: "pending_payment_proof", label: "To Pay" },
+    { key: "pending_payment_verification", label: "Awaiting Confirmed" },
+    { key: "pending_refound", label: "To Refound" },
+    { key: "payment_verified", label: "Payment Verified" },
+    { key: "cancelled_by_admin", label: "Cancelled by Admin" },
+    { key: "cancelled_by_user", label: "Cancelled by User" },
+    { key: "refund_completed", label: "Refund Completed" },
+    { key: "refund_rejected", label: "Refund Rejected" },
   ], []);
+
 
   const [selectedOptions, setSelectedOptions] = useState<Status[]>([]);
 
   useEffect(() => {
     const initialSelectedOptions = status.map(key => statuses.find(s => s.key === key)).filter(Boolean) as Status[];
     setSelectedOptions(initialSelectedOptions);
-  }, [status, statuses]); 
+  }, [status, statuses]);
 
   const handleChange = (selectedOptions: Status[]) => {
     setSelectedOptions(selectedOptions);
@@ -35,19 +38,21 @@ const StatusSelectDropdown = ({ status, setStatus }: StatusSelectDropdownProps) 
   };
 
   return (
-<Select
-  classNamePrefix="custom-select"
-  isMulti={true}
-  isClearable={true}
-  isSearchable={true}
-  placeholder={"Select order status..."}
-  options={statuses}
-  value={selectedOptions}
-  className="text-sm text-black w-[200px] h-10" // กำหนดขนาดคงที่
-  onChange={handleChange}
-  getOptionValue={(option) => option.key}
-  getOptionLabel={(option) => option.label}
-/>
+    <Select
+      classNamePrefix="custom-select"
+      isMulti={true}
+      isClearable={true}
+      isSearchable={true}
+      placeholder={"Select order status..."}
+      options={statuses}
+      value={selectedOptions}
+      className="text-sm text-black w-[200px] h-10" // กำหนดขนาดคงที่
+      onChange={handleChange}
+      getOptionValue={(option) => option.key}
+      getOptionLabel={(option) => option.label}
+
+      
+    />
 
   );
 };

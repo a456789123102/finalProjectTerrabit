@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import Image from "next/image";
+import { Trash2, Upload } from 'lucide-react';
 
-function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, handleUploadSlip,handleClearSlipImage }) {
+function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, handleUploadSlip, handleClearSlipImage }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -42,65 +43,69 @@ function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, h
         <div className="text-red-700 text-[1.1rem] mb-2 font-bold">Upload Your payment slip:</div>
       )}
 
-      {/* อัพโหลดสลิป */}
-      {order.status === "awaiting_slip_upload" && !order.slipUrl && (
+      {/* อัพสลิป */}
+      {order.status === "pending_payment_proof" && !order.slipUrl && (
         <div className="flex flex-col gap-2 text-[0.7rem] text-slate-700">
           <input
             type="file"
             placeholder="Slip Image"
-             accept="image/jpeg, image/png"
-             onChange={handleFileChange}
+            accept="image/jpeg, image/png"
+            onChange={handleFileChange}
           />
-            {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-          {/* ปุ่ม Upload จะแสดงเมื่อมีรูปภาพ */}
+          {errorMessage && <div className="text-red-600">{errorMessage}</div>}
           {selectedFile && (
-             <div className="flex flex-col items-start gap-2">
-          <div>Selected File: {selectedFile.name}</div>
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 self-center"
-              onClick={() => handleUploadSlip(order.id, selectedFile)} // ส่งไฟล์ไปยังฟังก์ชันอัพโหลด
-            >
-              Upload
-            </button>
+            <div className="flex flex-col items-start gap-2">
+              <div>Selected File: {selectedFile.name}</div>
+              <div className="px-4 py-2 bg-blue-500 text-white rounded-[4px] cursor-pointer hover:bg-blue-700 self-center flex flex-row gap-1 items-center" onClick={() => handleUploadSlip(order.id, selectedFile)} >
+                <Upload size={13}/>
+                <div>   Upload</div>
+              </div>
             </div>
           )}
         </div>
       )}
-
-      {/* แสดงรูปภาพถ้ามี slipUrl */}
       {order.slipUrl && (
-  <div className="flex flex-col gap-2 items-center">
-    <Image
-      src={order.slipUrl}
-      alt="Slip"
-      width={100}
-      height={100}
-      className="cursor-pointer"
-      onClick={handleImageClick} // คลิกเพื่อเปิด Modal
-    />
-    {order.status === "awaiting_slip_upload"|| order.status === "awaiting_confirmation"&& <button className="text-sm px-3 py-1 text-white bg-red-500 rounded" onClick={()=>{handleClearSlipImage(order.id,order.status)}}>Delete Image</button>}
-   
-  </div>
-)}
+        <div className="flex flex-col w-full justify-center gap-4 items-center">
+  <Image
+    src={order.slipUrl}
+    alt="Slip"
+    width={100}
+    height={100}
+    className="cursor-pointer"
+    onClick={handleImageClick}
+  />
+  
+  {(order.status === "pending_payment_proof" || order.status === "pending_payment_verification") && (
+    <div className="flex items-baseline">
+      <div 
+        className="flex items-center gap-1 px-3 py-2 text-[0.8rem] text-white bg-red-500 hover:bg-red-600 rounded-[4px] cursor-pointer"
+        onClick={() => { handleClearSlipImage(order.id, order.status) }}
+      >
+        <Trash2 size={14} />
+        <span>Delete</span>
+      </div>
+    </div>
+  )}
+</div>
 
+      )}
 
-      {/* Modal สำหรับรูปภาพขยาย */}
       {isModalOpen && (
         <div
           className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center z-50"
           onClick={handleModalClose} // คลิกนอก Modal เพื่อปิด
         >
-          <div className="relative">
+          <div className="relative p-10 px-20">
             {/* รูปภาพขยาย */}
             <Image
               src={order.slipUrl}
               alt="Slip Enlarged"
-              width={800}
-              height={800}
+              width={500}
+              height={500}
             />
             {/* ปุ่มปิด */}
             <button
-              className="absolute top-2 right-2 text-white bg-red-600 px-2 py-1 rounded"
+              className="absolute top-10 right-0 text-white bg-red-600 px-2 py-1 rounded"
               onClick={handleModalClose}
             >
               Close

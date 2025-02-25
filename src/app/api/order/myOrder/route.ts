@@ -1,20 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { get } from "@/app/api/const";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { status: string } }
-) {
+export async function GET(req: NextRequest,) {
   try {
-    const { status } = params;
-    console.log(`Received status: ${status}`);
 
     const token = req.cookies.get("token")?.value;
     if (!token) {
       return NextResponse.json({ error: "Token not found" }, { status: 401 });
     }
 
-    const res = await get(`/api/order/${status}/myOrder`, token);
+    const res = await get(`/api/order/myOrder?${req.nextUrl.searchParams.toString()}`, token);
 
     if (!res.ok) {
       const errorData = await res.json();
