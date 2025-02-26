@@ -50,8 +50,6 @@ const StatusSelectDropdown = ({ status, setStatus }: StatusSelectDropdownProps) 
       onChange={handleChange}
       getOptionValue={(option) => option.key}
       getOptionLabel={(option) => option.label}
-
-      
     />
 
   );

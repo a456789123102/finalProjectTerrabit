@@ -79,6 +79,7 @@ export const getOwnAddress = async () => {
 
 export const getOneAddress = async (id:number) => {
   try {
+    console.log("here is API")
     const res = await axios.get(`/api/address/myAddress/${id}`);
     return res.data;
   } catch (error) {

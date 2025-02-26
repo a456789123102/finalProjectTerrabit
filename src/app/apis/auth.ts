@@ -42,7 +42,7 @@ export const logout = async () => {
     return res.data;
 }
 
-export const register = async (email: string, username: string, password: string) => {
+export const goRegister = async (email: string, username: string, password: string) => {
     try {
       if (!email || !username || !password) {
         throw new Error('กรุณากรอกข้อมูลให้ครบทุกช่อง');

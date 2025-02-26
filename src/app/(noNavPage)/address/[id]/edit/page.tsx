@@ -65,10 +65,10 @@ function EditAddressPage() {
         addressData.email || ""
       );
 
-      console.log('✅ Address updated response:', response);
+      console.log(' Address updated response:', response);
       router.push("/address/myAddress");
     } catch (error) {
-      console.error('❌ Error updating Address:', error);
+      console.error('Error updating Address:', error);
     }
   };
 

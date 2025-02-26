@@ -1,26 +1,34 @@
 "use client";
 import { useEffect, useState } from 'react';
-import Text from '../../components/text';
 import InputText from '../../components/inputText';
-import { register, logout } from '@/app/apis/auth';
+import { goRegister, logout } from '@/app/apis/auth';
 import { useRouter } from "next/navigation";
 import { useUserStore } from '@/store/zustand';
 import Link from 'next/link';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerSchema } from "../../components/registerSchema";
+import { Eye, EyeClosed } from "lucide-react";
 
 function Register() {
+  const [error, setError] = useState("")
   const router = useRouter();
-  const { id } = useUserStore();
-  const { clearUser } = useUserStore();
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const { id, clearUser } = useUserStore();
+  const [isHidePassword, setIsHidePassword] = useState(true);
 
-  const handleRegister = async () => {
+
+  const { register, handleSubmit, formState: { errors }, } = useForm({
+    resolver: zodResolver(registerSchema),
+  });
+
+
+
+
+
+  const handleRegister = async (data) => {
     try {
       setError('');
-      await register(email, username, password);
+      await goRegister(data.email, data.username, data.password);
       setError('Your account is successfully registered');
       setTimeout(() => {
         router.push("/login");
@@ -44,14 +52,75 @@ function Register() {
   })
 
   return (
-    <div className='w-full h-screen flex flex-col items-center justify-center '>
-      <Text className='bg-white p-5 px-16 flex justify-center flex-col items-center max-w-1/4'>
+    <div className='w-full h-screen flex flex-col items-center justify-center font-pixelify'>
+      <form onSubmit={handleSubmit(handleRegister)} className='bg-white p-5 px-16 flex justify-center flex-col items-center w-1/4'>
         <div className='w-full'>
           <div className='justify-center flex py-3 text-4xl  font-bold'>Register</div>
-          <InputText label='E-mail' value={email} onChange={setEmail} />
-          <InputText label='Username' value={username} onChange={setUsername} />
-          <InputText label='Password' value={password} onChange={setPassword} />
-          <InputText label='Confirm Password' value={confirmPassword} onChange={setConfirmPassword} />
+
+          <div className='flex flex-col my-1'>
+            <div className="flex flex-row gap-2 items-baseline justify-between">
+              <div className="mb-1 text-sm flex-grow">Email</div>
+              {errors.email && <div className="text-[0.6rem] text-red-500"> {errors.email.message} </div>}
+            </div>
+            <input
+              className={`bg-white mb-1  border h-9 px-4 hover:border-yellow-500 ${errors.email ? "border-red-500" : "border-gray-700"}`}
+              type="text"
+              placeholder="Enter your email..."
+              maxLength={50}
+              {...register("email")}
+              autoComplete='off'
+            />
+          </div>
+
+          <div className='flex flex-col my-1'>
+            <div className="flex flex-row gap-2 items-baseline justify-between">
+              <div className="mb-1 text-sm flex-grow">Username</div>
+              {errors.username && <div className="text-[0.6rem] text-red-500"> {errors.username.message} </div>}
+            </div>
+            <input
+              className={`bg-white mb-1  border h-9 px-4 hover:border-yellow-500 ${errors.username ? "border-red-500" : "border-gray-700"}`}
+              type="text"
+              {...register("username")}
+              autoComplete='off'
+              placeholder="Choose a username..."
+            />
+          </div>
+
+          <div className='flex flex-col my-1'>
+            <div className="flex flex-row gap-2 items-baseline justify-between">
+              <div className="mb-1 text-sm flex-grow">Password</div>
+              {errors.password && <div className="text-[0.6rem] text-red-500"> {errors.password.message} </div>}
+            </div>
+            <div className='flex flex-row relative'>
+              <input
+                className={`bg-white mb-1 w-full border h-9 px-4 hover:border-yellow-500 ${errors.confirmPassword ? "border-red-500" : "border-gray-700"}`}
+                type={isHidePassword ? "password" : "text"}
+                {...register("password")}
+                autoComplete='off'
+                     placeholder="Create a password..."
+              />
+             <div className='absolute bottom-3 right-2'> {isHidePassword ? <EyeClosed size={20} onClick={() => { setIsHidePassword(false) }} /> : <Eye size={20} onClick={() => { setIsHidePassword(true) }} />}</div>
+            </div>
+          </div>
+
+          <div className='flex flex-col my-1'>
+            <div className="flex flex-row gap-2 items-baseline justify-between">
+              <div className="mb-1 text-sm flex-grow">confirm Password</div>
+              {errors.confirmPassword && <div className="text-[0.6rem] text-red-500"> {errors.confirmPassword.message} </div>}
+            </div>
+            <div className='flex flex-row relative'>
+              <input
+                className={`bg-white mb-1 w-full border h-9 px-4 hover:border-yellow-500 ${errors.confirmPassword ? "border-red-500" : "border-gray-700"}`}
+                type={isHidePassword ? "password" : "text"}
+                {...register("confirmPassword")}
+                autoComplete='off'
+                 placeholder="Confirm your password..."
+              />
+             <div className='absolute bottom-3 right-2'> {isHidePassword ? <EyeClosed size={20} onClick={() => { setIsHidePassword(false) }} /> : <Eye size={20} onClick={() => { setIsHidePassword(true) }} />}</div>
+            </div>
+          </div>
+
+
         </div>
         {error && (
           <div className={error === "Your account is successfully registered" ? "text-green-500" : "text-red-500"}>
@@ -59,14 +128,14 @@ function Register() {
           </div>
         )}
 
-        <button className='text-white justify-center flex py-3 my-4 bg-[#2E2E2E] hover:bg-[#111111] w-full' onClick={handleRegister}>
+        <button className='text-white justify-center flex py-3 my-4 bg-[#2E2E2E] hover:bg-[#111111] w-full' type="submit">
           Register
         </button>
         <div className='text-sm space-y-1 flex flex-col items-center font-bold text-[#2E2E2E] '>
           <Link href={'/product'} className='hover:text-[#111111] hover:underline cursor-pointer'>Return to Store</Link>
           <Link href={'/login'} className='hover:text-[#111111] hover:underline cursor-pointer'>go to login</Link>
         </div>
-      </Text>
+      </form>
     </div>
   );
 }
