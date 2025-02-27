@@ -49,7 +49,9 @@ function TopSellerBox() {
   stroke="#8884d8"   
   strokeWidth={2}   
   name="Selling Amount" 
+  barSize={50}  
 />
+
 
   </BarChart>
 </ResponsiveContainer>

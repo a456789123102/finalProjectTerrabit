@@ -22,9 +22,7 @@ function page() {
   const [searchQuery, setSearchQuery] = useState("");
   const [tempSearchQuery, setTempSearchQuery] = useState("")
   const [orderBy, setOrderBy] = useState("");
-  const [tempOrderBy, setTempOrderBy] = useState("");
   const [orderWith, setOrderWith] = useState("");
-  const [tempOrderWith, setTempOrderWith] = useState("");
   const [isPublished, setIsPublished] = useState(null);
   const [tempIsPublished, setTempIsPublished] = useState(null); 
   const [forceFetch, setForceFetch] = useState(false);
@@ -38,13 +36,7 @@ function page() {
     setPagination,
   });
 
-  const handleComfirm = () => {
-    setSearchQuery(tempSearchQuery);
-    setOrderBy(tempOrderBy);
-    setOrderWith(tempOrderWith);
-    setIsPublished(tempIsPublished);
 
-  }
 
   const [columnKeysFiltered, setColumnKeysFiltered] = useState<string[]>([
     'id',
@@ -110,10 +102,28 @@ function page() {
           return<input
           type="checkbox"
           checked={!!val}
+          className='w-full self-center'
           onChange={() => handleIsPublished(row.original.id, row.original[key])} // ✅ แก้ให้เป็น arrow function
         />
          // ✅ ใช้ val แทน key
-        } else {
+        }        if (key === 'createdAt' || key === 'updatedAt') {
+          const formatDate = (dateStr: string) => {
+              const options: Intl.DateTimeFormatOptions = {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+              };
+              return new Date(dateStr).toLocaleDateString(undefined, options);
+          };
+          
+
+          return <div>{formatDate(val as string)}</div>;
+      }
+         else {
           return val;
         }
       }
@@ -142,6 +152,7 @@ function page() {
       return [...new Set(updatedColumns)];
     });
   };
+
   
 
 
@@ -162,19 +173,15 @@ function page() {
           handleColumnToggle={handleColumnToggle}
           totalItems={pagination.totalReviews}
           fromSearch={searchQuery}
+          sortData={sortByOptions}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          orderWith={orderWith}
+          setOrderWith={setOrderWith}
         />
-        <div className='flex flex-row w-1/2 items-center justify-between'>
+        <div className='flex flex-row w-1/3 items-center justify-center gap-2'>
           <PublishedCheckbox isPublished={tempIsPublished} setIsPublished={setTempIsPublished} />
-          <SortBySelectedDropDown
-            data={sortByOptions}
-            orderBy={tempOrderBy}
-            setOrderBy={setTempOrderBy}
-            orderWith={tempOrderWith}
-            setOrderWith={setTempOrderWith}
-          />
-          <div className=' p-2 ml-2 bg-blue-500 text-white font-bold rounded-[4px] cursor-pointer hover:bg-blue-600' onClick={handleComfirm}>
-            Confirm
-          </div>
+
         </div>
       </div>
 

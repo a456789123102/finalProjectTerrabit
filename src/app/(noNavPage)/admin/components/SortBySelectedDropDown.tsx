@@ -31,7 +31,7 @@ const SortBySelectedDropDown: React.FC<SortBySelectedDropDownProps> = ({
 
   return (
     <Select
-      placeholder="Select sorting..."
+      placeholder="Sort by..."
       options={data}
       getOptionLabel={(e) => e.label}
       getOptionValue={(e) => `${e.orderBy}-${e.orderWith}`}

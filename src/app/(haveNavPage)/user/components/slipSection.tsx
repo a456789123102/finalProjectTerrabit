@@ -35,13 +35,15 @@ function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, h
   }
 
   return (
-    <div className="w-full flex flex-col gap-2">
+    <div className="w-full flex flex-col gap-2 justify-between">
       {/* ข้อความแสดงสถานะ */}
-      {order.slipUrl ? (
-        <div className="text-green-700 text-[1.1rem] mb-2 font-bold">Your Payment Slip:</div>
+     <div className='py-[10px] mb-3 font-bold border-b border-gray-300 text-[1.1rem] w-full items-center border '>
+     {order.slipUrl ? (
+        <div className="text-green-700">Your Payment Slip:</div>
       ) : (
-        <div className="text-red-700 text-[1.1rem] mb-2 font-bold">Upload Your payment slip:</div>
+        <div className="text-red-700">Upload Your payment slip:</div>
       )}
+     </div>
 
       {/* อัพสลิป */}
       {order.status === "pending_payment_proof" && !order.slipUrl && (

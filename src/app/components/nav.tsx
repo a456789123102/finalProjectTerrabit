@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { myCarts } from '../apis/carts';
 
 const menuItems = [
-  { name: 'Games', href: null },
+  { name: 'Games', href: "/product" },
   { name: 'Products', href: '/product' },
   { name: 'News', href: null },
   { name: 'Careers', href: '/careers' },

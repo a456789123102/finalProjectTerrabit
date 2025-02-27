@@ -62,14 +62,14 @@ function ReviewArea({
                           />
                           
                         ) : (
-                            <div className="p-1 border border-yellow-400 relative">
-                                <div className="flex flex-row gap-2 items-baseline">
+                            <div className="p-1 border border-yellow-400 relative ">
+                                <div className="flex flex-row gap-2 items-baseline pl-3">
                                     <div className="font-semibold text-slate-900 text-xl">{myReviews.userName}</div>
                                     <div className="flex flex-row">
                                         <StarRating rating={myReviews.rating} />
                                     </div>
                                 </div>
-                                <div className="text-[0.75rem] text-slate-500 mb-2">
+                                <div className="pl-3 text-[0.75rem] text-slate-500 mb-2">
                                     {new Date(myReviews.updatedAt)
                                         .toLocaleString("en-GB", {
                                             year: "numeric",
@@ -81,7 +81,7 @@ function ReviewArea({
                                         })
                                         .replace(",", "")}
                                 </div>
-                                <div className="text-slate-700 min-h-20 overflow-hidden break-words whitespace-normal">
+                                <div className="pl-3 text-slate-700 min-h-20 overflow-hidden break-words whitespace-normal">
                                     {myReviews.comments}
                                 </div>
                                 <SquarePen
@@ -125,7 +125,7 @@ function ReviewArea({
                 </div>
 
             </div>
-            {reviews.length > 0 ? (
+            {reviews.length > 0  ? (
                 reviews.map((review: Review) => (
                     <div key={review.id} className="p-1 my-3 bg-white border border-gray-300 rounded-[4px]">
                         <div className='p-3 border'>
@@ -151,7 +151,7 @@ function ReviewArea({
                 ))
             ) : (
                 <div className="text-[0.8rem] p-4">
-                    This product has not been reviewed yet...
+                    This product has not been reviewed {myReviews && "From other users"} yet...
                 </div>
             )}
         </div>

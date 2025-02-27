@@ -1,6 +1,7 @@
 import React from 'react'
 import FilterTableDropdown from './filterTableDropdown'
 import { Search } from "lucide-react"
+import SortBySelectedDropDown from './SortBySelectedDropDown';
 
 interface SearchAndFilterBarProps {
   tempSearchQuery: string;
@@ -11,7 +12,13 @@ interface SearchAndFilterBarProps {
   handleColumnToggle: (column: string) => void;
   totalItems: number;
   fromSearch: string;
-} 
+  sortData: { orderBy: string; orderWith: string; label: string; }[]; 
+  orderBy: string;
+  setOrderBy: (value: string) => void;
+  orderWith: string;
+  setOrderWith: (value: string) => void;
+}
+
 function SearchAndFilterBar({
   tempSearchQuery,
   setTempSearchQuery,
@@ -21,14 +28,26 @@ function SearchAndFilterBar({
   handleColumnToggle,
   totalItems,
   fromSearch,
+  sortData,
+  orderBy,
+  setOrderBy,
+  orderWith,
+  setOrderWith,
 }: SearchAndFilterBarProps) {
   return (
-    <div className='w-full flex flex-row  gap-4 '>
+    <div className=' flex flex-row gap-4 w-full'>
       <div className='flex flex-row text-[0.8rem]  w-full items-center'>
         <div className='mx-2 '>{totalItems} Items found.</div>
         {fromSearch === "" ? <></> : <div>  From Searching: {fromSearch}</div>}
       </div>
       <div className="flex flex-row w-full justify-end items-center">
+        <SortBySelectedDropDown
+          data={sortData}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          orderWith={orderWith}
+          setOrderWith={setOrderWith}
+        />
         <FilterTableDropdown
           columnKeys={columnKeys}
           handleColumnToggle={handleColumnToggle}
@@ -49,6 +68,6 @@ function SearchAndFilterBar({
       </div>
     </div>
   )
-}
+}  
 
-export default SearchAndFilterBar
+export default SearchAndFilterBar;

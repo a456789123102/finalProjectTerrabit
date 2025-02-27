@@ -1,14 +1,14 @@
 "use client";
 import { useEffect, useState } from 'react';
-import InputText from '../../components/inputText';
 import { goRegister, logout } from '@/app/apis/auth';
 import { useRouter } from "next/navigation";
 import { useUserStore } from '@/store/zustand';
 import Link from 'next/link';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "../../components/registerSchema";
+import { registerSchema } from "../schemas/registerSchema";
 import { Eye, EyeClosed } from "lucide-react";
+
 
 function Register() {
   const [error, setError] = useState("")
@@ -93,7 +93,7 @@ function Register() {
             </div>
             <div className='flex flex-row relative'>
               <input
-                className={`bg-white mb-1 w-full border h-9 px-4 hover:border-yellow-500 ${errors.confirmPassword ? "border-red-500" : "border-gray-700"}`}
+                className={`bg-white mb-1 w-full border h-9 px-4 hover:border-yellow-500 ${errors.password ? "border-red-500" : "border-gray-700"}`}
                 type={isHidePassword ? "password" : "text"}
                 {...register("password")}
                 autoComplete='off'

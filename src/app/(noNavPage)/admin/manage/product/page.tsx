@@ -21,6 +21,8 @@ function ProductTable() {
   const [tempSearchQuery, setTempSearchQuery] = useState("");
   const [category, setCategory] = useState('');
   const [forceFetch, setForceFetch] = useState(false);
+    const [orderBy, setOrderBy] = useState("");
+    const [orderWith, setOrderWith] = useState("");
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 10,
@@ -78,7 +80,7 @@ function ProductTable() {
 
   const columns = useMemo(() => {
     return columnKeysFiltered.map((key) => ({
-      header: key.charAt(0).toUpperCase() + key.slice(1),
+      header: key.charAt(0).toUpperCase() + key.slice(1).split("").map((e) => /[A-Z]/.test(e) ? ` ${e}` : e).join(""),
       accessorKey: key,
       cell: ({ row }) => {
         const value = row.original[key];
@@ -120,6 +122,23 @@ function ProductTable() {
             </div>
           );
         }
+        if (key === 'createdAt' || key === 'updatedAt') {
+          const formatDate = (dateStr: string) => {
+              const options: Intl.DateTimeFormatOptions = {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+              };
+              return new Date(dateStr).toLocaleDateString(undefined, options);
+          };
+          
+
+          return <div>{formatDate(value as string)}</div>;
+      }
 
         return value;
       },
@@ -142,6 +161,16 @@ function ProductTable() {
       return [...updatedColumns, "Actions"]; // ใส่ "Actions" ไว้ท้ายสุดเสมอ
     });
   };
+
+  const sortByOptions = [
+    { orderBy: "asc", orderWith: "createdAt", label: "Oldest Created" },
+    { orderBy: "desc", orderWith: "createdAt", label: "Newest Created" },
+    { orderBy: "asc", orderWith: "updatedAt", label: "Oldest Updated" },
+    { orderBy: "desc", orderWith: "updatedAt", label: "Newest Updated" },
+    { orderBy: "asc", orderWith: "totalPrice", label: "Highest Price" },
+    { orderBy: "desc", orderWith: "totalPrice", label: "Lowest Price" },
+  ];
+
   
 
   return (
@@ -149,7 +178,7 @@ function ProductTable() {
       className="min-h-screen my-7 flex flex-col justify-start items-center gap-5"
       style={{ backgroundColor: themeColors.bg, color: themeColors.text }}
     >
-      <div className="w-full flex justify-end items-center border-gray-300 border-y  gap-1 px-7"
+      <div className="w-full flex justify-between items-center border-gray-300 border-y  gap-1 px-7"
         style={{ backgroundColor: themeColors.base }}
       >
         <SearchAndFilterBar
@@ -161,9 +190,14 @@ function ProductTable() {
           handleColumnToggle={handleColumnToggle}
           totalItems={pagination.totalProducts}
           fromSearch={searchQuery}
+          sortData={sortByOptions}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          orderWith={orderWith}
+          setOrderWith={setOrderWith}
         />
         <Link
-          className="  px-4 py-2 h-10 hover:text-yellow-300 text-[0.8rem]  bg-blue-500 text-white rounded-[4px]"
+          className=" ml-20 px-4 py-2 h-10 hover:text-yellow-300 text-[0.8rem]  bg-blue-500 text-white rounded-[4px]"
           href={`/admin/manage/product/create`}
         >
           <div className="flex flex-row items-center gap-1">

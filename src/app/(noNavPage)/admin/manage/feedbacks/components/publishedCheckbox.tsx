@@ -22,9 +22,9 @@ function PublishedCheckbox({ isPublished, setIsPublished }) {
     }, [publishedCheck, notPublishedCheck, setIsPublished]);
 
     return (
-        <div className='flex flex-col text-[0.8rem] w-48 gap-2'>
+        <div className='flex flex-col text-[0.8rem] gap-1'>
             {/* Published Checkbox */}
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-2 w-full'>
                 <input
                     type='checkbox'
                     checked={publishedCheck}

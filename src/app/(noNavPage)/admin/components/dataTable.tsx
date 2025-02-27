@@ -6,7 +6,7 @@ function DataTable({ table }: any) {
   const { theme, themeColors } = useTheme();
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto text-[0.9rem]">
       <table
         className="border-collapse border border-gray-300 w-full"
         style={{ backgroundColor: themeColors.bg, color: themeColors.text }}

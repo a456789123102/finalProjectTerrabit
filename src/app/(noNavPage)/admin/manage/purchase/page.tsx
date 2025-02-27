@@ -7,11 +7,10 @@ import useFetchOrders from '../../hooks/orders/useFetchOrders';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import DataTable from '../../components/dataTable';
 import Image from 'next/image';
-import StatusSelectDropdown from './components/statusSelectDropdown';
 import Swal from 'sweetalert2';
 import { updateOrderStatus } from '@/app/apis/order';
-import { Search } from 'lucide-react';
 import SearchAndFilterBar from '../../components/SearchAndFilterBar';
+import OrderStatusSelectDropdown from './components/orderStatusSelectDropdown';
 
 // Define the types for your orders
 type Order = {
@@ -34,10 +33,12 @@ type SelectedOrders = Record<number, boolean>;
 
 function PurchaseTable() {
     const { themeColors } = useTheme();
-    const [status, setStatus] = useState<string[]>(["pending_payment_verification"]);
+    const [status, setStatus] = useState<string[]>([]);
     const [selectedOrders, setSelectedOrders] = useState<SelectedOrders>({});
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [tempSearchQuery, setTempSearchQuery] = useState<string>('');
+      const [orderBy, setOrderBy] = useState("");
+      const [orderWith, setOrderWith] = useState("");
     const [actionType, setActionType] = useState<string>("");
     const [pagination, setPagination] = useState<PaginationState>({
         page: 1,
@@ -286,34 +287,21 @@ const handleModelClose = () => {
                     );
                 }
 
-                if (key === 'createdAt') {
+                if (key === 'createdAt' || key === 'updatedAt') {
                     const formatDate = (dateStr: string) => {
                         const options: Intl.DateTimeFormatOptions = {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                          hour12: false,
                         };
                         return new Date(dateStr).toLocaleDateString(undefined, options);
                     };
                     
-
-                    return <div>{formatDate(value as string)}</div>;
-                }
-                if (key === 'updatedAt') {
-                    const formatDate = (dateStr: string) => {
-                        const options: Intl.DateTimeFormatOptions = {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                        };
-                        return new Date(dateStr).toLocaleDateString(undefined, options);
-                    };
-                    
-
+          
                     return <div>{formatDate(value as string)}</div>;
                 }
 
@@ -369,6 +357,16 @@ const handleModelClose = () => {
         });
     };
 
+    const sortByOptions = [
+        { orderBy: "asc", orderWith: "createdAt", label: "Oldest Created" },
+        { orderBy: "desc", orderWith: "createdAt", label: "Newest Created" },
+        { orderBy: "asc", orderWith: "updatedAt", label: "Oldest Updated" },
+        { orderBy: "desc", orderWith: "updatedAt", label: "Newest Updated" },
+        { orderBy: "asc", orderWith: "totalPrice", label: "Highest Price" },
+        { orderBy: "desc", orderWith: "totalPrice", label: "Lowest Price" },
+      ];
+    
+
 
     return (
         <div
@@ -376,7 +374,7 @@ const handleModelClose = () => {
             style={{ backgroundColor: themeColors.bg, color: themeColors.text }}
         >
             {/* top search filter */}
-            <div className="w-full flex justify-end items-center border-gray-300 border-y px-7"
+            <div className="w-full flex justify-between items-center border-gray-300 border-y px-7"
                 style={{ backgroundColor: themeColors.base }}
             >
                 <SearchAndFilterBar
@@ -388,10 +386,17 @@ const handleModelClose = () => {
                     handleColumnToggle={handleColumnToggle}
                     totalItems={pagination.totalOrders}
                     fromSearch={searchQuery}
+                    sortData={sortByOptions}
+                    orderBy={orderBy}
+                    setOrderBy={setOrderBy}
+                    orderWith={orderWith}
+                    setOrderWith={setOrderWith}
                 />
-                <div className="flex flex-row gap-2 text-[0.8rem] items-center w-1/2">
-                    <StatusSelectDropdown status={status} setStatus={setStatus} />
+                <div className="flex flex-row gap-2 w-1/2 text-[0.8rem] items-center justify-end">
+                    {/* <StatusSelectDropdown status={status} setStatus={setStatus} /> */}
+                   
                     <div className="flex flex-row items-center gap-1">
+                    <OrderStatusSelectDropdown status={status} setStatus={setStatus} /> 
                         <input
                             type="checkbox"
                             onChange={(e) => {
@@ -415,18 +420,17 @@ const handleModelClose = () => {
                         <option value="approve">Approve</option>
                         <option value="reject">Reject</option>
                     </select>
-
+                   
                     <button
                         onClick={handleConfirm}
                         className="ml-3 bg-blue-500 text-white px-4 py-2 rounded"
                     >
                         Confirm
                     </button>
+                   
                 </div>
             </div>
-
-
-            <div className='px-10'>
+            <div className='px-10 flex flex-row'>
                 {orders.length ? (
                     <DataTable table={table} />
                 ) : (
@@ -434,6 +438,8 @@ const handleModelClose = () => {
                         <p>No orders to display</p>
                     </div>
                 )}
+  
+
             </div>
             <PaginationControls
                 pagination={pagination}

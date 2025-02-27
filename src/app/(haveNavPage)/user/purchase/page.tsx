@@ -7,6 +7,7 @@ import AddressDropdown from "../components/addressDropdown";
 import SlipSection from "../components/slipSection";
 import { deleteImage, uploadSlipImage } from "@/app/apis/slipImage";
 import ActionSection from "../components/ActionSection";
+import Number from "@/app/components/Number";
 
 interface OrderItem {
   id: string;
@@ -186,20 +187,24 @@ function Orders() {
             orders.map((order) => (
               <div
                 key={order.id}
-                className="font-poppins shadow-sm p-3 flex flex-row justify-between min-h-20 bg-white"
+                className="font-poppins shadow-sm flex flex-row justify-between min-h-24 bg-white"
               >
-                <div className="border-x-2 p-2 w-1/4 flex flex-col justify-between">
+                <div className=" border-x border-gray-300  w-1/4 flex flex-col justify-between">
                   <div>
-                    <div className="flex flex-row p-2 gap-3">
-                      <div className=" flex flex-row gap-2">
-                        <div className="font-bold">Order ID:</div>
+                    <div className="flex flex-row gap-3 items-center">
+                      <div className=" flex flex-row gap-2 border-b border-gray-300 mb-3 py-[10px] w-full items-baseline text-[1.1rem]">
+                        <div className="font-bold pl-2">Order ID:</div>
                         <div> {order.id}</div>
                       </div>
                     </div>
-                    <div className=" text-slate-700 text-[0.7rem]">
-                      {order.items.map((item) => (
-                        <div key={item.id} className="border-b-2 gap-2 flex flex-row">
-                          <div className="text-black">{item.productName},</div> <div>Quantity: {item.quantity}, Price: {item.price}</div>
+                    <div className=" text-slate-700 text-[0.75rem]">
+                      {order.items.map((item,i) => (
+                        <div key={item.id} className=" px-2 gap-2 flex flex-row">
+                           <div className="text-black">{i}.</div> 
+                          <div className="text-black overflow-clip">{item.productName},</div> 
+                          <div>Quantity: {item.quantity},</div> 
+                          <div>Price:</div> 
+                          <Number>{item.price}</Number>
                         </div>
                       ))}
                     </div>
@@ -211,7 +216,7 @@ function Orders() {
                   </div>
 
                 </div>
-                <div className="border-r-2 w-1/4 p-2 gap-1 ">
+                <div className="border-r border-gray-300  w-1/4 flex flex-col justify-between">
                   <SlipSection
                     order={order}
                     isModalOpen={isModalOpen}

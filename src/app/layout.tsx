@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased bg-[#2E2E2E] font-poppins">
+      <body className="antialiased bg-[#2E2E2E] font-poppins ">
         <Logo />  
         {children} 
       </body>

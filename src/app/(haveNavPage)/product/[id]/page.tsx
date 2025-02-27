@@ -55,8 +55,8 @@ const ProductDetail = () => {
     totalReviews: 0,
   });
   const [isEditClick, setIsEditClick] = useState(false)
-    const [comment, setComment] = useState<string>("")
-    const [selectedStars, setSelectedStars] = useState(4);
+  const [comment, setComment] = useState<string>("")
+  const [selectedStars, setSelectedStars] = useState(4);
   const router = useRouter();
 
 
@@ -128,8 +128,8 @@ const ProductDetail = () => {
     if (id) {
       const fetchReviews = async () => {
         try {
-          const reviewData = await getReviewsById(Number(id),paginations.currentPage);
-          console.log('Review Data Fetched');
+          const reviewData = await getReviewsById(Number(id), paginations.currentPage);
+          console.log('Review Data Fetched::::',reviewData);
           setReviews(reviewData.reviews);
           setMyReviews(reviewData.myReviews)
           setMyReviewsPermission(reviewData.myReviewPermission)
@@ -142,7 +142,7 @@ const ProductDetail = () => {
       };
       fetchReviews();
     }
-  }, [id,paginations.currentPage]);
+  }, [id, paginations.currentPage]);
 
   if (loading) return <p>Loading...</p>;
 
@@ -194,10 +194,11 @@ const ProductDetail = () => {
               </div>
             </div>
           </div>
-          <div className='mt-4 my-2 bg-[#1C1C1C] text-white w-full p-5'>
+          <div className="mt-4 my-2 bg-[#1C1C1C] text-white w-full p-5">
             <div className="text-2xl">Description</div>
-            <div>{product.description}</div>
+            <div className="whitespace-pre-line">{product.description}</div>
           </div>
+
           <div className='my-2 bg-[#1C1C1C] w-full p-5 justify-center'>
             <div>
               <div className="text-2xl mb-3">Product Ratings</div>
@@ -220,22 +221,22 @@ const ProductDetail = () => {
                   <div className="justify-self-end ">Total {paginations.totalReviews} reviews.</div>
                 </div>
               )}
-<ReviewArea
-  reviews={reviews}
-  myReviews={myReviews}
-  myReviewPermission={myReviewPermission}
-  isEditClick={isEditClick} 
-  setIsEditClick={setIsEditClick} 
-  comment={comment}
-  setComment={setComment}
-  selectedStars={selectedStars}
-  setSelectedStars={setSelectedStars}
-/>
+              <ReviewArea
+                reviews={reviews}
+                myReviews={myReviews}
+                myReviewPermission={myReviewPermission}
+                isEditClick={isEditClick}
+                setIsEditClick={setIsEditClick}
+                comment={comment}
+                setComment={setComment}
+                selectedStars={selectedStars}
+                setSelectedStars={setSelectedStars}
+              />
 
 
               <div className="flex flex-row gap-4 items-center justify-center mt-4">
                 <ChevronLeft
-                onClick={handlePrevPage}
+                  onClick={handlePrevPage}
                   className="transition-transform duration-200 hover:scale-125 cursor-pointer"
                   size={40}
                 />
@@ -243,7 +244,7 @@ const ProductDetail = () => {
                   Page {paginations.currentPage} / {paginations.totalPages}
                 </div>
                 <ChevronRight
-                onClick={handleNextPage}
+                  onClick={handleNextPage}
                   className="transition-transform duration-200 hover:scale-125 cursor-pointer"
                   size={40}
                 />

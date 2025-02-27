@@ -89,6 +89,23 @@ function Page() {
             />
           );
         }
+        if (key === 'createdAt' || key === 'updatedAt') {
+          const formatDate = (dateStr: string) => {
+              const options: Intl.DateTimeFormatOptions = {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+              };
+              return new Date(dateStr).toLocaleDateString(undefined, options);
+          };
+          
+
+          return <div>{formatDate(val as string)}</div>;
+      }
         return val;
       },
     }));
@@ -106,7 +123,7 @@ function Page() {
       style={{ backgroundColor: themeColors.bg, color: themeColors.text }}
     >
       <div
-        className="w-full flex gap-2 justify-end items-center border-gray-300 border-y px-7 py-1"
+        className="w-full flex gap-2 justify-between items-center border-gray-300 border-y px-7 py-1"
         style={{ backgroundColor: themeColors.base }}
       >
         <SearchAndFilterBar
