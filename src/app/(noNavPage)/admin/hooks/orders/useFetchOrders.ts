@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { fetchAllOrders } from "@/app/apis/order";
 
-export const useFetchOrders = (statuses:string[],forceFetch,searchQuery,pagination, setPagination) => {
+export const useFetchOrders = (statuses:string[],forceFetch,searchQuery,pagination, setPagination,orderBy,orderWith) => {
     const [orders, setOrders] = useState([]);
 
     const fetchOrderLists = async () => {
 try {
     const orderData = await fetchAllOrders(statuses,searchQuery,pagination.page.toString(),
-    pagination.pageSize.toString());
+    pagination.pageSize.toString(),orderBy,orderWith);
     setOrders(orderData.orders);
     setPagination(orderData.pagination);
 } catch (error) {
@@ -17,7 +17,7 @@ try {
 
     useEffect(() =>{
         fetchOrderLists();
-    },[statuses, forceFetch,searchQuery, pagination.page, pagination.pageSize]);
+    },[statuses, forceFetch,searchQuery, pagination.page, pagination.pageSize,orderBy,orderWith]);
 
 return orders;
 }

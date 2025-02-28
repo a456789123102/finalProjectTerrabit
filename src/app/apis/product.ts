@@ -29,7 +29,9 @@ export const fetchProducts = async (
   search?: string,
   categories?: number[],
   page?: string,
-  pageSize?: string
+  pageSize?: string,
+  orderBy?: string, 
+  orderWith?: string
 ) => {
   try {
     // สร้าง params โดยใช้ URLSearchParams
@@ -48,7 +50,13 @@ export const fetchProducts = async (
     }
     if (pageSize) {
       params.append("pageSize", pageSize);
-      console.log(`pagesize add: ${pageSize}`);
+
+    }
+    if (orderBy) {
+      params.append("orderBy", orderBy);
+    }
+    if (orderWith) {
+      params.append("orderWith", orderWith);
     }
 
     const res = await axios.get("/api/product/get", {

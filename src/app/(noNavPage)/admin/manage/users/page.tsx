@@ -43,6 +43,16 @@ function Page() {
     "isActive",
   ]);
 
+  const sortByOptions = [
+    { orderBy: "asc", orderWith: "createdAt", label: "Oldest Created" },
+    { orderBy: "desc", orderWith: "createdAt", label: "Newest Created" },
+    { orderBy: "asc", orderWith: "updatedAt", label: "Oldest Updated" },
+    { orderBy: "desc", orderWith: "updatedAt", label: "Newest Updated" },
+    // { orderBy: "asc", orderWith: "rating", label: "Highest Rated" },
+    // { orderBy: "desc", orderWith: "rating", label: "Lowest Rated" },
+  ];
+
+
   const handleIsActive = async (id: string, status: boolean) => {
     const action = status ? "Ban" : "Unban";
     const result = await Swal.fire({
@@ -137,24 +147,18 @@ function Page() {
               const updatedColumns = prev.includes(column)
                 ? prev.filter((c) => c !== column)
                 : [...prev.filter((c) => c !== "isActive"), column, "isActive"]; 
-              return [...new Set(updatedColumns)]; // ✅ ลบค่าซ้ำ (กัน `isActive` ซ้ำ)
+              return [...new Set(updatedColumns)]; 
             });
           }}          
           totalItems={pagination.totalUsers}
           fromSearch={searchQuery}
-        />
-        <SortBySelectedDropDown
-          data={[
-            { orderBy: "asc", orderWith: "createdAt", label: "Oldest Created" },
-            { orderBy: "desc", orderWith: "createdAt", label: "Newest Created" },
-            { orderBy: "asc", orderWith: "updatedAt", label: "Oldest Updated" },
-            { orderBy: "desc", orderWith: "updatedAt", label: "Newest Updated" },
-          ]}
+          sortData={sortByOptions}
           orderBy={orderBy}
           setOrderBy={setOrderBy}
           orderWith={orderWith}
           setOrderWith={setOrderWith}
         />
+        
         <button
           className="p-2 ml-2 bg-blue-500 text-white font-bold rounded-[4px] cursor-pointer hover:bg-blue-600"
           onClick={() => setForceFetch((prev) => !prev)}

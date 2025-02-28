@@ -75,11 +75,11 @@ function Login() {
               {errors.username && <div className="text-[0.6rem] text-red-500"> {errors.username.message} </div>}
             </div>
             <input
-              className={`bg-white mb-1  border h-9 px-4 hover:border-yellow-500 ${errors.username ? "border-red-500" : "border-gray-700"}`}
+              className={`bg-white mb-1 text-[0.8rem] border h-9 px-4 hover:border-yellow-500 ${errors.username ? "border-red-500" : "border-gray-700"}`}
               type="text"
               {...register("username")}
               autoComplete='off'
-              placeholder="Choose a username..."
+              placeholder=""
             />
           </div>
           <div className='flex flex-col my-1'>
@@ -89,11 +89,11 @@ function Login() {
             </div>
             <div className='flex flex-row relative'>
               <input
-                className={`bg-white mb-1 w-full border h-9 px-4 hover:border-yellow-500 ${errors.password ? "border-red-500" : "border-gray-700"}`}
+                className={`bg-white mb-1 w-full border text-[0.8rem] h-9 px-4 hover:border-yellow-500 ${errors.password ? "border-red-500" : "border-gray-700"}`}
                 type={isHidePassword ? "password" : "text"}
                 {...register("password")}
                 autoComplete='off'
-                     placeholder="Create a password..."
+                     placeholder=""
               />
              <div className='absolute bottom-3 right-2'> {isHidePassword ? <EyeClosed size={20} onClick={() => { setIsHidePassword(false) }} /> : <Eye size={20} onClick={() => { setIsHidePassword(true) }} />}</div>
             </div>

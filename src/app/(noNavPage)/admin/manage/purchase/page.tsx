@@ -37,8 +37,8 @@ function PurchaseTable() {
     const [selectedOrders, setSelectedOrders] = useState<SelectedOrders>({});
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [tempSearchQuery, setTempSearchQuery] = useState<string>('');
-      const [orderBy, setOrderBy] = useState("");
-      const [orderWith, setOrderWith] = useState("");
+    const [orderBy, setOrderBy] = useState("");
+    const [orderWith, setOrderWith] = useState("");
     const [actionType, setActionType] = useState<string>("");
     const [pagination, setPagination] = useState<PaginationState>({
         page: 1,
@@ -51,11 +51,11 @@ function PurchaseTable() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-    const orders: Order[] = useFetchOrders(status, forceFetch, searchQuery, pagination, setPagination) ?? [];
+    const orders: Order[] = useFetchOrders(status, forceFetch, searchQuery, pagination, setPagination,orderBy,orderWith) ?? [];
 
     console.log("orders:", orders);
-    console.log("pagi:", pagination ?? { page: "undefined", pageSize: "undefined" });
 
+    console.log("orderBy:", orderBy,"orderWith:",orderWith);
 
     const [columnKeysFiltered, setColumnKeysFiltered] = useState<string[]>([
         'id',
@@ -362,8 +362,8 @@ const handleModelClose = () => {
         { orderBy: "desc", orderWith: "createdAt", label: "Newest Created" },
         { orderBy: "asc", orderWith: "updatedAt", label: "Oldest Updated" },
         { orderBy: "desc", orderWith: "updatedAt", label: "Newest Updated" },
-        { orderBy: "asc", orderWith: "totalPrice", label: "Highest Price" },
-        { orderBy: "desc", orderWith: "totalPrice", label: "Lowest Price" },
+        { orderBy: "desc", orderWith: "totalPrice", label: "Highest Price" },
+        { orderBy: "asc", orderWith: "totalPrice", label: "Lowest Price" },
       ];
     
 

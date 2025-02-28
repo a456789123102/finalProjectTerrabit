@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchProducts } from "@/app/apis/product";
 
-const useFetchProducts = (searchQuery, category, pagination, setPagination, forceFetch) => {
+const useFetchProducts = (searchQuery, category, pagination, setPagination, forceFetch,orderBy, orderWith) => {
   const [products, setProducts] = useState([]);
 
   const fetchProductLists = async () => {
@@ -10,7 +10,9 @@ const useFetchProducts = (searchQuery, category, pagination, setPagination, forc
         searchQuery,
         category ? [parseInt(category)] : [],
         pagination.page.toString(),
-        pagination.pageSize.toString()
+        pagination.pageSize.toString(),
+        orderBy,
+        orderWith,
       );
       setProducts(productData.products);
       setPagination(productData.pagination);
@@ -21,7 +23,7 @@ const useFetchProducts = (searchQuery, category, pagination, setPagination, forc
 
   useEffect(() => {
     fetchProductLists();
-  }, [searchQuery, category, pagination.page, pagination.pageSize, forceFetch]); // เพิ่ม forceFetch ใน dependency
+  }, [searchQuery, category, pagination.page, pagination.pageSize, forceFetch,orderBy, orderWith]); // เพิ่ม forceFetch ใน dependency
 
   return products;
 };

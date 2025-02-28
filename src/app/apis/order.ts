@@ -56,7 +56,7 @@ export const refoundOrder = async (id: number) => {
 };
 /////////////////////////////////////////////////////
 
-export const fetchAllOrders = async (statuses?:string[],searchQuery?:string,page?: string,pageSize?: string) => {
+export const fetchAllOrders = async (statuses?:string[],searchQuery?:string,page?: string,pageSize?: string,orderBy?: string,orderWith?: string) => {
 try {
   const params = new URLSearchParams();
   if (statuses && statuses.length > 0) {
@@ -70,7 +70,10 @@ try {
    }
    if (pageSize) {
      params.append("pageSize", pageSize);
-     console.log(`pagesize add: ${pageSize}`);
+   }if(orderBy) {
+    params.append("orderBy", orderBy);
+   }if(orderWith) {
+    params.append("orderWith", orderWith);
    }
   console.log("params:", params);
   const res = await axios.get("/api/order/all",{
@@ -148,3 +151,17 @@ export const getTopSellerItems = async (interval?: string, startDate?: Date, end
 throw error;
   }
 };
+////////////////////////////////////////////////////////////////////
+export const getTotalIncomesForCharts = async (interval: string, startDate: Date, endDate: Date) => {
+  try {
+    const params = new URLSearchParams();
+    params.append("interval", interval);
+    params.append("startDate", startDate.toISOString());
+    params.append("endDate", endDate.toISOString());
+    const res = await axios.get(`/api/order/charts/getTotalIncomesForCharts`, { params });
+    return res.data;
+  } catch (error) {
+    console.error("error fetching order", error);
+    throw error;
+  }
+}

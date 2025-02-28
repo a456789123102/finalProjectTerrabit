@@ -9,7 +9,7 @@ import RadialBarChartComponents from "../../components/charts/RadialBarChartComp
 
 function orderCharts() {
   const { themeColors } = useTheme();
-  const [interval, setInterval] = useState<string>("monthly");
+  const [interval, setInterval] = useState<string>("weekly");
   const [tempInterval, setTempInterval] = useState<string>(interval);
   const [startDate, setStartDate] = useState<Date>(() => {
     let date = new Date();
@@ -109,7 +109,7 @@ function orderCharts() {
           endDate={tempEndDate}
           setEndDate={setTempEndDate}
           handleConfirm={handleConfirm}
-          chartKeys={chartKeys} // ตรวจสอบว่า tempChartKeys ไม่เป็น undefined
+          chartKeys={chartKeys} 
           setChartKeys={setChartKeys}
           options={options}
           errMessages={errMessages}

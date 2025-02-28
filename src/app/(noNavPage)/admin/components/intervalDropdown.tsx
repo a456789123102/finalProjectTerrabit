@@ -1,5 +1,6 @@
 import Select from "react-select";
 
+
 function IntervalDropdown({ 
   interval, 
   setInterval 

@@ -33,7 +33,7 @@ function ProductTable() {
     'id', 'name', 'price', 'discount', 'finalPrice', 'quantity', "ProductCategory", "Actions"
   ]);
 
-  const products = useFetchProducts(searchQuery, category, pagination, setPagination, forceFetch);
+  const products = useFetchProducts(searchQuery, category, pagination, setPagination, forceFetch,orderBy, orderWith);
   console.log("Products: ", products)
 
   const handleSearchQuery = (e) => {
@@ -167,9 +167,10 @@ function ProductTable() {
     { orderBy: "desc", orderWith: "createdAt", label: "Newest Created" },
     { orderBy: "asc", orderWith: "updatedAt", label: "Oldest Updated" },
     { orderBy: "desc", orderWith: "updatedAt", label: "Newest Updated" },
-    { orderBy: "asc", orderWith: "totalPrice", label: "Highest Price" },
-    { orderBy: "desc", orderWith: "totalPrice", label: "Lowest Price" },
+    { orderBy: "desc", orderWith: "finalPrice", label: "Highest Price" },
+    { orderBy: "asc", orderWith: "finalPrice", label: "Lowest Price" },
   ];
+
 
   
 
