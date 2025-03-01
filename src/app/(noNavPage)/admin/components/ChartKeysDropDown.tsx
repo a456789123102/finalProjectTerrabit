@@ -13,22 +13,24 @@ interface ChartKeysDropDownProps {
   chartKeys: string[];
   setChartKeys: (keys: string[]) => void;
   options: string[];
+  multiSelect:boolean;
 }
 
 function ChartKeysDropDown({
   chartKeys,
   setChartKeys,
   options,
+  multiSelect
 }: ChartKeysDropDownProps) {
   const { theme, themeColors } = useTheme();
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="bordered" className="border border-gray-300 flex flex-row bg-slate-100"><SlidersHorizontal size={18} /><div>Select Charts</div></Button>
+        <Button variant="bordered" className="border border-gray-300 flex flex-row " style={{backgroundColor:themeColors.tertiary}}><SlidersHorizontal size={18} /><div>Select Charts</div></Button>
       </DropdownTrigger>
       <DropdownMenu
         aria-label="Select Data"
-        selectionMode="multiple"
+        selectionMode={multiSelect ? "multiple" : "single"}
         style={{ backgroundColor: themeColors.bg, color: themeColors.text }}
         className="border border-gray-300 w-full min-w-[150px]"
         selectedKeys={new Set(chartKeys)}

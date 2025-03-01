@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import ChartFiltersPanel from "../../components/ChartFiltersPanel";
-import useFetchIncomesForCharts from "@/app/(noNavPage)/admin/hooks/orders/useFetchIncomesForCharts";
+import useFetchTotalReviewsForCharts from "@/app/(noNavPage)/admin/hooks/reviews/useFetchTotalReviewsForCharts";
 import LineChartComponent from "../../components/charts/LineChartComponent";
 import { useTheme } from "@/app/context/themeContext";
 
@@ -18,10 +18,9 @@ function IncomeCharts() {
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [tempStartDate, setTempStartDate] = useState<Date>(startDate);
     const [tempEndDate, setTempEndDate] = useState<Date>(endDate);
-    const [chartKeys, setChartKeys] = useState<string[]>(["total"]);
+    const [chartKeys, setChartKeys] = useState<string[]>(["comments"]);
     const [errMessages, setErrMessages] = useState("");
 
-    const colorsPie = ["#82ca9d", "#8884d8", "#ffc658", "#ff7300"];
 
     const checkIntervalLength = (): boolean => {
         const maxEndDate = new Date(tempStartDate);
@@ -66,7 +65,7 @@ function IncomeCharts() {
         console.log(` Confirmed! startDate: ${tempStartDate}, endDate: ${tempEndDate}, interval: ${tempInterval}`);
     };
 
-    const { chartsData, total,loading, error } = useFetchIncomesForCharts(interval, startDate, endDate);
+    const { chartsData, totalComments,averageRating,loading, error } = useFetchTotalReviewsForCharts(interval, startDate, endDate);
 
 
     if (loading) return <p>Loading...</p>;
@@ -80,13 +79,6 @@ function IncomeCharts() {
     };
     const options = getChartKeys();
     console.log("options", options);
-
-    const intervalTitleMap: Record<string, string> = {
-        daily: "Last Day-over-Day Growth (DoD)",
-        weekly: "Last Week-over-Week Growth (WoW)",
-        monthly: "Last Month-over-Month Growth (MoM)",
-    };
-    const title = intervalTitleMap[interval] || "Order Growth Comparison";
 
     return (
         <div className='min--screen w-full'

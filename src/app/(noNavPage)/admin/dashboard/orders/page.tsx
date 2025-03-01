@@ -113,6 +113,7 @@ function orderCharts() {
           setChartKeys={setChartKeys}
           options={options}
           errMessages={errMessages}
+          multiSelect={true}
         />
       </div>
       <div>

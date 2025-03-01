@@ -69,3 +69,23 @@ try {
   throw error;
 }
 }
+
+///////////////////////////////
+
+export const getTotalUsersForCharts = async (interval: string, startDate: Date, endDate: Date) => {
+  try {
+    const params = new URLSearchParams();
+  if(interval){
+    params.append("interval", interval);
+  }
+  if(startDate && endDate){
+    params.append("startDate", startDate.toISOString());
+    params.append("endDate", endDate.toISOString());
+  }
+    const res = await axios.get(`/api/users/charts/getTotalUsersForCharts`,{params});
+    return res.data;
+  } catch (error) {
+    console.error("error fetching order", error);
+    throw error;
+  }
+}

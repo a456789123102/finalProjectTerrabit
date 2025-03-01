@@ -21,7 +21,7 @@ export const menuItems: MenuItem[] = [
     items: [
       { title: "OverAll", href: "/admin/dashboard" },
       { title: "Orders", href: "/admin/dashboard/orders" },
-      { title: "Incomes (not done)", href: "/admin/dashboard/incomes" },
+      { title: "Incomes", href: "/admin/dashboard/incomes" },
       { title: "Feedback (not done)", href: "/admin/dashboard/userfeedback" },
       { title: "Users (not done)", href: "/admin/dashboard/users" }
     ]

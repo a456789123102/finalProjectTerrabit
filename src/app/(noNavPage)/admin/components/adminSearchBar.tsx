@@ -16,15 +16,15 @@ const AdminSearchBar: React.FC = () => {
   
 
   return (
-<div className="relative ">
-  <div className="flex items-center">
+<div className="relative w-full">
+  <div className="flex items-center w-full">
     <Search className="text-gray-500 absolute right-3"/>
     <input
       type="text"
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
       placeholder="Search menu..."
-      className="h-8 pr-10 pl-2 border border-gray-800 text-black w-[278px]" 
+      className="h-8 pr-10 pl-2 border border-gray-800 text-black w-full" 
 />
   </div>
   {searchTerm && filteredItems.length > 0 && (

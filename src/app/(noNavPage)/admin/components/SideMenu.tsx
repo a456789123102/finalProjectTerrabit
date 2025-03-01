@@ -8,7 +8,7 @@ import { menuItems, MenuItem } from "@/data/adminMenuItems";
 const SideMenu: React.FC = () => {
     const { theme, themeColors } = useTheme();
     const [openMenus, setOpenMenus] = useState<number[]>([]);
-    const pathname = usePathname(); // ✅ ดึง path ปัจจุบันจาก Next.js
+    const pathname = usePathname();
     const router = useRouter();
 
     useEffect(() => {

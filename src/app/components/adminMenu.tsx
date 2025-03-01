@@ -18,15 +18,21 @@ export default function AdminMenu() {
       path: "/admin/manage/product" 
     },
     {
-      key: "addProductImage",
-      label: "Add Product Image",
-      path: "/product/create/image" 
+      key: "orderManagement",
+      label: "Orders Management",
+      path: "/admin/manage/purchase" 
     },
     {
-        key: "Order Management",
-        label: "OrderManagement",
-        path: "/admin/manage/purchase"
+        key: "UsersManagement",
+        label: "Users Management",
+        path: "/admin/manage/users"
       },
+      {
+        key: "FeedbackManagement",
+        label: "Feedback Management",
+        path: "/admin/manage/feedbacks"
+      },
+
 
   ];
 

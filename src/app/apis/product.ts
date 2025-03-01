@@ -42,7 +42,7 @@ export const fetchProducts = async (
 
     if (categories && categories.length > 0) {
       categories.forEach((category) => {
-        params.append("category", category.toString()); // ส่งหมวดหมู่หลายค่าโดยไม่มี []
+        params.append("category", category.toString()); 
       });
     }
     if (page) {
@@ -76,7 +76,7 @@ export const getProductById = async (id: number) => {
     const res = await axios.get(`/api/product/${id}`);
 
     // Log ข้อมูลที่ได้รับจาก Backend
-    console.log("Response from Backend:", res.data); // ตรวจสอบข้อมูลที่ได้จาก Backend
+    console.log("Response from Backend:", res.data); 
 
     return res.data;
   } catch (error) {
@@ -85,7 +85,6 @@ export const getProductById = async (id: number) => {
   }
 };
 
-//แก้ไข
 export const updateProduct = async (
   id: number,
   name: string,
@@ -97,7 +96,7 @@ export const updateProduct = async (
 ) => {
   try {
     const res = await axios.patch(
-      `/api/product/${id}/edit`, // ใช้ path ตามที่ backend กำหนด
+      `/api/product/${id}/edit`, 
       {
         name,
         price,
@@ -114,7 +113,6 @@ export const updateProduct = async (
   }
 };
 
-//ดึงจากไอดีใน params
 export const fetchProductFromCatId = async (id: number) => {
   try {
     const res = await axios.get(`/api/product/category/${id}`);
@@ -126,7 +124,6 @@ export const fetchProductFromCatId = async (id: number) => {
   }
 };
 
-//ดึงRelated
 export const fetchRelatedProducts = async (
   categories: number[],
   name: string,
@@ -148,7 +145,7 @@ export const fetchRelatedProducts = async (
   }
 };
 
-//ลบ product
+
 export const deleteProduct = async (id:number) =>{
   try {
    const res = await axios.delete(`/api/product/${id}/delete`);
