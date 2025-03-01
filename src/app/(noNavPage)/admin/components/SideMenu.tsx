@@ -3,7 +3,7 @@ import { AppWindow, ChartLine, CornerRightUp, CornerRightDown, ChevronRight } fr
 import { usePathname } from 'next/navigation' // ใช้ Next.js API ดึง path
 import { useTheme } from '@/app/context/themeContext';
 import { useRouter } from 'next/navigation';
-import { menuItems, MenuItem } from "@/data/adminMenuItems";
+import { menuItems } from "@/data/adminMenuItems";
 
 const SideMenu: React.FC = () => {
     const { theme, themeColors } = useTheme();

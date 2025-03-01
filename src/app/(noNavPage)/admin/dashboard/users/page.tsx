@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import ChartFiltersPanel from "../../components/ChartFiltersPanel";
-import useFetchTotalReviewsForCharts from "@/app/(noNavPage)/admin/hooks/reviews/useFetchTotalReviewsForCharts";
 import LineChartComponent from "../../components/charts/LineChartComponent";
 import { useTheme } from "@/app/context/themeContext";
+import useFetchUsersForCharts from "../../hooks/users/useFetchUsersForCharts";
 import TotalBox from "../components/totalBox";
 
 function IncomeCharts() {
@@ -19,7 +19,7 @@ function IncomeCharts() {
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [tempStartDate, setTempStartDate] = useState<Date>(startDate);
     const [tempEndDate, setTempEndDate] = useState<Date>(endDate);
-    const [chartKeys, setChartKeys] = useState<string[]>(["comments"]);
+    const [chartKeys, setChartKeys] = useState<string[]>(["activeUsers"]);
     const [errMessages, setErrMessages] = useState("");
 
 
@@ -66,7 +66,7 @@ function IncomeCharts() {
         console.log(` Confirmed! startDate: ${tempStartDate}, endDate: ${tempEndDate}, interval: ${tempInterval}`);
     };
 
-    const { chartsData, totalComments,averageRating,loading, error } = useFetchTotalReviewsForCharts(interval, startDate, endDate);
+    const{ chartsData,totalActiveUsers,totalinActiveUsers,loading,error } = useFetchUsersForCharts(interval, startDate, endDate);
 
 
     if (loading) return <p>Loading...</p>;
@@ -100,13 +100,18 @@ function IncomeCharts() {
                     setChartKeys={setChartKeys}
                     options={options}
                     errMessages={errMessages}
-                    multiSelect={false}
+                    multiSelect={true}
                 />
             </div>
             <TotalBox 
         headerText="Total Orders"
-        amount={chartKeys[0] === "comments" ? totalComments : averageRating}
-        unit={chartKeys[0] === "comments" ? "comments" : "/ 5"}
+        amount={chartKeys.reduce((acc, key) => {
+            if (key === "activeUsers") return acc + totalActiveUsers;
+            if (key === "inactiveUsers") return acc + totalinActiveUsers;
+            return acc;
+          }, 0)}
+          
+        unit="users"
         startDate={startDate}
         endDate={endDate}
         includes={chartKeys}

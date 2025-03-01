@@ -13,7 +13,7 @@ function useFetchIncomesForCharts(interval: string, startDate: Date, endDate: Da
 const data = await getTotalIncomesForCharts(interval, startDate, endDate);
 console.log("data:",data);
             setChartsData(data.data || []);
-            setTotal(data.total || 0);
+            setTotal(data.totalIncomes || 0);
 
             setLoading(false);
     } catch (err) {

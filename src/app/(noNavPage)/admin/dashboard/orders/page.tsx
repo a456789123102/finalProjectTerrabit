@@ -6,6 +6,7 @@ import LineChartComponent from "../../components/charts/LineChartComponent";
 import { useTheme } from "@/app/context/themeContext";
 import PieChartComponent from "../../components/charts/PieChartComponent";
 import RadialBarChartComponents from "../../components/charts/RadialBarChartComponents";
+import TotalBox from "../components/totalBox";
 
 function orderCharts() {
   const { themeColors } = useTheme();
@@ -50,10 +51,10 @@ function orderCharts() {
     return errorMessage === "";
   };
   useEffect(() => {
-    checkIntervalLength()
-    console.log("error msg: " + errMessages)
-  },[tempEndDate,tempStartDate,tempInterval])
-  
+    if (errMessages) {
+      checkIntervalLength();
+    }
+  }, [tempEndDate, tempStartDate, tempInterval, errMessages]);
   
 
   const handleConfirm = () => {
@@ -116,6 +117,20 @@ function orderCharts() {
           multiSelect={true}
         />
       </div>
+      <TotalBox 
+        headerText="Total Orders"
+        amount={Object.entries(total).reduce((acc, [key, value]) => {
+          if (chartKeys.includes(key)) {
+            return acc + (typeof value === "number" ? value : 0);
+          }
+          return acc;
+        }, 0)}
+        
+        unit="orders"
+        startDate={startDate}
+        endDate={endDate}
+        includes={chartKeys}
+      />
       <div>
         <div className=' mx-7 p-5 flex flex-col'>
           <div className='p-5  border border-gray-300' style={{ backgroundColor: themeColors.base }}>

@@ -4,6 +4,7 @@ import ChartFiltersPanel from "../../components/ChartFiltersPanel";
 import useFetchIncomesForCharts from "@/app/(noNavPage)/admin/hooks/orders/useFetchIncomesForCharts";
 import LineChartComponent from "../../components/charts/LineChartComponent";
 import { useTheme } from "@/app/context/themeContext";
+import TotalBox from "../components/totalBox";
 
 function IncomeCharts() {
     const { themeColors } = useTheme();
@@ -86,8 +87,6 @@ function IncomeCharts() {
         weekly: "Last Week-over-Week Growth (WoW)",
         monthly: "Last Month-over-Month Growth (MoM)",
     };
-    const title = intervalTitleMap[interval] || "Order Growth Comparison";
-
     return (
         <div className='min--screen w-full'
             style={{ backgroundColor: themeColors.bg }}
@@ -110,6 +109,14 @@ function IncomeCharts() {
                     multiSelect={false}
                 />
             </div>
+            <TotalBox 
+        headerText="Total Incomes"
+        amount={total}
+        unit="THB"
+        startDate={startDate}
+        endDate={endDate}
+        includes={chartKeys}
+      />
             <div>
                 <div className=' mx-7 p-5 flex flex-col'>
                     <div className='p-5  border border-gray-300' style={{ backgroundColor: themeColors.base }}>

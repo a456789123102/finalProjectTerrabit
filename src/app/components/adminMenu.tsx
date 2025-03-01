@@ -14,12 +14,12 @@ export default function AdminMenu() {
     },
     {
       key: "ProductManagement",
-      label: "Product Management",
+      label: "Manage Product",
       path: "/admin/manage/product" 
     },
     {
       key: "orderManagement",
-      label: "Orders Management",
+      label: "Manage Purchase Order",
       path: "/admin/manage/purchase" 
     },
     {
