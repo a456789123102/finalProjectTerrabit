@@ -4,19 +4,19 @@ import axios from "axios";
   export const uploadSlipImage = async (orderId: number, image: File) => {
     try {
       const formData = new FormData();
-      formData.append("image", image); // ใส่ไฟล์ใน FormData
+      formData.append("image", image); 
   
       const res = await axios.post(
-        `/api/slipImage/${orderId}/upload`, // URL API
+        `/api/slipImage/${orderId}/upload`, 
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // กำหนด Content-Type
+            "Content-Type": "multipart/form-data", 
           },
         }
       );
   
-      return res.data; // ส่งกลับข้อมูลที่ได้รับจาก Backend
+      return res.data;
     } catch (error) {
       console.error("Error uploading slip image:", error);
       throw error;

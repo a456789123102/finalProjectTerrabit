@@ -31,7 +31,7 @@ const SideMenu: React.FC = () => {
   {menuItems.map((item, index) => (
     <div key={index} className="flex flex-col border-y w-full items-center">
       <div
-        className="text-[1rem] flex flex-row gap-2 items-center p-3 justify-between w-full cursor-pointer bg-blue-400 border-2 border-blue-600 text-white"
+        className="text-[1rem] flex flex-row gap-2 items-center p-3 justify-between w-full cursor-pointer bg-blue-400 border-2 border-blue-500 text-white"
         onClick={() => toggleMenu(index)}
       >
         <div className="flex flex-row gap-2">
@@ -51,9 +51,9 @@ const SideMenu: React.FC = () => {
             key={subIndex}
             
             className={`py-3 text-[0.9rem] pl-11 pr-3 flex flex-row justify-between w-full  ${
-              pathname === subItem.href ? "border border-blue-400 font-bold" : "border-b border-gray-200"
+              pathname === subItem.href ? "border border-[#FF9913] font-bold" : "border-b border-gray-200"
             }`}
-            style={{ color: pathname === subItem.href ? themeColors.hoverText : themeColors.text }}
+            style={{ color: pathname === subItem.href ? "#FF9913" : themeColors.text }}
           >
             <div className="hover:text-yellow-600 cursor-pointer" onClick={handleMenuClick(subItem.href)}>{subItem.title}</div>
             {pathname === subItem.href && <ChevronRight />}

@@ -3,16 +3,22 @@ import React, { useState } from "react";
 import { menuItems, MenuItem } from "@/data/adminMenuItems"; // ปรับ path ให้ถูกต้องตามโครงสร้างโปรเจคของคุณ
 import { Search } from "lucide-react";
 import { useTheme } from "@/app/context/themeContext";
+import { useRouter } from "next/navigation"; 
 
 const AdminSearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { themeColors } = useTheme();
+  const router = useRouter();
 
   const filteredItems = menuItems.flatMap((menu: MenuItem) =>
-    menu.items.filter((item) =>
-      item.title.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    menu.items
+      .filter((item) => item.title.toLowerCase().includes(searchTerm.toLowerCase()))
+      .map((item) => ({
+        ...item,
+        parentTitle: menu.title 
+      }))
   );
+  
   
 
   return (
@@ -33,10 +39,10 @@ const AdminSearchBar: React.FC = () => {
         <div
           key={index}
           className="p-2 hover:bg-gray-100 cursor-pointer"
-          onClick={() => {
-          }}
+          onClick={() => router.push(item.href)}
         >
-          {item.title}
+          {item.title} ({item.parentTitle})
+
         </div>
       ))}
     </div>
