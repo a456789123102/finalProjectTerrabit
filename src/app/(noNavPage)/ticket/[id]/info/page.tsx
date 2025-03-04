@@ -1,11 +1,58 @@
 "use client"
+import { createReply, getTicketById } from '@/app/apis/ticket'
 import { AlarmClock, MessageSquareReply } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import React from 'react'
+import { useEffect, useState } from 'react'
+import { formatDistanceToNow } from "date-fns";
+import { enUS } from "date-fns/locale";
+import { useUserStore } from "@/store/zustand";
 
 function page() {
+  const [ticket,setTicket] = useState({})
+  const [loading, setLoading] = useState(true)
+  const[message,setMessage] = useState("");
   const params = useParams()
   const { id } = params
+  const ticketId = Array.isArray(id) ? id[0] : id;
+  const { id: currentUserId } = useUserStore();
+
+
+  const fetchTicket = async () => {
+  
+    try {
+      const res = await getTicketById(ticketId); 
+      console.log(res);
+      setTicket(res);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching ticket:", error);
+    }
+  };
+  
+  useEffect(() => {
+fetchTicket();
+  }, [id]);
+
+const sendReply = async () => {
+  try {
+    if (!message.trim()) return; 
+    await createReply(ticketId,message);
+    setMessage("");
+    fetchTicket();
+  } catch (error) {
+    console.error("Error sending reply:", error);
+  }
+}
+
+if(loading) {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen">
+      <div className="spinner-border text-primary" role="status">
+        <span className="sr-only">Loading...</span>
+      </div>
+    </div>
+  )
+}
   return (
 <div className="w-full min-h-screen bg-slate-100 flex flex-col items-center">
   {/* Header */}
@@ -14,73 +61,89 @@ function page() {
   </div>
 
   {/* Main Content */}
-  <div className='p-5 flex flex-row w-full gap-5'>
+  <div className="p-5 flex flex-row w-full gap-5 flex-1 min-h-0">
     {/* Left Panel - Dynamic Height */}
-    <div className='p-3 w-1/6 border border-gray-300 flex flex-col h-96 gap-2 sticky top-0 bg-white'>
+    <div className="p-3 w-1/6 border border-gray-300 flex flex-col h-96 gap-2 sticky top-0 bg-white">
       <div>TICKET INFORMATION</div>
       <div>Total Replies</div>
-      <div className='text-gray-600 flex flex-row gap-1 items-center'>
+      <div className="text-gray-600 flex flex-row gap-1 items-center">
         <MessageSquareReply size={18} />
-        <div>18</div>
+        <div>{ticket.messages ? ticket.messages.length : 0}</div>
       </div>
-      <div>Timestamp</div>
-      <div className='text-gray-600 flex flex-row gap-1 items-center'>
+      <div>Last Activity</div>
+      <div className="text-gray-600 flex flex-row gap-1 items-center">
         <AlarmClock size={18} />
-        <div>1999-29-08 23:54</div>
+        <div>{ticket.updatedAt ? new Date(ticket.updatedAt).toLocaleString() : "N/A"}</div>
       </div>
-      <div className='border-t border-gray-300 pt-1'>Status</div>
-      <div className='text-gray-600'>open</div>
-      <div className='border-t border-gray-300 pt-1'>Actions</div>
-      <div className='text-gray-600'>close this ticket</div>
+      <div className="border-t border-gray-300 pt-1">Status</div>
+      <div className="text-gray-600">
+        {ticket.isSolved ? <div>Closed</div> : <div>Open</div>}
+      </div>
+      <div className="border-t border-gray-300 pt-1">Actions</div>
+      <div className="text-gray-600">
+        {ticket.isSolved ? <div>-</div> : <div>close this ticket</div>}
+      </div>
     </div>
 
     {/* Right Panel - Expandable */}
-    <div className='p-5 w-5/6 border flex flex-col gap-2 border-gray-300 bg-white h-[calc(100vh-4rem)]'>
-      <div className='text-[1.5rem]'>How can I purchase order with my metamask account on your website? Even is it possible?</div>
+    <div className="p-5 w-5/6 border flex flex-col gap-2 border-gray-300 bg-white flex-1 min-h-0">
+      <div className="text-[1.5rem]">{ticket.topic}</div>
 
       {/* Ticket Info Bar */}
-      <div className='flex flex-row gap-4 py-2 border-b border-gray-300'>
-        <div className='flex flex-row gap-1 items-center'>
-          <div className='text-gray-600'>Created - </div>
-          <div>2 days ago</div>
+      <div className="flex flex-row gap-6 py-2 border-b border-gray-300">
+        <div className="flex flex-row gap-1 items-center">
+          <div className="text-gray-500">Created - </div>
+          <div>{formatDistanceToNow(new Date(ticket.createdAt), { addSuffix: true, locale: enUS })}</div>
         </div>
-        <div className='flex flex-row gap-1 items-center'>
-          <div className='text-gray-600'>By - </div>
-          <div>User1</div>
+        <div className="flex flex-row gap-1 items-center">
+          <div className="text-gray-500">By - </div>
+          <div>{ticket.user?.username}{ticket.user?.isAdmin && " (Admin)"}</div>
         </div>
       </div>
 
       {/* Ticket Content */}
-      <div className="whitespace-pre-wrap border-b border-gray-300 py-3 flex-1 overflow-auto">
-        Hey, I’ve been exploring your website and I’m really interested in making a purchase. However, I prefer using **MetaMask** for payments instead of traditional methods.
-
-        I was wondering: **Is it even possible to purchase an order using my MetaMask wallet?** If so, how does the process work? Do I need to manually send crypto to a given address, or is there an integrated payment flow that connects directly with MetaMask?
-
-        Also, what cryptocurrencies are supported? Do you accept **ETH**, **USDC**, or any other tokens? And are there any additional fees or gas costs I should be aware of before proceeding?
-
-        Would really appreciate a step-by-step guide on how to complete a purchase using MetaMask. Looking forward to your response! 🚀
-
-        **Thanks!**
-        User1
+      <div className="text-[1.1rem] whitespace-pre-wrap border-b border-gray-300 py-3 flex-grow overflow-auto min-h-[150px]">
+        {ticket.details}
       </div>
 
       {/* Replies Section */}
-      <div className='border border-red-500 mt-4 gap-5 flex flex-col flex-1 overflow-auto'>
-        <div className='flex flex-col border bg-gray-50 p-5'>
-          <div className='flex flex-row gap-2 pb-2 items-baseline'>
-            <div>Admin1</div>
-            <div className='text-[0.8rem] text-gray-600'>2mins ago</div>
-          </div>
-          <div className='border p-2 text-[0.9rem] min-h-32 bg-white text-gray-800'>
-            Hello, thanks for your question. Unfortunately, our website still does not support payment via MetaMask.
-          </div>
-        </div>
+      <div className="mt-4 gap-5 flex flex-col flex-grow overflow-auto min-h-0">
+        {ticket.messages &&
+          ticket.messages.map((message, i) => (
+            <div
+              className={`flex flex-col border bg-gray-50 p-5 ${
+                currentUserId === message.senderId ? "border-blue-400" : "border-gray-300"
+              }`}
+              key={i}
+            >
+              <div className="flex flex-row gap-2 pb-2 items-baseline">
+                <div>{message.sender.username}</div>
+                <div className="text-[0.7rem] text-gray-600">
+                  {formatDistanceToNow(new Date(message.createdAt), { addSuffix: true, locale: enUS })}
+                </div>
+              </div>
+              <div className="border-t p-3 text-[0.9rem] text-gray-700">{message.content}</div>
+            </div>
+          ))}
       </div>
 
-      {/* Reply Form - Sticky at Bottom */}
-      <div className='flex flex-row gap-4 py-2 border-t border-gray-300 sticky bottom-0 bg-white'>
-        <textarea placeholder='Reply to ticket' className='w-full border border-gray-300 h-20 p-3'></textarea>
-        <button className='w-1/4 border border-gray-400 text-gray-800 text-center py-2'>Send</button>
+      {/* Reply Form */}
+      <div className="flex flex-row gap-4 py-2 border-t border-gray-300 bg-white sticky bottom-0 w-full">
+        <textarea
+          placeholder="Reply to ticket"
+          className="w-full border border-gray-300 h-20 p-3"
+          value={message}
+          maxLength={500}
+          onChange={(e) => setMessage(e.target.value)}
+        ></textarea>
+        <div className="w-1/4 flex flex-col justify-end">
+          <div
+            className="border hover:bg-blue-600 cursor-pointer bg-blue-500 text-white rounded-sm text-center py-2"
+            onClick={sendReply}
+          >
+            Send
+          </div>
+        </div>
       </div>
     </div>
   </div>

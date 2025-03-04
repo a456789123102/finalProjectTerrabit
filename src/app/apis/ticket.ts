@@ -34,3 +34,30 @@ export const myTickets = async (
     throw error;
   }
 };
+
+export const getTicketById = async(id:string) => {
+try {
+  const res = await axios.get(`/api/ticket/${id}/info`);
+  return res.data;
+} catch (error) {
+  throw error;
+}
+}
+
+export const createReply = async(id:string,content:string) => {
+  try {
+    const res = await axios.post(`/api/ticket/${id}/reply`,{content});
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const createTicket = async(topic:string,details:string) => {
+  try {
+    const res = await axios.post(`/api/ticket/create`,{topic,details});
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
