@@ -1,4 +1,5 @@
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
+import { MapPinHouse } from "lucide-react";
 import Link from "next/link";
 
 interface Address {
@@ -32,8 +33,9 @@ const AddressDropdown: React.FC<AddressDropdownProps> = ({
     <div className="bg-gray-200 w-full">
       <Dropdown className="w-full">
         <DropdownTrigger>
-          <Button variant="bordered" className="w-full block">
-            <div className="text-slate-900 border text-[0.7rem] w-full whitespace-normal break-words text-left">
+          <Button variant="bordered" className="w-full flex flex-row gap-1">
+            <MapPinHouse size={15} />
+            <div className="text-slate-800 border text-[0.7rem] w-full whitespace-normal break-words text-left">
               {selectedAddressObj
                 ? `${selectedAddressObj.recipientName}, ${selectedAddressObj.currentAddress}, ${selectedAddressObj.tambonName}, ${selectedAddressObj.amphureName}, ${selectedAddressObj.provinceName}, ${selectedAddressObj.zipCode}`
                 : "Select an address"}

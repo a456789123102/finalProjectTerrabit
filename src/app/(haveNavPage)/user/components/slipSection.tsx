@@ -35,9 +35,9 @@ function SlipSection({ order, isModalOpen, handleImageClick, handleModalClose, h
   }
 
   return (
-    <div className="w-full flex flex-col gap-2 justify-between">
+    <div className="w-full px-2 flex flex-col gap-2 justify-between">
       {/* ข้อความแสดงสถานะ */}
-     <div className='py-[10px] mb-3 font-bold border-b border-gray-300 text-[1.1rem] w-full items-center border '>
+     <div className='py-[10px]  mb-3 border-b border-gray-300 text-[1.1rem] w-full items-center '>
      {order.slipUrl ? (
         <div className="text-green-700">Your Payment Slip:</div>
       ) : (

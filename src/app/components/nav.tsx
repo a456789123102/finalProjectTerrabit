@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { myCarts } from '../apis/carts';
 
 const menuItems = [
-  { name: 'Games', href: "/product" },
+  { name: 'Games', href: "/product?category=1" },
   { name: 'Products', href: '/product' },
   { name: 'News', href: null },
   { name: 'Careers', href: '/careers' },
@@ -59,9 +59,10 @@ useEffect(() => {
       <div className='flex flex-row gap-7 w-1/3 items-center overflow-hidden'>
         {menuItems.map((item, index) => (
           item.href ? (
-            <Link key={index} href={item.href} className="hover:underline cursor-pointer hover:text-yellow-200 hover:text-[1.3rem] transition-all duration-200 delay-50">
-              {item.name}
-            </Link>
+<div key={index} onClick={() => router.replace(item.href)} className="hover:underline cursor-pointer hover:text-yellow-200 hover:text-[1.3rem] transition-all duration-200 delay-50">
+  {item.name}
+</div>
+
           ) : (
             <div key={index} className="hover:underline cursor-pointer hover:text-yellow-200 hover:text-[1.5rem] transition-all duration-200 delay-100">
               {item.name}

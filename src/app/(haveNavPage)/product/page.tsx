@@ -23,12 +23,23 @@ const searchFromUrl = searchParams.get('search');
   });
 
   useEffect(() => {
-    if (categoryFromUrl) {
-      setCategory(categoryFromUrl); 
-    }if(searchFromUrl){
-setSearch(searchFromUrl)
+    const newCategory = searchParams.get("category");
+    const newSearch = searchParams.get("search");
+  
+    console.log("Checking category from URL...", newCategory);
+    
+    if (newCategory !== category) {
+      setCategory(newCategory || "");
+      console.log("Updated category from URL:", newCategory);
     }
-  }, [categoryFromUrl,searchFromUrl]);
+    
+    if (newSearch !== search) {
+      setSearch(newSearch || "");
+      console.log("Updated search from URL:", newSearch);
+    }
+  }, [searchParams.toString()]);
+  
+  
 
   const fetchProductList = useCallback(async () => {
     setLoading(true);

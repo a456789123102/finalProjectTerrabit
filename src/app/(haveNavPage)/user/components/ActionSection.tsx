@@ -1,26 +1,22 @@
+import { CircleX, HandCoins } from 'lucide-react';
 import React from 'react';
 
 function ActionSection({ order, handleCancelledOrder, handleRefoundOrder }) {
 
     const cancelledBTN = (
-        <button
-            key="cancelled"
-            className="p-2 px-4 bg-red-500 hover:bg-red-400 shadow-md rounded"
-            onClick={() => handleCancelledOrder(order.id)}
-        >
-            Cancel Order
-        </button>
-    );
-
-    const refoundBTN = (
-        <button
-            key="refound"
-            className="p-2 px-4 bg-orange-500 hover:bg-orange-400 shadow-md rounded"
-            onClick={() => handleRefoundOrder(order.id)}
-        >
-            Request Refund
-        </button>
-    );
+        <div className="p-2 text-red-500 cursor-pointer flex items-center gap-2 hover:underline" onClick={() => handleCancelledOrder(order.id)}>
+          <CircleX size={15} />
+          <div>Cancelled Order</div>
+        </div>
+      );
+      
+      const refoundBTN = (
+        <div className="p-2 text-orange-500 cursor-pointer flex items-center gap-2 hover:underline" onClick={() => handleRefoundOrder(order.id)}>
+          <HandCoins size={15} />
+          <div>Request Refund</div>
+        </div>
+      );
+      
 
 
     const actions = [
@@ -36,8 +32,8 @@ function ActionSection({ order, handleCancelledOrder, handleRefoundOrder }) {
 
     return (
         <div>
-            <div className="text-[1.1rem] mb-2 font-bold">Action:</div>
-            <div className="text-[0.8rem] text-white flex gap-2">
+            <div className="border-b border-gray-300 mb-3 py-[10px] items-baseline text-[1.1rem]">Action:</div>
+            <div className="text-[0.8rem] text-white flex gap-2 flex-col">
                 {availableActions.length > 0 ? (
                     availableActions.map(option => option) 
                 ) : (

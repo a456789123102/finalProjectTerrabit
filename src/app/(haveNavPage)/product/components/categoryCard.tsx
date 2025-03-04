@@ -42,9 +42,6 @@ const CategorySelect = ({ setCategory, isMulti, selectedCategories = [] }) => {
     setSelectedOptions(selectedOption); // 🔹 อัปเดต state ให้ตรงกับ React-Select
   };
 
-  console.log("🚀 categories:", categories);
-  console.log("✅ selectedCategories (Raw):", selectedCategories);
-  console.log("🎯 Selected Options for Select:", selectedOptions);
 
   return (
 <div className='text-sm overflow-visible'>

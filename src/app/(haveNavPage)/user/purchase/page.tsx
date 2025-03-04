@@ -44,24 +44,24 @@ interface Status {
 
 
 function Orders() {
-  const [orders, setOrders] = useState<Order[]>([]); // Use Order interface
-  const [addresses, setAddresses] = useState<Address[]>([]); // Use Address interface
-  const [status, setStatus] = useState<string[]>(["pending_payment_proof"]); // Status key
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [status, setStatus] = useState<string[]>(["pending_payment_proof"]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
 
   useEffect(() => {
-    fetchOrders(); // โหลดข้อมูลเมื่อ component ถูก mount หรือ status เปลี่ยน
+    fetchOrders();
   }, [status]);
 
   useEffect(() => {
-    fetchAddress(); // โหลดข้อมูลเมื่อ orders เปลี่ยน
+    fetchAddress();
   }, [orders]);
 
   const fetchOrders = async () => {
     try {
       const orderItems = await myOrder(status);
-      setOrders(orderItems); // อัปเดตข้อมูล order
+      setOrders(orderItems);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -71,7 +71,7 @@ function Orders() {
     try {
       const addressItems = await getOwnAddress();
       console.log("Fetched addresses:", JSON.stringify(addressItems, null, 2));
-      setAddresses(addressItems.addresses); // อัปเดตข้อมูล address
+      setAddresses(addressItems.addresses);
     } catch (error) {
       console.error("Error fetching addresses:", error);
     }
@@ -82,7 +82,7 @@ function Orders() {
       console.log("orderId:", orderId, "newAddressId:", newAddressId);
       const res = await updateOrderAddress(orderId, newAddressId);
       console.log("updated order addresses:", JSON.stringify(res, null, 2));
-      await fetchOrders(); // รีเฟรชข้อมูลหลังจากอัปเดตที่อยู่สำเร็จ
+      await fetchOrders();
     } catch (error) {
       console.error("Error updating address:", error);
     }
@@ -166,8 +166,8 @@ function Orders() {
 
   return (
     <div className="flex flex-col items-center gap-3 min-w-[590px]">
-      <div className="self-start p-2 bg-white w-full pl-5">Checkout Section</div>
-      <div className="bg-gray-100 w-5/6 justify-center flex flex-col mt-5 p-6 m-4">
+      <div className="self-start p-2 bg-white w-full pl-5 border border-gray-300">Checkout Section</div>
+      <div className="bg-gray-100 w-full justify-center flex flex-col mt-5 p-6 m-4">
         <div className="flex flex-row bg-white justify-between w-full shadow-sm">
           {statuses.map((item) => (
             <button
@@ -187,23 +187,23 @@ function Orders() {
             orders.map((order) => (
               <div
                 key={order.id}
-                className="font-poppins shadow-sm flex flex-row justify-between min-h-24 bg-white"
+                className="font-poppins shadow-sm flex flex-row justify-between min-h-40 bg-white"
               >
-                <div className=" border-x border-gray-300  w-1/4 flex flex-col justify-between">
+                <div className=" px-2 border-x border-gray-300  w-1/4 flex flex-col justify-between">
                   <div>
                     <div className="flex flex-row gap-3 items-center">
                       <div className=" flex flex-row gap-2 border-b border-gray-300 mb-3 py-[10px] w-full items-baseline text-[1.1rem]">
-                        <div className="font-bold pl-2">Order ID:</div>
-                        <div> {order.id}</div>
+                        <div className=" pl-2">Order ID:</div>
+                        <div> #{String(order.id).padStart(4,"0")}</div>
                       </div>
                     </div>
                     <div className=" text-slate-700 text-[0.75rem]">
-                      {order.items.map((item,i) => (
+                      {order.items.map((item, i) => (
                         <div key={item.id} className=" px-2 gap-2 flex flex-row">
-                           <div className="text-black">{i}.</div> 
-                          <div className="text-black overflow-clip">{item.productName},</div> 
-                          <div>Quantity: {item.quantity},</div> 
-                          <div>Price:</div> 
+                          <div className="text-black">{i+1}.</div>
+                          <div className="text-black overflow-clip">{item.productName},</div>
+                          <div>Quantity: {item.quantity},</div>
+                          <div>Price:</div>
                           <Number>{item.price}</Number>
                         </div>
                       ))}
@@ -226,27 +226,35 @@ function Orders() {
                     handleClearSlipImage={handleClearSlipImage}
                   />
                 </div>
-                <div className="border-r-2 w-1/4 p-3 flex flex-col gap-2">
+                <div className="border-r w-1/4 px-2 flex flex-col gap-2 border-gray-300">
                   {
                     order.addressesId && order.status !== "pending_payment_proof" && order.status !== "pending_payment_verification" ? (
                       <div>
-                        <div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>
+                        <div className="flex flex-row gap-3 items-center">
+                          <div className="flex flex-row gap-2 border-b border-gray-300 mb-3 py-[10px] w-full items-baseline text-[1.1rem]">
+                            <div className="pl-2 text-green-700">Shipping to:</div>
+                          </div>
+                        </div>
                         {(() => {
-                          const curradd = addresses.find((address) => address.id === order.addressesId)
+                          const curradd = addresses.find((address) => address.id === order.addressesId);
                           return curradd ? (
-                            <div className="text-[0.8rem] text-slate-800">
+                            <div className="text-[0.8rem] text-slate-800 px-2">
                               {curradd.recipientName}, {curradd.currentAddress}, {curradd.tambonName}, {curradd.amphureName}, {curradd.provinceName}, {curradd.zipCode}
                             </div>
                           ) : (
-                            <div>No address found</div>
+                            <div className="px-2">No address found</div>
                           );
-
-                        })()
-                        }
+                        })()}
                       </div>
                     ) : (
                       <div>
-                        {order.addressesId ? (<div className="text-green-700 text-[1.1rem] mb-2 font-bold">Shipping to:</div>) : (<div className="text-red-700 text-[1.1rem] mb-2 font-bold">Please Select an address:</div>)}
+                        <div className="flex flex-row gap-3 items-center">
+                          <div className="flex flex-row gap-2 border-b border-gray-300 mb-3 py-[10px] w-full items-baseline text-[1.1rem]">
+                            <div className={` pl-2 ${order.addressesId ? "text-green-700" : "text-red-700"}`}>
+                              {order.addressesId ? "Shipping to:" : "Please Select an address:"}
+                            </div>
+                          </div>
+                        </div>
                         <AddressDropdown
                           addresses={addresses}
                           selectedAddress={order.addressesId}
@@ -256,17 +264,9 @@ function Orders() {
                       </div>
                     )
                   }
-
                 </div>
-                <div className="border-r-2 w-1/4 p-3">
-                  {/* <div className="text-[1.1rem] mb-2 font-bold">Action:</div>
-                  <div className="text-[0.8rem] text-white">
-                    {order.status === "pending_payment_proof" ? (
-                      <button className="p-2 px-4 bg-red-500 hover:bg-red-400 shadow-md rounded" onClick={() => { handleOrderDelete(order.id) }}>Delete this Order</button>
-                    ) : order.status === "pending_payment_verification" || order.status === "payment_verified" ? 
-                    (<button className="p-2 px-4 bg-orange-500 hover:bg-orange-400  shadow-md rounded" onClick={() => {handleRefoundOrder(order.id) }}>Cancel this order.</button>) :
-                      <button className="p-2 px-4 bg-red-400 hover:bg-red-500  shadow-md rounded">Undo the cancellation.</button>}
-                  </div> */}
+
+                <div className="border-r w-1/4 px-2 flex flex-col gap-2 border-gray-300">
                   <ActionSection
                     order={order}
                     handleRefoundOrder={handleRefoundOrder}
