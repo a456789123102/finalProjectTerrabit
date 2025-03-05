@@ -1,6 +1,7 @@
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import { useRouter } from 'next/navigation'; 
 import { useState } from "react";
+import {FileSliders} from "lucide-react"
 
 export default function AdminMenu() {
   const router = useRouter(); 
@@ -43,10 +44,10 @@ export default function AdminMenu() {
   
 
   return (
-    <div className="text-yellow-500 hover:bg-orange-100 cursor-pointer">
+    <div className="text-yellow-500 hover:bg-orange-100 cursor-pointer bg-blue-500  rounded-sm">
       <Dropdown isOpen={isOpen}>
         <DropdownTrigger>
-          <Button variant="bordered"
+          <Button variant="bordered" className="text-[0.7rem] flex flex-row gap-1"
           onMouseEnter={() => {
             setIsOpen(true);
           }}
@@ -54,7 +55,8 @@ export default function AdminMenu() {
             setIsOpen(false);
           }}
           >
-            Admin Menu
+            <FileSliders size={17}/>
+            <div>Admin Menu</div>
           </Button>
         </DropdownTrigger>
         <DropdownMenu

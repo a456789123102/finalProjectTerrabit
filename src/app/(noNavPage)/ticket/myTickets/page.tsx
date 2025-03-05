@@ -1,11 +1,11 @@
 "use client"
-import { myTickets } from '@/app/apis/ticket';
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { closeTicket, myTickets } from '@/app/apis/ticket';
+import { ChevronLeft, ChevronRight, Search, Ticket } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 
 interface TicketResponse {
@@ -19,7 +19,7 @@ interface TicketResponse {
 }
 
 function Page() {
-  const router = useRouter();
+ 
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 10,
@@ -33,6 +33,8 @@ function Page() {
   const [isSolved, setIssolved] = useState("");
   const [search, setSearch] = useState('');
   const [tempSearch, setTempSearch] = useState('');
+  const router = useRouter();
+  const searchParams = useSearchParams(); 
 
   const getTickets = async () => {
     const data = await myTickets(search, orderBy, orderWith, isSolved, pagination.page.toString(), pagination.pageSize.toString());
@@ -45,6 +47,13 @@ function Page() {
     getTickets();
   }, [search, orderBy, orderWith, isSolved, pagination.page]);
 
+  useEffect(() => {
+    const statusParam = searchParams.get("status");
+
+    if (statusParam) {
+      setIssolved(statusParam === "solved"? "true" : statusParam === "unsolved"? "false" : "");
+    }
+  }, [searchParams]);
 
   const handleSearch = (e) => {
     if (e) e.preventDefault(); 
@@ -65,13 +74,22 @@ function Page() {
     }
   };
 
+  const handleCloseTicket = async (id:number) => {
+    try {
+      await closeTicket(id);
+      getTickets();
+    } catch (error) {
+      console.error("Error closing ticket:", error);
+    }
+  }
+
 
 
   const sortByOptions = [
     { orderBy: "desc", orderWith: "createdAt", label: "Creation Date: Newest First" },
     { orderBy: "asc", orderWith: "createdAt", label: "Creation Date: Oldest First" },
-    { orderBy: "desc", orderWith: "timestamp", label: "Last Activity: Most Recent First" },
-    { orderBy: "asc", orderWith: "timestamp", label: "Last Activity: Oldest First" },
+    { orderBy: "desc", orderWith: "updatedAt", label: "Last Activity: Most Recent First" },
+    { orderBy: "asc", orderWith: "updatedAt", label: "Last Activity: Oldest First" },
   ];
 
   const statusOptions = [
@@ -141,8 +159,9 @@ function Page() {
 
 
           </div>
-          <div className="border rounded-sm bg-blue-500 text-[0.9rem] text-white p-2 hover:text-yellow-300 hover:bg-blue-600 cursor-pointer">
-            <div>Create new ticket</div>
+          <div className="border rounded-sm flex flex-row gap-1 items-center bg-blue-500 text-[0.9rem] text-white p-2 hover:text-yellow-300 hover:bg-blue-600 cursor-pointer">
+           <Ticket size={17} />
+            <div onClick={() => router.push("/ticket/create")}>Create new Ticket</div>
           </div>
         </div>
       </div>
@@ -181,7 +200,7 @@ function Page() {
                     className="cursor-pointer text-blue-500 hover:text-blue-700"
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log("Close ticket:", ticket.id);
+                      handleCloseTicket(ticket.id);
                     }}
                   >
                     Close Ticket

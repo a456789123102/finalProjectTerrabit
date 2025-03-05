@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation"; // ❌ ไม่ใช้ usePathname() แล้ว
+import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/zustand";
 import AdminNavbar from "./components/adminNavbar";
 import AdminSidebar from "./components/adminSidebar";
@@ -12,11 +12,11 @@ function Layout({ children }: { children: React.ReactNode }) {
   const { username, isAdmin } = useUserStore();
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isScrollDown, setIsScrollDown] = useState(false);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // ✅ ป้องกัน Redirect ทันที
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); 
 
   useEffect(() => {
     if (username === undefined) {
-      console.log("⏳ Loading Zustand state...");
+      console.log(" Loading Zustand state...");
       return; 
     }
 
@@ -25,8 +25,8 @@ function Layout({ children }: { children: React.ReactNode }) {
       const currentPath = encodeURIComponent(window.location.pathname);
       router.replace(`/login?redirect=${currentPath}`);
     } else if (!isAdmin) {
-      console.log("🚫 User is not an admin. Redirecting to home...");
-      router.replace("/"); // 🔥 ถ้าไม่ใช่ Admin ให้เด้งไปหน้าหลัก
+      console.log(" User is not an admin. Redirecting to home...");
+      router.replace("/"); 
     } else {
       console.log("✅ Authenticated as Admin, rendering page.");
       setIsCheckingAuth(false);

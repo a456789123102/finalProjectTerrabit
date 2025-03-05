@@ -1,5 +1,5 @@
 "use client"
-import { createReply, getTicketById } from '@/app/apis/ticket'
+import { closeTicket, createReply, getTicketById } from '@/app/apis/ticket'
 import { AlarmClock, MessageSquareReply } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -8,6 +8,7 @@ import { enUS } from "date-fns/locale";
 import { useUserStore } from "@/store/zustand";
 
 function page() {
+
   const [ticket,setTicket] = useState({})
   const [loading, setLoading] = useState(true)
   const[message,setMessage] = useState("");
@@ -41,6 +42,15 @@ const sendReply = async () => {
     fetchTicket();
   } catch (error) {
     console.error("Error sending reply:", error);
+  }
+}
+
+const handleCloseTicket = async () => {
+  try {
+    await closeTicket(Number(ticketId));
+    fetchTicket();
+  } catch (error) {
+    console.error("Error closing ticket:", error);
   }
 }
 
@@ -81,7 +91,7 @@ if(loading) {
       </div>
       <div className="border-t border-gray-300 pt-1">Actions</div>
       <div className="text-gray-600">
-        {ticket.isSolved ? <div>-</div> : <div>close this ticket</div>}
+        {ticket.isSolved ? <div>-</div> : <div onClick={handleCloseTicket} className="text-blue-500 underline cursor-pointer">Close this ticket</div>}
       </div>
     </div>
 
@@ -116,8 +126,11 @@ if(loading) {
               }`}
               key={i}
             >
-              <div className="flex flex-row gap-2 pb-2 items-baseline">
-                <div>{message.sender.username}</div>
+              <div className="flex flex-col gap-2 pb-2 items-baseline">
+                <div className='flex flex-row gap-2'>
+                  <div>{message.sender.username}</div>
+                  {message.sender.isAdmin && (<div className='text-yellow-500'>(Admin)</div>)}
+                </div>
                 <div className="text-[0.7rem] text-gray-600">
                   {formatDistanceToNow(new Date(message.createdAt), { addSuffix: true, locale: enUS })}
                 </div>
@@ -128,23 +141,25 @@ if(loading) {
       </div>
 
       {/* Reply Form */}
+ {!ticket.isSolved &&
       <div className="flex flex-row gap-4 py-2 border-t border-gray-300 bg-white sticky bottom-0 w-full">
-        <textarea
-          placeholder="Reply to ticket"
-          className="w-full border border-gray-300 h-20 p-3"
-          value={message}
-          maxLength={500}
-          onChange={(e) => setMessage(e.target.value)}
-        ></textarea>
-        <div className="w-1/4 flex flex-col justify-end">
-          <div
-            className="border hover:bg-blue-600 cursor-pointer bg-blue-500 text-white rounded-sm text-center py-2"
-            onClick={sendReply}
-          >
-            Send
-          </div>
+      <textarea
+        placeholder="Reply to ticket"
+        className="w-full border border-gray-300 h-20 p-3"
+        value={message}
+        maxLength={500}
+        onChange={(e) => setMessage(e.target.value)}
+      ></textarea>
+      <div className="w-1/4 flex flex-col justify-end">
+        <div
+          className="border hover:bg-blue-600 cursor-pointer bg-blue-500 text-white rounded-sm text-center py-2"
+          onClick={sendReply}
+        >
+          Send
         </div>
       </div>
+    </div>
+ }
     </div>
   </div>
 </div>

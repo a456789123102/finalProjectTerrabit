@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useUserStore } from "@/store/zustand";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import InputText from "../../components/inputText";
 import { login } from "@/app/apis/auth";
 import { Eye,EyeClosed } from "lucide-react";
 import { loginSchema } from '../schemas/loginSchema';

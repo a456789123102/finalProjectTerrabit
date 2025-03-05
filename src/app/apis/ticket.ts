@@ -61,3 +61,22 @@ export const createTicket = async(topic:string,details:string) => {
     throw error;
   }
 }
+
+export const justCountTickets = async() => {
+  try {
+    const res = await axios.get("/api/ticket/justCountTickets");
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const closeTicket = async(id:number) => {
+  try {
+    const res = await axios.patch(`/api/ticket/${id}/close`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+  
+}

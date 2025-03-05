@@ -1,12 +1,18 @@
 "use client"
-import { createTicket } from "@/app/apis/ticket";
+import { createTicket, justCountTickets } from "@/app/apis/ticket";
 import { Ticket, TicketCheck, TicketX } from "lucide-react";
-import { useState } from "react";
-import { useRouter} from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-const CreateTicketForm = ({ onSubmit }) => {
+const CreateTicketForm = () => {
+
     const [topic, setTopic] = useState("");
     const [details, setDetails] = useState("");
+    const [countTickets, setCountTickets] = useState({
+        "all": 0,
+        "solved": 0,
+        "unsolved": 0
+    });
     const router = useRouter();
 
     const handleSubmit = async (e) => {
@@ -16,13 +22,27 @@ const CreateTicketForm = ({ onSubmit }) => {
             return;
         }
         try {
-          const newticket =  await createTicket(topic,details);
-          console.log("Created:",newticket)
-     router.push(`/ticket/${newticket.id}/info`)
+            const newticket = await createTicket(topic, details);
+            console.log("Created:", newticket)
+            router.push(`/ticket/${newticket.id}/info`)
         } catch (error) {
             console.error("Error creating ticket:", error);
         }
     };
+
+    const getCountTickets = async () => {
+        try {
+            const res = await justCountTickets();
+            console.log("countres:", res)
+
+            setCountTickets(res);
+        } catch (error) {
+            console.error("Error counting tickets:", error);
+        }
+    }
+    useEffect(() => {
+        getCountTickets();
+    }, []);
 
     return (
         <div className="bg-slate-50 h-screen w-full flex-col items-start flex gap-5 ">
@@ -31,25 +51,25 @@ const CreateTicketForm = ({ onSubmit }) => {
                 {/* lefdt side */}
                 <div className="w-2/6 p-6 border bg-white border-gray-300 shadow-md rounded-[4px] flex flex-col gap-2">
                     <div className="py-4 text-[1.1rem]">TICKET INFORMATIONS</div>
-                    <div className="flex flex-col p-2 gap-2 border-t border-gray-300 hover:bg-slate-100 cursor-pointer">
+                    <div className="flex flex-col p-2 gap-2 border-t border-gray-300 hover:bg-slate-100 cursor-pointer" onClick={()=>router.push("/ticket/myTickets")}>
                         <div>All Tickets</div>
-                        <div className="flex flex-row gap-2 items-center">
+                        <div className="flex flex-row gap-2 items-center" >
                             <Ticket color="blue" size={20} />
-                            <div className="text-gray-600">20</div>
+                            <div className="text-gray-600">{countTickets.all}</div>
                         </div>
                     </div>
-                    <div className="flex flex-col p-2 gap-2 border-t border-gray-300 hover:bg-slate-100 cursor-pointer">
+                    <div className="flex flex-col p-2 gap-2 border-t border-gray-300 hover:bg-slate-100 cursor-pointer" onClick={()=>router.push("/ticket/myTickets?status=unsolved")}>
                         <div>Open Tickets</div>
-                        <div className="flex flex-row gap-2 items-center">
+                        <div className="flex flex-row gap-2 items-center" >
                             <TicketX color="red" size={20} />
-                            <div className="text-gray-600">20</div>
+                            <div className="text-gray-600">{countTickets.unsolved}</div>
                         </div>
                     </div>
-                    <div className="flex flex-col p-2 gap-2 border-t border-gray-300 hover:bg-slate-100 cursor-pointer">
-                        <div>Close Tickets</div>
+                    <div className="flex flex-col p-2 gap-2 border-t border-gray-300 hover:bg-slate-100 cursor-pointer" onClick={()=>router.push("/ticket/myTickets?status=solved")}>
+                        <div>Closed Tickets</div>
                         <div className="flex flex-row gap-2 items-center">
                             <TicketCheck color="green" size={20} />
-                            <div className="text-gray-600">20</div>
+                            <div className="text-gray-600">{countTickets.solved}</div>
                         </div>
                     </div>
                 </div>
