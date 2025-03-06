@@ -22,7 +22,7 @@ export default function UserMenu() {
     {
       key: "profile",
       label: "Profile (not done)",
-      path: "/user/account/profile" 
+      path: "/user/profile" 
     },
     {
       key: "MyCarts",
@@ -47,7 +47,7 @@ export default function UserMenu() {
   ];
 
   const handleAction = (path: string) => {
-    router.push(path); // ใช้ path ที่กำหนดในแต่ละ item เพื่อนำทาง
+    router.push(path); 
   };
 
   return (

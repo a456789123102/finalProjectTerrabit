@@ -21,14 +21,14 @@ function Layout({ children }: { children: React.ReactNode }) {
     }
 
     if (!username) {
-      console.log("🔴 User not logged in. Redirecting...");
+      console.log("User not logged in. Redirecting...");
       const currentPath = encodeURIComponent(window.location.pathname);
       router.replace(`/login?redirect=${currentPath}`);
     } else if (!isAdmin) {
       console.log(" User is not an admin. Redirecting to home...");
       router.replace("/"); 
     } else {
-      console.log("✅ Authenticated as Admin, rendering page.");
+      console.log("Authenticated as Admin, rendering page.");
       setIsCheckingAuth(false);
     }
   }, [username, isAdmin, router]);

@@ -1,36 +1,48 @@
-"use client"
-import React, { useState } from 'react'
-import MyAccount from '../components/MyAccount';
-import Addresses from '../components/Addresses';
-import PurchaseTable from '../components/PurchaseTable';
+"use client";
+import React, { useState } from "react";
+import MyAccount from "../components/MyAccount";
+import AccDetails from "../components/AccDetails";
+import PurchaseTable from "../components/PurchaseTable";
 
-function page() {
-    const [menuClick, setMenuClick] = useState('My Account')
+function Page() {
+  const [menuClick, setMenuClick] = useState("My Account");
 
-    const rightMenu = [
-        { name: 'My Account', component: <MyAccount /> },
-        { name: 'Address', component: <Addresses /> },
-        { name: 'Purchase history', component: <PurchaseTable /> },
-      ];
+  const rightMenu = [
+    { name: "My Account", component: <MyAccount /> },
+    { name: "Details", component: <AccDetails /> },
+    { name: "Purchase history", component: <PurchaseTable /> },
+  ];
+
   return (
-    <div className='flex items-center justify-center h-screen w-full '>
-        <div className='border-2 border-gray-300 flex flex-row p-5 w-3/5 bg-white'>
-{/* left menu side */}
-<div className='flex-flex-col w-1/3'>
-{
-    rightMenu.map((item, index) => (
-        <div key={index} className={`border-b-2 p-2 cursor-pointer hover:text-yellow-500 hover:underline ${item.name === menuClick ? "text-orange-700 border-orange-700":"text-black"}`} onClick={() => setMenuClick(item.name)}>{item.name}</div>
-    ))
-}
-</div>
+    <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
+      <div className="border border-gray-300 flex flex-row p-5 w-4/5 items-start shadow-md bg-white rounded-lg">
+        
+        {/* ✅ Left Menu Side */}
+        <div className="flex flex-col w-1/4 bg-white border-r p-3">
+          <h2 className="text-lg font-semibold text-gray-700 mb-3">Settings</h2>
+          {rightMenu.map((item, index) => (
+            <div
+              key={index}
+              className={`p-3 cursor-pointer transition-all duration-300 rounded-md 
+                ${
+                  item.name === menuClick
+                    ? "bg-blue-500 text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
+              onClick={() => setMenuClick(item.name)}
+            >
+              {item.name}
+            </div>
+          ))}
+        </div>
 
-{/* right content area */}
-        <div className='border w-2/3 h-80'>
-    {rightMenu.find(item => item.name === menuClick)?.component}
+        {/* Right Content Area */}
+        <div className="w-3/4 p-1 bg-white min-h-96">
+          {rightMenu.find((item) => item.name === menuClick)?.component}
         </div>
-        </div>
-        </div>
-  )
+      </div>
+    </div>
+  );
 }
 
-export default page
+export default Page;

@@ -44,7 +44,7 @@ export default function AdminMenu() {
   
 
   return (
-    <div className="text-yellow-500 hover:bg-orange-100 cursor-pointer bg-blue-500  rounded-sm">
+    <div className="text-yellow-500 hover:bg-orange-100 cursor-pointer ">
       <Dropdown isOpen={isOpen}>
         <DropdownTrigger>
           <Button variant="bordered" className="text-[0.7rem] flex flex-row gap-1"
