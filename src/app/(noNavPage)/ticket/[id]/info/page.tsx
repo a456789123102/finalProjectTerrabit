@@ -112,7 +112,7 @@ if(loading) {
       </div>
 
       {/* Ticket Content */}
-      <div className="text-[1.1rem] whitespace-pre-wrap border-b border-gray-300 py-3 flex-grow overflow-auto min-h-[150px]">
+      <div className="text-[1.1rem] whitespace-pre-wrap border-b border-gray-300 p-5 text-gray-700 flex-grow overflow-auto min-h-[150px]">
         {ticket.details}
       </div>
 

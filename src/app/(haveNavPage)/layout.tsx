@@ -6,7 +6,8 @@ function Layout({ children }: PropsWithChildren) {
   return (
     <Text className="">
       <Nav />  {/* Nav */}
-      <div className="bg-[#363636] w-full h-screen">
+      <div className=" w-full min-h-screen"  
+      >
         {children}  {/* Content */}
       </div>
     </Text>

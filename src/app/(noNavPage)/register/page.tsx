@@ -52,8 +52,13 @@ function Register() {
   })
 
   return (
-    <div className='w-full h-screen flex flex-col items-center justify-center font-pixelify'>
-      <form onSubmit={handleSubmit(handleRegister)} className='bg-white p-5 px-16 flex justify-center flex-col items-center w-1/4'>
+    <div className='w-full h-screen flex flex-col items-center justify-center font-pixelify'   style={{
+      backgroundImage: `url('https://firebasestorage.googleapis.com/v0/b/terrabit-5d129.appspot.com/o/decorative%2Fthumb-1920-995128.jpg?alt=media')`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+    }}>
+      <form onSubmit={handleSubmit(handleRegister)} className='bg-white p-5 px-16  flex justify-center flex-col items-center w-[60vh] min-w-96'>
         <div className='w-full'>
           <div className='justify-center flex py-3 text-4xl  font-bold'>Register</div>
 

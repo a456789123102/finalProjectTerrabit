@@ -158,16 +158,16 @@ function Orders() {
 
   const statuses: { key: string[], label: string }[] = [
     { key: ["pending_payment_proof"], label: "To Pay" },
-    { key: ["pending_payment_verification"], label: "Awaiting Confirm" },
+    { key: ["pending_payment_verification", "pending_refound"], label: "Awaiting Confirm" },
     { key: ["payment_verified"], label: "Payment Verified" },
     { key: ["cancelled_by_admin", "cancelled_by_user", "refund_rejected"], label: "Unsuccessful Order" },
     { key: ["refund_completed"], label: "Refund Completed" },
   ];
 
   return (
-    <div className="flex flex-col items-center gap-3 min-w-[590px]">
+    <div className="flex flex-col items-center gap-3 ">
       <div className="self-start p-2 bg-white w-full pl-5 border border-gray-300">Checkout Section</div>
-      <div className="bg-gray-100 w-full justify-center flex flex-col mt-5 p-6 m-4">
+      <div className="bg-gray-100 w-full justify-center flex flex-col mt-5 p-6 m-4 min-w-96">
         <div className="flex flex-row bg-white justify-between w-full shadow-sm">
           {statuses.map((item) => (
             <button
@@ -182,37 +182,47 @@ function Orders() {
             </button>
           ))}
         </div>
-        <div className="flex flex-col gap-5 bg-gray-100 w-full mt-5">
+        <div className="flex flex-col gap-5 bg-gray-100 w-full mt-5 ">
           {orders.length > 0 ? (
             orders.map((order) => (
               <div
                 key={order.id}
-                className="font-poppins shadow-sm flex flex-row justify-between min-h-40 bg-white"
+                className="font-poppins shadow-sm flex flex-row justify-between min-h-40 bg-white py-2"
               >
                 <div className=" px-2 border-x border-gray-300  w-1/4 flex flex-col justify-between">
                   <div>
                     <div className="flex flex-row gap-3 items-center">
                       <div className=" flex flex-row gap-2 border-b border-gray-300 mb-3 py-[10px] w-full items-baseline text-[1.1rem]">
                         <div className=" pl-2">Order ID:</div>
-                        <div> #{String(order.id).padStart(4,"0")}</div>
+                        <div> #{String(order.id).padStart(4, "0")}</div>
                       </div>
                     </div>
-                    <div className=" text-slate-700 text-[0.75rem]">
+                    <div className=" text-slate-700 text-[0.75rem] flex flex-col">
+                      <div className="px-2 py-2 grid grid-cols-4 items-center gap-2 text-black font-bold">
+                        <div className="col-span-2">Items</div>
+                        <div className="col-span-1">Quantity</div>
+                        <div className="col-span-1">Price</div>
+                      </div>
                       {order.items.map((item, i) => (
-                        <div key={item.id} className=" px-2 gap-2 flex flex-row">
-                          <div className="text-black">{i+1}.</div>
-                          <div className="text-black overflow-clip">{item.productName},</div>
-                          <div>Quantity: {item.quantity},</div>
-                          <div>Price:</div>
-                          <Number>{item.price}</Number>
+                        <div key={item.id} className="px-2 grid grid-cols-4 items-center gap-2">
+                          <div className="text-black overflow-hidden col-span-2">{i + 1}.{item.productName}</div>
+                          <div className="col-span-1">{item.quantity}</div>
+                          <div className="col-span-1"><Number>{item.price}</Number></div>
                         </div>
+
                       ))}
                     </div>
                   </div>
-                  <div className="flex flex-row  p-2 gap-2 self-end">
-                    <div className="font-bold">Total: </div>
-                    <div>{order.totalPrice} </div>
-                    <div>THB</div>
+                  <div className="flex flex-row  p-2 gap-2 justify-between">
+                    <div className="flex flex-row gap-2">
+                      <div className="font-bold">Total: </div>
+                      <div>{order.totalPrice} </div>
+                      <div>THB</div>
+                    </div>
+ <div className="flex flex-row gap-1">
+ <div className="font-bold">Status: </div>
+ <div className="text-slate-700">{order.status.replaceAll("_"," ")}</div>
+ </div>
                   </div>
 
                 </div>

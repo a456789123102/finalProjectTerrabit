@@ -89,3 +89,12 @@ export const getTotalUsersForCharts = async (interval: string, startDate: Date, 
     throw error;
   }
 }
+///////////////////////////////////
+export const myInfo = async () => {
+  try {
+    const res = await axios.get("/api/users/myInfo");
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

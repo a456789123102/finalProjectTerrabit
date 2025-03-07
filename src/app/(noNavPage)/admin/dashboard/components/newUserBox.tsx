@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useTheme } from "@/app/context/themeContext";
 import useFetchUsers from "../../hooks/users/useFetchUser";
-import { json } from "stream/consumers";
-import { Mail, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { formatDistanceToNow } from "date-fns";
+import { enUS } from "date-fns/locale";
+
 
 function NewUserBox() {
   const { themeColors } = useTheme();
+  const router = useRouter();
   const [pagination, setPagination] = useState({
     pageSize: 5,
   })
@@ -35,20 +39,24 @@ function NewUserBox() {
                 </div>
                 <div>{user.username}</div>
               </div>
-              <div className="text-gray-500 text-[0.65rem]">{new Date(user.createdAt).toLocaleString("en-US", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: false,
-              })}
+              <div className="text-gray-500 text-[0.65rem]">
+                <div className="flex flex-row gap-2">
+                  <div>{new Date(user.createdAt).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: false,
+                  })}</div>
+                  <div>({formatDistanceToNow(new Date(user.createdAt), { addSuffix: true, locale: enUS })})</div>
+                </div>
+
               </div>
             </div>
             <div className="flex flex-row gap-2 text-gray-500">
-              <Mail className="hover:text-yellow-600 cursor-pointer" size={20} />
-              <Settings className="hover:text-purple-400 cursor-pointer" size={20}/>
+              <Settings className="hover:text-purple-400 cursor-pointer" onClick={() => router.push("/admin/manage/users")} size={20} />
             </div>
           </div>))}
       </div>

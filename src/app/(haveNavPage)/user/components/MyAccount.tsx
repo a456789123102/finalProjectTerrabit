@@ -1,6 +1,8 @@
 import React from 'react'
-
-function MyAccount() {
+import { formatDistanceToNow } from "date-fns";
+import { enUS } from "date-fns/locale";
+function MyAccount({user}) {
+    console.log("USER:",user)
     return (
         <div className="p-3 flex flex-col">
   {/* Header */}
@@ -18,7 +20,7 @@ function MyAccount() {
       <div className="w-1/3 text-right font-medium">E-mail</div>
       <input
         className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="example@email.com"
+        placeholder={user?.email || "No email available"}
         disabled
       />
     </div>
@@ -29,7 +31,7 @@ function MyAccount() {
       <div className="flex flex-row items-center w-full gap-2">
         <input
           className="border rounded-md px-3 py-2 flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Username"
+          placeholder={user.username|| "No username available"}
           disabled
         />
         <button className="px-3 py-1 text-blue-500 border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white transition-all">
@@ -47,6 +49,10 @@ function MyAccount() {
         </button>
       </div>
     </div>
+    <div className='self-end flex flex-row gap-2 text-gray-400'>
+  <div >Member Since :</div>
+  <div>{formatDistanceToNow(new Date(user.createdAt), { addSuffix: true, locale: enUS })}</div>
+</div>
   </div>
 </div>
 

@@ -61,8 +61,10 @@ function Login() {
   }, [id, router, redirectPath]);
 
   return (
-<div className="w-full h-screen flex flex-col items-center justify-center font-pixelify">
-  <div className="bg-white p-5 px-16 flex justify-center flex-col items-center max-w-1/4">
+<div className="w-full h-screen flex flex-col items-center justify-center font-pixelify"   style={{
+    backgroundImage: `url('https://firebasestorage.googleapis.com/v0/b/terrabit-5d129.appspot.com/o/decorative%2Fthumb-1920-1205979.png?alt=media')`,
+  }}>
+  <div className="bg-white p-5 pb-12 px-16 flex justify-center flex-col items-center w-[50vh] min-w-80">
     <div className="w-full">
       <h2 className="justify-center flex py-3 text-4xl font-bold">LOGIN</h2>
       
@@ -107,14 +109,13 @@ function Login() {
         </button>
       </form>
 
-      <div className="text-sm space-y-1 flex flex-col items-center font-bold text-[#2E2E2E]">
-        <Link href={"/product"} className="hover:text-[#111111] hover:underline">
+      <div className="text-sm space-y-1 gap-2 flex flex-col items-center font-bold text-[#2E2E2E]">
+        <Link href={"/product"} className="hover:text-blue-600 hover:underline ">
           Return to Store
         </Link>
-        <Link href={"/register"} className="hover:text-[#111111] hover:underline">
+        <Link href={"/register"} className="hover:text-blue-600 hover:underline ">
           Create account
         </Link>
-        <div className="hover:text-[#111111] hover:underline">Forgot your password?</div>
       </div>
     </div>
   </div>

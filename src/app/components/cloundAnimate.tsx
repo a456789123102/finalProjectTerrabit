@@ -1,6 +1,6 @@
 const CloudAnimation = () => {
     return (
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none border overflow-hidden border-red-500">
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
                 <div className="absolute top-4 left-[-150px] z-10 animate-sun w-[250px] opacity-100">
           <img src="/images/sun.png" alt="sun" className="w-full h-auto" />
         </div>

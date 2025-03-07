@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import Link from 'next/link';
 import { deleteProduct } from "@/app/apis/product";
 import { SquarePlus } from "lucide-react";
+import Image from "next/image";
 
 function ProductTable() {
   const { themeColors } = useTheme();
@@ -23,12 +24,14 @@ function ProductTable() {
   const [forceFetch, setForceFetch] = useState(false);
     const [orderBy, setOrderBy] = useState("");
     const [orderWith, setOrderWith] = useState("");
+ 
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 10,
     totalPages: 1,
     totalProducts: 0,
   });
+
   const [columnKeysFiltered, setColumnKeysFiltered] = useState([
     'id', 'name', 'price', 'discount', 'finalPrice', 'quantity', "ProductCategory", "Actions"
   ]);
@@ -93,17 +96,20 @@ function ProductTable() {
         }
         if (key === "Image") {
           return (
-            <div className="flex justify-center">
+            <div className="flex flex-row gap-2 justify-center">
               {Array.isArray(value) && value.length > 0 ? (
-                <img
-                  src={value[0]?.imageUrl} // ✅ ดึงรูปแรกออกมาแสดง
-                  alt={row.original.name}
-                  width={50} // ✅ กำหนดขนาดภาพ
-                  height={50}
-                  className="rounded-md shadow-md object-cover"
-                />
+                value.map((img, index) => (
+                  <Image
+                    key={index}
+                    src={img.imageUrl}
+                    alt={row.original.name || "Product Image"}
+                    width={50}
+                    height={50}
+                    className="shadow-md object-cover"
+                  />
+                ))
               ) : (
-                <span>No Image</span> // ✅ กรณีไม่มีรูปภาพ
+                <span>No Image</span>
               )}
             </div>
           );

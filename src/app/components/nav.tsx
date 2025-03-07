@@ -37,6 +37,12 @@ function Nav() {
     };
   }, []);
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+  handleSearch()
+    }
+  }
+
   const handleSearch = () => {
     if (text.length > 0) {
       router.push(`/product?search=${text}`);
@@ -87,6 +93,7 @@ function Nav() {
               value={text}
               placeholder='Search'
               onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             {/* Search Icon */}
             <div className=" cursor-pointer">

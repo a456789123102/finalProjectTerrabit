@@ -14,10 +14,10 @@ interface StatusSelectDropdownProps {
 const OrderStatusSelectDropdown = ({ status, setStatus }: StatusSelectDropdownProps) => {
   const {themeColors } = useTheme();
       const statuses = useMemo(() => [
-        { key: "pending_payment_proof", label: "To Pay" },
-        { key: "pending_payment_verification", label: "Awaiting Confirmed" },
-        { key: "pending_refound", label: "To Refound" },
-        { key: "payment_verified", label: "Payment Verified" },
+        { key: "pending_payment_proof", label: "User Pending To Pay" },
+        { key: "pending_payment_verification", label: "Admin Pending To Confirmed" },
+        { key: "pending_refound", label: "Admin Pending To Refound" },
+        { key: "payment_verified", label: "Verified" },
         { key: "cancelled_by_admin", label: "Cancelled by Admin" },
         { key: "cancelled_by_user", label: "Cancelled by User" },
         { key: "refund_completed", label: "Refund Completed" },

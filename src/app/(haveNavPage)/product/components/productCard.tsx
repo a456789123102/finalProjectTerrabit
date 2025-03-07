@@ -16,7 +16,7 @@ type Product = {
 const CategoryItem = ({ name, categoryId, onClick }: { name: string; categoryId: number; onClick: (id: number) => void }) => {
   return (
     <div
-      className="px-2 py-1 ml-2 bg-blue-300 hover:bg-blue-400 flex justify-center rounded-md text-[0.6rem] cursor-pointer"
+      className="px-2 py-1  ml-2 bg-blue-300 text-gray-900 hover:bg-blue-400 flex justify-center rounded-md text-[0.6rem] cursor-pointer"
       onClick={() => onClick(categoryId)}
     >
       {name}
@@ -49,7 +49,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 </div>
 
 
-      <div className="w-full h-[250px] overflow-hidden rounded-lg shadow-lg">
+      <div className="w-full h-[250px] overflow-hidden  ">
         <Image
           className="object-contain w-full h-full cursor-pointer"
           src={productImage}

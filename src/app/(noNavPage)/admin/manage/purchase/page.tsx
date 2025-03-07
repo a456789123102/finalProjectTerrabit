@@ -77,25 +77,38 @@ function PurchaseTable() {
             const validStatus = ['pending_payment_verification', 'pending_refound'];
             if (!validStatus.includes(currentStatus)) {
                 console.error(`Invalid status: ${currentStatus}.`);
-                throw new Error(`Invalid status: ${currentStatus}`);
+                return;
             }
-
-            const updatedStatus = "cancelled_by_admin";
+    
+            const updatedStatus = currentStatus === 'pending_payment_verification' 
+                ? "cancelled_by_admin" 
+                : "refund_rejected";
+    
             console.log(`Order ${orderId} rejected from status ${currentStatus} with new status: ${updatedStatus}`);
-
+    
             const res = await updateOrderStatus(orderId, updatedStatus);
-
-            // ตรวจสอบผลลัพธ์จาก API ใหม่
-            if (!res || res.status !== 200) {
-                throw new Error(`Failed to update status for Order ID ${orderId}`);
+            console.log("API Response:", res);
+    
+     
+            if (!res || res?.status !== 200) {
+                console.error(`Failed to update Order ID ${orderId}`);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update Failed',
+                    text: `Could not update Order ID ${orderId}. Please try again.`,
+                });
+                return;
             }
-
+            
+            
+    
             console.log(`Order ${orderId} status updated successfully to: ${updatedStatus}`);
         } catch (error) {
             console.error('Failed to reject status', error);
             throw error;
         }
     };
+    
     const handleApprove = async (orderId: number, currentStatus: string) => {
         try {
             if (!["pending_payment_verification", "pending_refound"].includes(currentStatus)) {
@@ -127,7 +140,6 @@ function PurchaseTable() {
                 showConfirmButton: false,
             });
 
-            // ✅ อัปเดตข้อมูลใหม่หลังเปลี่ยนสถานะสำเร็จ
             setForceFetch(prev => !prev);
         } catch (error) {
             console.error('Failed to update order:', error);
@@ -179,16 +191,19 @@ function PurchaseTable() {
 
                     try {
                         if (actionType === 'approve') {
-                            await handleApprove(orderId, order.status); // รอให้ handleApprove เสร็จ
+                            await handleApprove(orderId, order.status); 
                         } else if (actionType === 'reject') {
-                            await handleReject(orderId, order.status); // รอให้ handleReject เสร็จ
+                            await handleReject(orderId, order.status);
                         }
+                        console.log("failedOrder:",failedOrders)
                     } catch (error) {
                         console.error(`Failed to update Order ID ${orderId}:`, error);
                         failedOrders.push(orderIdStr);
+                        console.log("failedOrder:",failedOrders)
                     }
                 }
             }
+            
 
             if (failedOrders.length > 0) {
                 Swal.fire({

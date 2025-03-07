@@ -26,12 +26,12 @@ console.log("productId:", productId);
   }, [categories, name, productId]); // ดึงข้อมูลเมื่อ props เปลี่ยน
 
   return (
-    <div className="relative w-full overflow-hidden"> {/* ✅ จำกัดการแสดงผล */}
-      <div className="flex flex-row h-full overflow-x-auto scrollbar-hide whitespace-nowrap"> {/* ✅ เลื่อนซ้าย-ขวาได้ */}
+    <div className="relative w-full overflow-hidden"> 
+      <div className="flex flex-row h-full overflow-x-auto scrollbar-hide whitespace-nowrap"> 
         {loading ? (
           <div className="text-center w-full">Loading related products...</div>
         ) : relatedProducts.length > 0 ? (
-          relatedProducts.slice(0, 4).map((product) => (  // ✅ ลดจำนวนที่แสดง
+          relatedProducts.slice(0, 4).map((product) => ( 
             <div key={product.id} className="mx-2 w-1/4 min-w-[250px]">
               <ProductCard product={product} />
             </div>
