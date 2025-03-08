@@ -98,10 +98,11 @@ const CreateTicketForm = () => {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-[4px]"
+                            className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-[4px] inline-block"
                         >
                             Submit Ticket
                         </button>
+
                     </form>
                 </div>
             </div>

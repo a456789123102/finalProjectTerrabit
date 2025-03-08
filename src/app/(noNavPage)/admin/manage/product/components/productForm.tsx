@@ -52,7 +52,7 @@ const [existingImageDetail2Id, setExistingImageDetail2Id] = useState<number | nu
 
         setName(product.name || '');
         setPrice(product.price || '');
-        setDiscount(product.discount || 0);
+        setDiscount(product.discount*100 || 0);
         setQuantity(product.quantity || '');
         setDescription(product.description || '');
 
@@ -245,7 +245,7 @@ fetchProductData()
         </div>
 
         {/* Right Section: Images */}
-        {mode === 'edit' && <div className="w-1/2 p-6">
+        {mode === 'edit' && <div className="w-1/2 p-6 overflow-hidden">
           <h3 className="text-lg font-semibold mb-4">Images</h3>
           {[
             {

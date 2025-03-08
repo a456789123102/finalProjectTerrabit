@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const PaginationControls = ({ pagination, setPagination }) => {
   return (
-    <div className="mt-4 flex flex-row gap-4 items-center justify-between border">
+    <div className="mt-4 flex flex-row gap-4 items-center justify-between">
       {/* Page Navigation */}
       <div className="flex items-center gap-2">
         {pagination.page > 1 && (

@@ -45,9 +45,18 @@ interface Status {
 
 function Orders() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [count, setCount] = useState([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [status, setStatus] = useState<string[]>(["pending_payment_proof"]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const statuses: { key: string[], label: string, count: number }[] = [
+    { key: ["pending_payment_proof"], label: "To Pay", count: 0 },
+    { key: ["pending_payment_verification", "pending_refound"], label: "Awaiting Confirm", count: 0 },
+    { key: ["payment_verified"], label: "Payment Verified", count: 0 },
+    { key: ["cancelled_by_admin", "cancelled_by_user", "refund_rejected"], label: "Unsuccessful Order", count: 0 },
+  ];
 
 
   useEffect(() => {
@@ -61,7 +70,9 @@ function Orders() {
   const fetchOrders = async () => {
     try {
       const orderItems = await myOrder(status);
-      setOrders(orderItems);
+      setOrders(orderItems.orders);
+      setCount(orderItems.count);
+      console.log("Fetched orders:", JSON.stringify(orderItems, null, 2));
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -125,6 +136,14 @@ function Orders() {
     }
   }
 
+  const updatedStatuses = statuses.map(status => {
+    const foundCount = count.find(c => status.key.includes(c.status));
+    return {
+      ...status,
+      count: foundCount ? foundCount.count : 0, 
+    };
+  });
+
   const handleCancelledOrder = async (orderId: number) => {
     try {
       console.log("request Refound orderId:", orderId);
@@ -156,29 +175,26 @@ function Orders() {
     setIsModalOpen(false);
   };
 
-  const statuses: { key: string[], label: string }[] = [
-    { key: ["pending_payment_proof"], label: "To Pay" },
-    { key: ["pending_payment_verification", "pending_refound"], label: "Awaiting Confirm" },
-    { key: ["payment_verified"], label: "Payment Verified" },
-    { key: ["cancelled_by_admin", "cancelled_by_user", "refund_rejected"], label: "Unsuccessful Order" },
-    { key: ["refund_completed"], label: "Refund Completed" },
-  ];
+
+
+
 
   return (
     <div className="flex flex-col items-center gap-3 ">
       <div className="self-start p-2 bg-white w-full pl-5 border border-gray-300">Checkout Section</div>
       <div className="bg-gray-100 w-full justify-center flex flex-col mt-5 p-6 m-4 min-w-96">
         <div className="flex flex-row bg-white justify-between w-full shadow-sm">
-          {statuses.map((item) => (
+          {updatedStatuses.map((item) => (
             <button
               key={item.key}
-              className={`p-4 px-6 transition-all duration-300 hover:text-yellow-600 text-[1.1rem] w-full ${item.key.every((k) => status.includes(k))
+              className={`p-4 px-6 transition-all flex flex-row gap-2 items-baseline duration-300 hover:text-yellow-600 text-[1.1rem] w-full ${item.key.every((k) => status.includes(k))
                 ? "border-b-2 border-yellow-600 text-yellow-600"
                 : "border-b-2"
                 }`}
               onClick={() => setStatus(item.key)}
             >
-              {item.label}
+            <div>{item.label}</div>
+            <div className=" text-red-500">{item.count}</div>
             </button>
           ))}
         </div>

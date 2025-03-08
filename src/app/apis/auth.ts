@@ -54,3 +54,29 @@ export const goRegister = async (email: string, username: string, password: stri
       throw error;
     }
   };
+
+  export const changePassword = async (oldPassword:string,newPassword:string) => {
+    try {
+        const res = await axios.patch("/api/auth/changePassword", {
+            oldPassword,
+            newPassword
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+        
+    }
+  }
+
+  
+  export const changeUsername = async (oldPassword:string,newUsername:string) => {
+    try {
+        const res = await axios.patch("/api/auth/changeUsername", {
+            oldPassword,
+            newUsername
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+  }

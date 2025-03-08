@@ -2,9 +2,9 @@
 
 import { useUserStore } from "@/store/zustand";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
-import { useRouter } from 'next/navigation'; // Import useRouter สำหรับการนำทาง
+import { useRouter } from 'next/navigation'; 
 import { logout } from "../apis/auth";
-import {User} from "lucide-react"
+import {LogOut, User} from "lucide-react"
 
 import { useState } from "react";
 
@@ -41,8 +41,13 @@ export default function UserMenu() {
     },
     {
       key: "Logout",
-      label: "Logout",
-      onClick: handleLogout 
+      label: (
+        <div className="flex items-center gap-2 bg-red-50 text-red-500">
+          <LogOut size={16} /> Logout
+        </div>
+      ),
+      onClick: handleLogout,
+      className: "text-red-500 hover:bg-red-100"
     }
   ];
 
@@ -78,7 +83,7 @@ export default function UserMenu() {
           {items.map((item) => (
             <DropdownItem
               key={item.key}
-              className="hover:bg-orange-100 py-1"
+              className={`hover:bg-orange-100 py-1 flex items-center gap-2 ${item.className || ""}`}
               onPress={() => item.onClick ? item.onClick() : handleAction(item.path)}
             >
               {item.label}

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import MyAccount from "../components/MyAccount";
 import AccDetails from "../components/AccDetails";
-import PurchaseTable from "../components/PurchaseTable";
 import { myInfo } from "@/app/apis/user";
 
 function Page() {
@@ -37,8 +36,6 @@ function Page() {
   return (
     <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
       <div className="border border-gray-300 flex flex-row p-5 w-[100vh] min-w-96  items-start shadow-md bg-white rounded-lg">
-        
-        {/* ✅ Left Menu Side */}
         <div className="flex flex-col w-1/4 bg-white border-r border-gray-400 pb-2">
           <h2 className="text-lg font-semibold text-gray-700 mb-3">Settings</h2>
           {rightMenu.map((item, index) => (
@@ -57,7 +54,6 @@ function Page() {
           ))}
         </div>
 
-        {/* Right Content Area */}
         <div className="w-3/4 p-1 bg-white min-h-96">
           {rightMenu.find((item) => item.name === menuClick)?.component}
         </div>

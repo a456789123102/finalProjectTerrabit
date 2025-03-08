@@ -101,8 +101,8 @@ function MyCart() {
       </div>
       <div className="fixed bottom-0 w-5/6 bg-white  text-center flex flex-row p-4 justify-end items-center min-w-[544px] border shadow-md ">
         <div className='flex flex-row justify-end items-center gap-3'>
-          <div>Total ({cartItemCount} item):</div>
-          <div className='text-2xl text-orange-600 flex flex-row gap-1'><div>฿</div><Number>{totalPrice}</Number></div>
+          <div className='font-poppins text-gray-800'>Total ({cartItemCount} item):</div>
+          <div className='font-poppins text-2xl text-orange-600 flex flex-row gap-1 '><div>฿</div><Number>{totalPrice}</Number></div>
           <div className=' bg-orange-600 p-2 px-7 text-white  cursor-pointer hover:bg-orange-500' onClick={handleCheckout}>Check Out</div>
           <div className='p-2 text-[0.8rem] text-red-600 hover:underline cursor-pointer' onClick={handleClearCart}>Remove All</div>
         </div>

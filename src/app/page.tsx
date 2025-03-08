@@ -36,8 +36,6 @@ export default function Home() {
         >
           < HomeDeatailsBox/>
         </div>
-
-        <div className='bg-black'>dsaasdasd</div>
       </div>
     </div>
 
