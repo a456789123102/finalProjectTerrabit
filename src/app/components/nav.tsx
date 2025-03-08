@@ -10,7 +10,7 @@ import { myCarts } from '../apis/carts';
 const menuItems = [
   { name: 'Games', href: "/product?category=1" },
   { name: 'All Products', href: '/product' },
-  { name: 'Careers', href: '/careers' },
+  // { name: 'Careers', href: '/careers' },
   { name: 'Supports', href: '/ticket/create' }
 ];
 

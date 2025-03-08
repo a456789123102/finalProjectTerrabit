@@ -1,8 +1,8 @@
-"use client"; // ✅ เพิ่มบรรทัดนี้เพื่อบอกว่าเป็น Client Component
+"use client"; 
 
 import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // ✅ ใช้ Router ได้แล้ว!
+import { useRouter } from "next/navigation"; 
 
 function HomeDeatailsBox() {
   const router = useRouter();
@@ -31,7 +31,7 @@ function HomeDeatailsBox() {
             {/* 🔗 ปุ่มเปลี่ยนหน้า */}
             <div
               className="self-end p-3 transition-all duration-300 cursor-pointer group-hover:bg-slate-50 group-hover:text-blue-600 inline-flex w-fit rounded-sm group-hover:shadow-lg"
-              onClick={() => router.push("/product?category=1")} // ✅ คลิกแล้วไปหน้า /shop
+              onClick={() => router.push("/product?category=1")} 
             >
               View All Games
             </div>
