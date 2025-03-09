@@ -1,0 +1,251 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  username     String         @unique
+  password     String
+  isActive     Boolean        @default(true)
+  isAdmin      Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Addresses    Addresses[]
+  Cart         Cart[]
+  Order        Order[]
+  Review       Review[]
+  OrderItem    OrderItem[]
+  tickets      Ticket[]       @relation("UserTickets")
+  messages     Message[]      @relation("UserMessages")
+  Notification Notification[] @relation("UserNotifications")
+}
+
+model Product {
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  price           Float?
+  discount        Float?
+  finalPrice      Float?
+  quantity        Int
+  description     String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  ProductCategory ProductCategory[]
+  Cart            Cart[]
+  OrderItem       OrderItem[]
+  Review          Review[]
+  Image           ProductImage[]
+}
+
+model Category {
+  id              Int               @id @default(autoincrement())
+  name            String
+  ProductCategory ProductCategory[]
+}
+
+model ProductCategory {
+  productId  Int
+  categoryId Int
+
+  product  Product  @relation(fields: [productId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@id([productId, categoryId])
+}
+
+model ProductImage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+}
+
+model Cart {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  productId  Int?
+  quantity   Int      @default(1)
+  totalPrice Float?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull) // ตั้งค่าเป็น NULL เมื่อ Product ถูกลบ
+}
+
+model Order {
+  id                   Int      @id @default(autoincrement())
+  userId               Int
+  totalPrice           Float?
+  status               String   @default("pending_payment_proof")
+  slipUrl              String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  cancelOrRejectReason String?
+
+  Address     Addresses?  @relation(fields: [addressesId], references: [id])
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       OrderItem[]
+  addressesId Int?
+}
+
+model OrderItem {
+  id          Int      @id @default(autoincrement())
+  orderId     Int
+  productId   Int?
+  productName String
+  quantity    Int
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull) // ตั้งค่าเป็น NULL เมื่อ Product ถูกลบ
+  User    User?    @relation(fields: [userId], references: [id])
+  userId  Int?
+}
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  productId   Int
+  userId      Int
+  userName    String
+  rating      Float
+  comments    String
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, userId])
+}
+
+model Career {
+  id          Int              @id @default(autoincrement())
+  title       String
+  site        String
+  description String
+  type        String
+  location    String
+  salary      Float
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  assigners   careerAssigner[]
+}
+
+model careerAssigner {
+  id          Int      @id @default(autoincrement())
+  careerId    Int
+  name        String
+  lastName    String
+  email       String
+  description String
+  phoneNumber String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  career      Career   @relation(fields: [careerId], references: [id])
+}
+
+model Addresses {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  recipientName  String
+  currentAddress String
+  provinceId     Int
+  provinceName   String
+  amphureId      Int
+  amphureName    String
+  tambonId       Int
+  tambonName     String
+  zipCode        String
+  mobileNumber   String
+  email          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  orders Order[]
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  province Province @relation(fields: [provinceId], references: [id], onDelete: Restrict)
+  amphure  Amphure  @relation(fields: [amphureId], references: [id], onDelete: Restrict)
+  tambon   Tambon   @relation(fields: [tambonId], references: [id], onDelete: Restrict)
+}
+
+model Province {
+  id           Int    @id
+  name_th      String
+  name_en      String
+  geography_id Int
+
+  amphures  Amphure[]
+  Addresses Addresses[]
+}
+
+model Amphure {
+  id          Int      @id
+  name_th     String
+  name_en     String
+  province_id Int
+  province    Province @relation(fields: [province_id], references: [id], onDelete: Cascade)
+
+  tambons   Tambon[]
+  Addresses Addresses[]
+}
+
+model Tambon {
+  id         Int     @id
+  name_th    String
+  name_en    String
+  amphure_id Int
+  amphure    Amphure @relation(fields: [amphure_id], references: [id], onDelete: Cascade)
+  zip_code   Int
+
+  Addresses Addresses[]
+}
+
+model Ticket {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation("UserTickets", fields: [userId], references: [id])
+  userId    Int
+  topic     String
+  details   String
+  isSolved  Boolean   @default(false)
+  messages  Message[] @relation("TicketMessages")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  @@unique([userId, topic])
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  ticket    Ticket   @relation("TicketMessages", fields: [ticketId], references: [id])
+  ticketId  Int
+  sender    User     @relation("UserMessages", fields: [senderId], references: [id])
+  senderId  Int
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  message   String
+  url       String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation("UserNotifications",fields: [userId], references: [id], onDelete: Cascade)
+}
