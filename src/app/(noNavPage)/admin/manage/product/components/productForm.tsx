@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CategorySelect from '../../../../../(haveNavPage)/product/components/categoryCard';
 import { getProductById } from '@/app/apis/product';
 import Image from 'next/image';
@@ -38,11 +38,11 @@ const [existingImageDetail2Id, setExistingImageDetail2Id] = useState<number | nu
 
   const {themeColors} = useTheme();
 
-  const fetchProductData = async () => {
+  const fetchProductData = useCallback(async () => {
     if (mode === 'edit' ) {
       if (productId === undefined) {
         console.error("Invalid product ID:", productId);
-        return; // หยุดการทำงานถ้า productId ไม่ถูกต้อง
+        return; 
       }
       setIsLoading(true);
       try {
@@ -78,11 +78,11 @@ const [existingImageDetail2Id, setExistingImageDetail2Id] = useState<number | nu
         setIsLoading(false);
       }
     }
-  };
+  },[mode, productId]);
 
   useEffect(() => {
     fetchProductData();
-  }, [productId, mode]);
+  }, [fetchProductData]);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,9 +104,10 @@ const [existingImageDetail2Id, setExistingImageDetail2Id] = useState<number | nu
       setMessage('Error submitting product');
     }
   };
-  const handleCategoryChange = (newCategories: number[]) => {
-    setCategories(newCategories);
+  const handleCategoryChange = (newCategories: number | number[]) => {
+    setCategories(Array.isArray(newCategories) ? newCategories : [newCategories]);
   };
+  
 
   const handleUploadImage = async (
     file: File,

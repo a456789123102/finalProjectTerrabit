@@ -1,9 +1,12 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+interface PaginationControlsProps {
+  pagination: Record<string, any>; 
+  setPagination: React.Dispatch<React.SetStateAction<Record<string, any>>>; 
+}
 
-
-const PaginationControls = ({ pagination, setPagination }) => {
+const PaginationControls: React.FC<PaginationControlsProps> = ({ pagination, setPagination }) => {
   return (
     <div className="mt-4 flex flex-row gap-4 items-center justify-between">
       {/* Page Navigation */}
@@ -27,9 +30,7 @@ const PaginationControls = ({ pagination, setPagination }) => {
 
       {/* Page Size Selector */}
       <div className="flex items-center gap-2 mr-2">
-        <label htmlFor="pageSize" className="text-sm">
-          Show:
-        </label>
+        <label htmlFor="pageSize" className="text-sm">Show:</label>
         <select
           id="pageSize"
           value={pagination.pageSize}
@@ -49,9 +50,7 @@ const PaginationControls = ({ pagination, setPagination }) => {
         </select>
       </div>
     </div>
-
   );
 };
-
 
 export default PaginationControls;

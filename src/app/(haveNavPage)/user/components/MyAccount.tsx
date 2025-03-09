@@ -4,7 +4,16 @@ import { enUS } from "date-fns/locale";
 import ChangePwBox from './changePwBox';
 import ChangeUsernameBox from './changeUsernameBox';
 
-function MyAccount({ user }) {
+interface UserProps {
+  user: {
+    id: number;
+    email: string;
+    username: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+const MyAccount: React.FC<UserProps> = ({ user }) => {
   const [isEditClick, setIsEditClick] = useState("");
   console.log("USER:", user)
 

@@ -1,9 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { post } from "../../const"; 
 
-export const config = {
-    runtime: "edge",
-  };
 
   export async function POST(req: NextRequest) {
     try {

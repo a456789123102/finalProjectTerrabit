@@ -1,16 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules"; // Swiper module imports
+import { Navigation, Autoplay } from "swiper/modules";
+import { Swiper as SwiperClass } from "swiper";
 import Image from "next/image";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
-import { X } from "lucide-react"; // Icon for closing modal
+import { X } from "lucide-react";
 
-function ImageSwiper({ images }) {
-  const [selectedImage, setSelectedImage] = useState(null);
+interface ImageData {
+  id: number;
+  name: string;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  productId: number;
+}
+
+interface ImageSwiperProps {
+  images: ImageData[];
+}
+
+const ImageSwiper: React.FC<ImageSwiperProps> = ({ images }) => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const swiperRef = useRef<SwiperClass | null>(null); 
 
   return (
     <section className="bg-black p-4">
@@ -26,18 +41,18 @@ function ImageSwiper({ images }) {
           loop={true}
           modules={[Navigation, Autoplay]}
           className="h-96 max-w-4xl mx-auto"
+          onSwiper={(swiper) => (swiperRef.current = swiper)} 
         >
-          {images.map((image, index) => (
-            <SwiperSlide key={index}>
+          {images.map((image) => (
+            <SwiperSlide key={image.id}>
               <div className="flex h-full w-full items-center justify-center">
-                {/* คลิกแล้วขยายเต็มจอ */}
                 <Image
                   src={image.imageUrl}
-                  alt={image.alt || `Slide ${index + 1}`}
+                  alt={`Slide ${image.id}`}
                   width={800}
                   height={500}
                   className="block h-full w-full object-contain max-h-[400px] cursor-pointer"
-                  priority={index === 0}
+                  priority={image.id === images[0].id}
                   onClick={() => setSelectedImage(image.imageUrl)}
                 />
               </div>
@@ -49,17 +64,14 @@ function ImageSwiper({ images }) {
         <nav className="my-4">
           <ul className="flex gap-4">
             {images.map((image, index) => (
-              <li key={index}>
+              <li key={image.id}>
                 <button
-                  onClick={() => {
-                    const swiperInstance = document.querySelector(".swiper")?.swiper;
-                    swiperInstance?.slideTo(index);
-                  }}
+                  onClick={() => swiperRef.current?.slideTo(index)} 
                   className="relative block h-full w-full overflow-hidden border border-gray-600"
                 >
                   <Image
                     src={image.imageUrl}
-                    alt={image.alt || `Thumbnail ${index + 1}`}
+                    alt={`Thumbnail ${index + 1}`}
                     width={80}
                     height={40}
                     className="block h-full w-full object-cover"
@@ -78,15 +90,13 @@ function ImageSwiper({ images }) {
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative p-4 rounded-lg max-w-5xl">
-            {/* Close Button */}
             <button
-              className="absolute top-0 right-0 text-white bg-red-500 px-3 py-1 "
+              className="absolute top-0 right-0 text-white bg-red-500 px-3 py-1"
               onClick={() => setSelectedImage(null)}
             >
               <X size={20} />
             </button>
 
-            {/* Full Screen Image */}
             <Image
               src={selectedImage}
               width={1200}
@@ -99,6 +109,6 @@ function ImageSwiper({ images }) {
       )}
     </section>
   );
-}
+};
 
 export default ImageSwiper;

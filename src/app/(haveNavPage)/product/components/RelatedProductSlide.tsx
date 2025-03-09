@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { fetchRelatedProducts } from '../../../apis/product';
 import ProductCard from './productCard';
 
-function RelatedProductSlide({ categories, name, productId }) {
+interface RelatedProductSlideProps {
+  categories: number[]; 
+  name: string;
+  productId: number;
+}
+
+const RelatedProductSlide: React.FC<RelatedProductSlideProps> = ({ categories, name, productId }) => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true); // สำหรับแสดงสถานะการโหลด
 
-  const fetchProductList = async () => {
+  const fetchProductList = useCallback(async () => {
     try {
-      setLoading(true); // เริ่มการโหลด
-      console.log("categories:", categories);
-console.log("name:", name);
-console.log("productId:", productId);
+      setLoading(true); 
       const products = await fetchRelatedProducts(categories, name, productId);
       setRelatedProducts(products.relatedProducts);
     } catch (error) {
       console.error("Error fetching related products:", error);
     } finally {
-      setLoading(false); // จบการโหลด
+      setLoading(false); 
     }
-  };
+  }, [categories, name, productId]); 
 
   useEffect(() => {
     fetchProductList();
-  }, [categories, name, productId]); // ดึงข้อมูลเมื่อ props เปลี่ยน
+  }, [fetchProductList]); 
 
   return (
     <div className="relative w-full overflow-hidden"> 
@@ -32,7 +35,7 @@ console.log("productId:", productId);
           <div className="text-center w-full">Loading related products...</div>
         ) : relatedProducts.length > 0 ? (
           relatedProducts.slice(0, 4).map((product) => ( 
-            <div key={product.id} className="mx-2 w-1/4 min-w-[250px]">
+            <div key={(product as { id: number }).id} className="mx-2 w-1/4 min-w-[250px]">
               <ProductCard product={product} />
             </div>
           ))

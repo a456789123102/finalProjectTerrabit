@@ -9,6 +9,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../schemas/registerSchema";
 import { Eye, EyeClosed } from "lucide-react";
 
+interface Data {
+  email: string;
+  username: string;
+  password: string;
+}
+
 
 function Register() {
   const [error, setError] = useState("")
@@ -25,7 +31,7 @@ function Register() {
 
 
 
-  const handleRegister = async (data) => {
+  const handleRegister = async (data:Data) => {
     try {
       setError('');
       await goRegister(data.email, data.username, data.password);

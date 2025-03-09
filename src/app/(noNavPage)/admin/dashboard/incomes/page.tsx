@@ -5,6 +5,7 @@ import useFetchIncomesForCharts from "@/app/(noNavPage)/admin/hooks/orders/useFe
 import LineChartComponent from "../../components/charts/LineChartComponent";
 import { useTheme } from "@/app/context/themeContext";
 import TotalBox from "../components/totalBox";
+import { useCallback } from "react";
 
 function IncomeCharts() {
     const { themeColors } = useTheme();
@@ -24,34 +25,37 @@ function IncomeCharts() {
 
     const colorsPie = ["#82ca9d", "#8884d8", "#ffc658", "#ff7300"];
 
-    const checkIntervalLength = (): boolean => {
-        const maxEndDate = new Date(tempStartDate);
-        let errorMessage = "";
 
-        if (tempInterval === "daily") {
-            maxEndDate.setMonth(maxEndDate.getMonth() + 1);
-            if (tempEndDate > maxEndDate) {
-                errorMessage = "The end date exceeds the maximum limit of 1 month for the daily interval.";
-            }
-        } else if (tempInterval === "weekly") {
-            maxEndDate.setMonth(maxEndDate.getMonth() + 6);
-            if (tempEndDate > maxEndDate) {
-                errorMessage = "The end date exceeds the maximum limit of 6 months for the weekly interval.";
-            }
-        } else if (tempInterval === "monthly") {
-            maxEndDate.setFullYear(maxEndDate.getFullYear() + 2);
-            if (tempEndDate > maxEndDate) {
-                errorMessage = "The end date exceeds the maximum limit of 2 years for the monthly interval.";
-            }
+const checkIntervalLength = useCallback((): boolean => {
+    const maxEndDate = new Date(tempStartDate);
+    let errorMessage = "";
+
+    if (tempInterval === "daily") {
+        maxEndDate.setMonth(maxEndDate.getMonth() + 1);
+        if (tempEndDate > maxEndDate) {
+            errorMessage = "The end date exceeds the maximum limit of 1 month for the daily interval.";
         }
+    } else if (tempInterval === "weekly") {
+        maxEndDate.setMonth(maxEndDate.getMonth() + 6);
+        if (tempEndDate > maxEndDate) {
+            errorMessage = "The end date exceeds the maximum limit of 6 months for the weekly interval.";
+        }
+    } else if (tempInterval === "monthly") {
+        maxEndDate.setFullYear(maxEndDate.getFullYear() + 2);
+        if (tempEndDate > maxEndDate) {
+            errorMessage = "The end date exceeds the maximum limit of 2 years for the monthly interval.";
+        }
+    }
 
-        setErrMessages(errorMessage);
-        return errorMessage === "";
-    };
+    setErrMessages(errorMessage);
+    return errorMessage === "";
+}, [tempStartDate, tempEndDate, tempInterval]); 
+
+
     useEffect(() => {
         checkIntervalLength()
         console.log("error msg: " + errMessages)
-    }, [tempEndDate, tempStartDate, tempInterval])
+    }, [tempEndDate, tempStartDate, tempInterval,checkIntervalLength,errMessages])
 
 
 

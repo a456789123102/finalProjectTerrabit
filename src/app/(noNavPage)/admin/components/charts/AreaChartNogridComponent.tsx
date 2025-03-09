@@ -1,9 +1,19 @@
 import React, { useRef, useEffect, useState } from "react";
 import { AreaChart, Area, Tooltip } from "recharts";
 
-const AreaChartNogridComponent = ({ data, keyData, color }) => {
-  const chartContainerRef = useRef(null);
-  const [chartWidth, setChartWidth] = useState(200);
+interface ChartData {
+  [key: string]: number | string;
+}
+
+interface AreaChartNogridComponentProps {
+  data: ChartData[];
+  keyData: string;
+  color: string;
+}
+
+const AreaChartNogridComponent: React.FC<AreaChartNogridComponentProps> = ({ data, keyData, color }) => {
+  const chartContainerRef = useRef<HTMLDivElement | null>(null);
+  const [chartWidth, setChartWidth] = useState<number>(200);
 
   useEffect(() => {
     const updateChartSize = () => {
@@ -28,11 +38,12 @@ const AreaChartNogridComponent = ({ data, keyData, color }) => {
         </defs>
 
         <Tooltip
-  formatter={(value, name, props) => {
-    const label = props.payload?.label ?? "No Label";
-    return label !== "No Label" ? [`${value.toLocaleString()}`, `${label}`] : [`${value.toLocaleString()}`, name];
-  }}
-/>
+          formatter={(value: number | string, name: string, props: any) => {
+            const label = props.payload?.label ?? "No Label";
+            return label !== "No Label" ? [`${value.toLocaleString()}`, `${label}`] : [`${value.toLocaleString()}`, name];
+          }}
+        />
+        
         <Area
           type="linear"
           dataKey={keyData}

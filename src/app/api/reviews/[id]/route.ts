@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { get } from "../../const"; // ดึงฟังก์ชัน get
 
-export async function GET(req: NextRequest, { params }) {
+export async function GET(req: NextRequest, {params}:{params:{id:string}}) {
   try {
     const { id } = params;
     const token = req.cookies.get("token")?.value;

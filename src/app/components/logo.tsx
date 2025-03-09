@@ -11,12 +11,22 @@ import Text from './text';
 import { BellRing, X } from 'lucide-react';
 import { deleteAllNoti, deleteOneNoti, myNotifications } from '../apis/notification';
 
+interface NotiProps {
+  id: number;
+  userId: number;
+  url: string;
+  message: string;
+  createdAt: string;
+  updatedAt:  string;
+  isRead: boolean;
+}
+
 function Logo() {
   const router = useRouter();
   const { username, isAdmin, setUser } = useUserStore();
   const [showNotifications, setShowNotifications] = useState(false);
-  const notificationRef = useRef(null); // ใช้จับ element เพื่อปิด dropdown
-  const [noti, setNoti] = useState([]);
+  const notificationRef = useRef(null); 
+  const [noti, setNoti] = useState<NotiProps[]>([]);
   const [totalNoti, setTotalNoti] = useState(0)
 
   const fetchNotifications = async () => {
@@ -110,7 +120,7 @@ function Logo() {
               <div className='absolute top-8 right-0 w-72 bg-white border border-gray-300 rounded-sm shadow-lg z-50 max-h-[80vh] overflow-scroll'>
                 {noti.length > 0 ? (
                   <div>
-                    {noti.map((notification) => (
+                    {noti.map((notification:NotiProps) => (
                       <div key={notification.id} className="flex justify-between items-center px-4 text-[0.8rem] text-slate-700 py-2 border-b">
 
                         {notification.url ? (

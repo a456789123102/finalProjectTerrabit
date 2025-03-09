@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useCallback } from "react";
 import { myOrder, updateOrderAddress, deleteOrder, refoundOrder, cancelledOrder } from "@/app/apis/order";
 import { getOwnAddress } from "@/app/apis/address";
 import AddressDropdown from "../components/addressDropdown";
@@ -42,10 +43,17 @@ interface Status {
   label: string;
 }
 
+interface OrderCount {
+  status: string;
+  count: number;
+}
+
+
+
 
 function Orders() {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [count, setCount] = useState([]);
+  const [count, setCount] = useState<OrderCount[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [status, setStatus] = useState<string[]>(["pending_payment_proof"]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,16 +66,7 @@ function Orders() {
     { key: ["cancelled_by_admin", "cancelled_by_user", "refund_rejected"], label: "Unsuccessful Order", count: 0 },
   ];
 
-
-  useEffect(() => {
-    fetchOrders();
-  }, [status]);
-
-  useEffect(() => {
-    fetchAddress();
-  }, [orders]);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const orderItems = await myOrder(status);
       setOrders(orderItems.orders);
@@ -76,7 +75,7 @@ function Orders() {
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
-  };
+  }, [status]); 
 
   const fetchAddress = async () => {
     try {
@@ -156,17 +155,6 @@ function Orders() {
     }
   }
 
-  // const handleOrderDelete = async (orderId: number) => {
-  //   try {
-  //     console.log("orderId:", orderId);
-  //     const res = await deleteOrder(orderId);
-  //     console.log("Deleted order:", JSON.stringify(res, null, 2));
-  //     fetchOrders();
-  //   } catch (error) {
-  //     console.error("Error deleting order:", error);
-  //   }
-  // }
-
   const handleImageClick = () => {
     setIsModalOpen(true);
   };
@@ -174,6 +162,15 @@ function Orders() {
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
+
+
+  useEffect(() => {
+    fetchOrders();
+  }, [status,fetchOrders]);
+
+  useEffect(() => {
+    fetchAddress();
+  }, [orders]);
 
 
 
@@ -184,9 +181,9 @@ function Orders() {
       <div className="self-start p-2 bg-white w-full pl-5 border border-gray-300">Checkout Section</div>
       <div className="bg-gray-100 w-full justify-center flex flex-col mt-5 p-6 m-4 min-w-96">
         <div className="flex flex-row bg-white justify-between w-full shadow-sm">
-          {updatedStatuses.map((item) => (
+          {updatedStatuses.map((item,i) => (
             <button
-              key={item.key}
+              key={i}
               className={`p-4 px-6 transition-all flex flex-row gap-2 items-baseline duration-300 hover:text-yellow-600 text-[1.1rem] w-full ${item.key.every((k) => status.includes(k))
                 ? "border-b-2 border-yellow-600 text-yellow-600"
                 : "border-b-2"

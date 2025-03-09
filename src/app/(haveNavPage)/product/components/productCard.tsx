@@ -50,14 +50,19 @@ const ProductCard = ({ product }: { product: Product }) => {
 
 
       <div className="w-full h-[250px] overflow-hidden  ">
-        <Image
-          className="object-contain w-full h-full cursor-pointer"
-          src={productImage}
-          alt="Cover Image"
-          width={300}
-          height={250}
-          onClick={handleProductClick}
-        />
+      <div className="relative w-full h-[250px]">
+      <Image
+  className="object-contain w-full h-full cursor-pointer"
+  src={productImage}
+  alt="Cover Image"
+  width={200}
+  height={300}
+  style={{ width: "auto", height: "auto" }} 
+  onClick={handleProductClick}
+/>
+
+</div>
+
       </div>
       
       <div>

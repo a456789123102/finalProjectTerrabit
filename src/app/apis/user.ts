@@ -19,7 +19,7 @@ export const getAllUsers = async (
   search?: string,
   orderBy?:string,
     orderWith?:string,
-    isActive?:boolean,
+    isActive?:boolean | null,
     page?:string,
     pageSize?:string
 ) => {
@@ -72,23 +72,34 @@ try {
 
 ///////////////////////////////
 
-export const getTotalUsersForCharts = async (interval: string, startDate: Date, endDate: Date) => {
+export const getTotalUsersForCharts = async (
+  interval: string,
+  startDate: string | Date,
+  endDate: string | Date
+) => {
   try {
     const params = new URLSearchParams();
-  if(interval){
-    params.append("interval", interval);
-  }
-  if(startDate && endDate){
-    params.append("startDate", startDate.toISOString());
-    params.append("endDate", endDate.toISOString());
-  }
-    const res = await axios.get(`/api/users/charts/getTotalUsersForCharts`,{params});
+
+    if (interval) {
+      params.append("interval", interval);
+    }
+
+    const parsedStartDate = typeof startDate === "string" ? new Date(startDate) : startDate;
+    const parsedEndDate = typeof endDate === "string" ? new Date(endDate) : endDate;
+
+    if (parsedStartDate && parsedEndDate) {
+      params.append("startDate", parsedStartDate.toISOString());
+      params.append("endDate", parsedEndDate.toISOString());
+    }
+
+    const res = await axios.get(`/api/users/charts/getTotalUsersForCharts`, { params });
     return res.data;
   } catch (error) {
-    console.error("error fetching order", error);
+    console.error("Error fetching user data:", error);
     throw error;
   }
-}
+};
+
 ///////////////////////////////////
 export const myInfo = async () => {
   try {

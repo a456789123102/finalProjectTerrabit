@@ -1,6 +1,7 @@
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 import { MapPinHouse } from "lucide-react";
 import Link from "next/link";
+import React from "react"; // ต้อง import React
 
 interface Address {
   id: number;
@@ -43,22 +44,25 @@ const AddressDropdown: React.FC<AddressDropdownProps> = ({
           </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Dynamic Actions" className="border rounded shadow-lg w-full">
-          {addresses
-            .filter((address) => address.id !== selectedAddress)
-            .map((address) => (
-              <DropdownItem
-                key={address.id}
-                onPress={() => handleSelectAddress(orderId, address.id)} // ใช้ onPress แทน onClick
-                className="bg-gray-100 border-b py-2 text-[0.7rem] my-1 w-full p-2 hover:bg-gray-200 text-slate-700"
-              >
-                {`${address.recipientName}, ${address.currentAddress}, ${address.tambonName}, ${address.amphureName}, ${address.provinceName}, ${address.zipCode}, ${address.mobileNumber}, ${address.email}`}
-              </DropdownItem>
-            ))}
-          <DropdownItem key="create-address" className="bg-gray-100 py-2 text-[0.8rem] text-blue-600 font-semibold">
-            <Link href="/address/create" passHref>
-              <div className="p-2 block hover:bg-gray-200 text-blue-600">+ Create New Address</div>
-            </Link>
-          </DropdownItem>
+          {/* ✅ ใช้ React.Fragment หรือ <>...</> แทนการใช้ array ตรงๆ */}
+          <>
+            {addresses
+              .filter((address) => address.id !== selectedAddress)
+              .map((address) => (
+                <DropdownItem
+                  key={address.id}
+                  onPress={() => handleSelectAddress(orderId, address.id)} // ใช้ onPress แทน onClick
+                  className="bg-gray-100 border-b py-2 text-[0.7rem] my-1 w-full p-2 hover:bg-gray-200 text-slate-700"
+                >
+                  {`${address.recipientName}, ${address.currentAddress}, ${address.tambonName}, ${address.amphureName}, ${address.provinceName}, ${address.zipCode}, ${address.mobileNumber}, ${address.email || ''}`}
+                </DropdownItem>
+              ))}
+            <DropdownItem key="create-address" className="bg-gray-100 py-2 text-[0.8rem] text-blue-600 font-semibold">
+              <Link href="/address/create" passHref>
+                <div className="p-2 block hover:bg-gray-200 text-blue-600">+ Create New Address</div>
+              </Link>
+            </DropdownItem>
+          </>
         </DropdownMenu>
       </Dropdown>
     </div>

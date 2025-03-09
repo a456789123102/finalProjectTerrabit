@@ -53,7 +53,7 @@ function Page() {
   ];
 
 
-  const handleIsActive = async (id: string, status: boolean) => {
+  const handleIsActive = async (id: number, status: boolean) => {
     const action = status ? "Ban" : "Unban";
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -88,7 +88,7 @@ function Page() {
     return columnKeysFiltered.map((key) => ({
       header: key.charAt(0).toUpperCase() + key.slice(1),
       accessorKey: key,
-      cell: ({ row }) => {
+      cell:  ({ row }: { row: any }) => {
         const val = row.original[key];
         if (key === "isActive") {
           return (
@@ -127,6 +127,19 @@ function Page() {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const handleColumnToggle = (column: string) => {
+    setColumnKeysFiltered((prev: string[]) => {
+      if (!prev) return []; 
+  
+      const updatedColumns = prev.includes(column)
+        ? prev.filter((c) => c !== column)
+        : [...prev.filter((c) => c !== "isActive"), column, "isActive"];
+  
+      return Array.from(new Set(updatedColumns)); 
+    });
+  };
+  
+
   return (
     <div
       className="min-h-screen my-7 flex flex-col justify-start items-center gap-5"
@@ -142,14 +155,7 @@ function Page() {
           handleSearchQuery={() => setForceFetch((prev) => !prev)}
           columnKeys={Object.keys(users[0] || {})}
           columnKeysFiltered={columnKeysFiltered}
-          handleColumnToggle={(column) => {
-            setColumnKeysFiltered((prev) => {
-              const updatedColumns = prev.includes(column)
-                ? prev.filter((c) => c !== column)
-                : [...prev.filter((c) => c !== "isActive"), column, "isActive"]; 
-              return [...new Set(updatedColumns)]; 
-            });
-          }}          
+          handleColumnToggle={handleColumnToggle}          
           totalItems={pagination.totalUsers}
           fromSearch={searchQuery}
           sortData={sortByOptions}
@@ -171,7 +177,7 @@ function Page() {
         <DataTable table={table} />
       </div>
 
-      <PaginationControls pagination={pagination} setPagination={setPagination} />
+      <PaginationControls pagination={pagination as any} setPagination={setPagination as any} />
     </div>
   );
 }

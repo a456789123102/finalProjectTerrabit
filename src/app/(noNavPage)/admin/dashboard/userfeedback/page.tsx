@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ChartFiltersPanel from "../../components/ChartFiltersPanel";
 import useFetchTotalReviewsForCharts from "@/app/(noNavPage)/admin/hooks/reviews/useFetchTotalReviewsForCharts";
 import LineChartComponent from "../../components/charts/LineChartComponent";
@@ -23,7 +23,7 @@ function IncomeCharts() {
     const [errMessages, setErrMessages] = useState("");
 
 
-    const checkIntervalLength = (): boolean => {
+    const checkIntervalLength = useCallback((): boolean => { 
         const maxEndDate = new Date(tempStartDate);
         let errorMessage = "";
 
@@ -46,11 +46,11 @@ function IncomeCharts() {
 
         setErrMessages(errorMessage);
         return errorMessage === "";
-    };
+    }, [tempStartDate, tempEndDate, tempInterval]);
     useEffect(() => {
         checkIntervalLength()
         console.log("error msg: " + errMessages)
-    }, [tempEndDate, tempStartDate, tempInterval])
+    }, [tempEndDate, tempStartDate, tempInterval,checkIntervalLength,errMessages])
 
 
 

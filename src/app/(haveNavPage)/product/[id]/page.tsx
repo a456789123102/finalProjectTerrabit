@@ -36,6 +36,9 @@ type ProductImage = {
   id: number;
   name: string;
   imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  productId: number;
 };
 
 
@@ -46,8 +49,8 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
   const [totalRating, setTotalRating] = useState(null);
-  const [myReviews, setMyReviews] = useState(null);
-  const [myReviewPermission, setMyReviewsPermission] = useState(null);
+  const [myReviews, setMyReviews] = useState(false);
+  const [myReviewPermission, setMyReviewsPermission] = useState(false);
   const [AddQuantity, setAddQuantity] = useState(1);
   const [paginations, setPaginations] = useState({
     currentPage: 1,
@@ -142,7 +145,7 @@ const ProductDetail = () => {
       };
       fetchReviews();
     }
-  }, [id, paginations.currentPage]);
+  }, [id, paginations.currentPage,isEditClick]);
 
   if (loading) return <p>Loading...</p>;
 

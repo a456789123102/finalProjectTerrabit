@@ -1,6 +1,10 @@
 import React from 'react'
 
-function StarRating({ rating }) {
+interface StarRatingProps {
+  rating: number;
+}
+
+function StarRating({ rating }: StarRatingProps) {
     return (
         <div className="flex">
           {Array.from({ length: rating }, (_, index) => (

@@ -7,18 +7,19 @@ interface ChartFiltersPanelProps {
   interval: string;
   setInterval: (interval: string) => void;
   startDate: Date;
-  setStartDate: (date: Date ) => void;
-  endDate: Date ;
-  setEndDate: (date: Date ) => void;
+  setStartDate: (date: Date) => void;
+  endDate: Date; 
+  setEndDate: (date: Date) => void; 
   handleConfirm: () => void;
   chartKeys: string[];
   setChartKeys: (keys: string[]) => void;
   options: string[];
-  errMessages: string | null;
+  errMessages: string;
   multiSelect: boolean;
 }
 
-// ✅ ใช้ `React.FC<ChartFiltersPanelProps>` เพื่อกำหนด Type ที่ถูกต้อง
+
+
 const ChartFiltersPanel: React.FC<ChartFiltersPanelProps> = ({
   interval,
   setInterval,
@@ -45,13 +46,14 @@ const ChartFiltersPanel: React.FC<ChartFiltersPanelProps> = ({
       )}
       <div className="flex flex-row gap-5 items-center">
         <div>
-          <DateRangePicker
-            startDate={startDate}
-            onStartDateChange={setStartDate}
-            endDate={endDate}
-            onEndDateChange={setEndDate}
-            errMessages={errMessages}
-          />
+        <DateRangePicker
+  startDate={startDate ?? undefined} 
+  onStartDateChange={setStartDate}
+  endDate={endDate ?? undefined} 
+  onEndDateChange={setEndDate}
+  errMessages={errMessages ?? undefined} 
+/>
+
         </div>
         <div className="w-36">
           <IntervalDropdown interval={interval} setInterval={setInterval} />

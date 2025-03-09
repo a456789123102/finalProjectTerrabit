@@ -1,8 +1,18 @@
 "use client"
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import Number from "@/app/components/Number"
+interface AccDetailsProps {
+  info: {
+    countAddress: number,
+    countTicket: number,
+    countOrder: number,
+    totalSpend: number,
+    countOrderItems: number
+  }
+}
 
-function AccDetails({ info }) {
+const AccDetails: React.FC<AccDetailsProps> = ({ info }) => {
   console.log("info:", info)
   const router = useRouter()
 
@@ -34,7 +44,7 @@ function AccDetails({ info }) {
 
         <div className='flex flex-row gap-2'>
           <div  className='text-slate-600'>Total spend:</div>
-          <div>{info.totalSpend}</div>
+          <div><Number>{info.totalSpend}</Number></div>
         </div>
       </div>
     </div>

@@ -7,14 +7,17 @@ type Cart = {
   id: number;
   userId: number;
   productId: number;
-  quantity: number;
+  quantity: number;  
   product: {
+    id: number;
     Image: { imageUrl: string }[];
     name: string;
     price: number;
     finalPrice: number;
+    quantity: number;
   };
 };
+
 
 
 function ProductCart({
@@ -30,7 +33,7 @@ function ProductCart({
   const [tempQuantity, setTempQuantity] = useState(cart.quantity);
 
   const handleIncreaseClick = () => {
-    if (Number(cart.product.quantity) > tempQuantity) {
+    if (cart.quantity && Number(cart.quantity) > tempQuantity) { 
       setTempQuantity((prev) => prev + 1);
     }
   };

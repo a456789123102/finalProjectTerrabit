@@ -103,15 +103,16 @@ export const changePublishedReviewStatus = async (id: number) => {
 };
 
 
-export const getTotalReviewsForCharts = async (interval: string, startDate: Date, endDate: Date) => {
+export const getTotalReviewsForCharts = async (interval: string, startDate: string | Date, endDate: string | Date) => {
   try {
     const params = new URLSearchParams();
   if(interval){
     params.append("interval", interval);
   }
   if(startDate && endDate){
-    params.append("startDate", startDate.toISOString());
-    params.append("endDate", endDate.toISOString());
+    params.append("startDate", (typeof startDate === "string" ? new Date(startDate) : startDate).toISOString());
+    params.append("endDate", (typeof endDate === "string" ? new Date(endDate) : endDate).toISOString());
+    
   }
     const res = await axios.get(`/api/reviews/charts/getTotalReviewsForCharts`,{params});
     return res.data;

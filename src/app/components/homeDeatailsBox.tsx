@@ -24,7 +24,7 @@ function HomeDeatailsBox() {
           </div>
           <div className="flex flex-col">
             <div className="text-[1.4rem] font-bold">Games: Play Beyond Imagination</div>
-            <div className="text-[1.2rem]">"Crafting Worlds, One Pixel at a Time"</div>
+            <div className="text-[1.2rem]">Crafting Worlds, One Pixel at a Time</div>
             <div>
               Step into a world where every pixel tells a story. Explore our collection of handcrafted indie games, designed to bring out the nostalgia of classic gaming while incorporating modern creativity.
             </div>
@@ -53,7 +53,7 @@ function HomeDeatailsBox() {
           </div>
           <div className="flex flex-col">
             <div className="text-[1.4rem] font-bold">Accessories: Elevate Your Gaming Setup</div>
-            <div className="text-[1.2rem]">"Enhance Your Play with Premium Gear"</div>
+            <div className="text-[1.2rem]">Enhance Your Play with Premium Gear</div>
             <div>
               From custom keycaps and LED desk lights to high-quality gaming gear, our accessories collection is designed to enhance both functionality and aesthetics for the ultimate gaming experience.
             </div>
@@ -81,7 +81,7 @@ function HomeDeatailsBox() {
           </div>
           <div className="flex flex-col">
             <div className="text-[1.4rem] font-bold">Home Decoration: Style Your Space</div>
-            <div className="text-[1.2rem]">"Transform Your Room into a Gamer’s Haven"</div>
+            <div className="text-[1.2rem]">Transform Your Room into a Gamer’s Haven</div>
             <div>
               Make your gaming space truly unique with pixel-themed posters, neon signs, and artwork inspired by your favorite games. Elevate your room aesthetics with high-quality decorations tailored for gamers.
             </div>

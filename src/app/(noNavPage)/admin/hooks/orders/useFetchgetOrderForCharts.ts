@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchgetOrderForCharts } from "@/app/apis/order";
 
 interface TotalData {
@@ -22,7 +22,7 @@ export const useFetchOrderForCharts = (interval: string, startDate: Date, endDat
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchOrderData = async () => {
+    const fetchOrderData = useCallback(async () => {
         setLoading(true);
         setError(null);
         try {
@@ -36,11 +36,11 @@ export const useFetchOrderForCharts = (interval: string, startDate: Date, endDat
         } finally {
             setLoading(false);
         }
-    };
-
+    }, [interval, startDate, endDate]);
+    
     useEffect(() => {
         fetchOrderData();
-    }, [interval, startDate, endDate]);
+    }, [fetchOrderData]);
 
     return { chartsData, total, comparativeGrowth, loading, error };
 };

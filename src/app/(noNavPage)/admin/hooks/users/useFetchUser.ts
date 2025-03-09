@@ -1,5 +1,5 @@
 import { getAllUsers } from "@/app/apis/user";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 interface PaginationType {
   page: number;
@@ -12,7 +12,7 @@ interface FetchParams {
   search?: string;
   orderBy?: string | undefined;
   orderWith?: string;
-  isActive?: boolean | undefined;
+  isActive?: boolean | null;
   pagination?: PaginationType;
   forceFetch?: boolean;
   setPagination?: React.Dispatch<React.SetStateAction<PaginationType>>;
@@ -31,7 +31,7 @@ const useFetchUsers = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchUserList = async () => {
+  const fetchUserList = useCallback(async () => {
     setLoading(true);
     try {
       const usersData = await getAllUsers(
@@ -42,11 +42,14 @@ const useFetchUsers = ({
         pagination?.page?.toString(),
         pagination?.pageSize?.toString()
       );
+
       setUsers(usersData.users);
-      console.log("user Data :",users)
+      console.log("user Data :", usersData.users); 
+
       if (setPagination) {
         setPagination(usersData.pagination);
       }
+
       setError(null);
     } catch (error) {
       console.error("Error fetching Users", error);
@@ -54,11 +57,11 @@ const useFetchUsers = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, orderBy, orderWith, isActive, pagination, setPagination, ]);
 
   useEffect(() => {
     fetchUserList();
-  }, [search, orderBy, orderWith, isActive, pagination?.page, pagination?.pageSize, forceFetch]);
+  }, [fetchUserList,forceFetch]);
 
   return { users, loading, error };
 };

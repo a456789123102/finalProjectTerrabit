@@ -1,7 +1,14 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+interface ChartData {
+  [key: string]: number | string | undefined;
+}
 
-function LineChartComponent({ data, chartKeys }) {
+interface LineChartProps {
+  data: ChartData[];
+  chartKeys: string[];
+}
+const LineChartComponent: React.FC<LineChartProps> = ({ data, chartKeys }) => {
 console.log(`chartKeys:${chartKeys}`);
   const colors = ["#82ca9d", "#8884d8", "#ffc658", "#ff7300"];
 
@@ -21,7 +28,7 @@ console.log(`chartKeys:${chartKeys}`);
             key={key}
             type="monotone"
             dataKey={key}
-            stroke={colors[index % colors.length]} // Cycle through colors if there are more keys than colors
+            stroke={colors[index % colors.length]} 
           />
         ))}
       </LineChart>

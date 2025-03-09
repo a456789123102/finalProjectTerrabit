@@ -13,6 +13,7 @@ interface AddressFormProps {
 interface Location {
   id: number;
   name_th: string;
+  zip_code: string;
 }
 
 function AddressForm({ onSubmit, mode }: AddressFormProps) {
@@ -96,7 +97,7 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
       };
       fetchAmphures();
     }
-  }, [provinceId]);
+  }, [provinceId,mode]);
 
   useEffect(() => {
     if (amphureId !== null) {
@@ -117,7 +118,7 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
       };
       fetchTambons();
     }
-  }, [amphureId]);
+  }, [amphureId,mode]);
 
   /** โหลดข้อมูลที่อยู่เมื่ออยู่ในโหมดแก้ไข */
   useEffect(() => {
@@ -179,37 +180,42 @@ function AddressForm({ onSubmit, mode }: AddressFormProps) {
   };
 
   /** เลือกจังหวัด */
-  const handleProvinceChange = (selectedOption) => {
+  const handleProvinceChange = (selectedOption: { value: number; label: string } | null) => {
     if (!selectedOption) return;
+  
     setProvinceId(selectedOption.value);
     setProvinceName(selectedOption.label);
-
+  
     if (mode !== "edit") {
       setAmphureId(null);
       setAmphureName("");
       setTambonId(null);
       setTambonName("");
       setZipCode("");
+      
       setAmphures([]);
-      setTambons([]);
+      setTambons([]); 
     }
   };
 
   /** เลือกอำเภอ */
-  const handleAmphureChange = (selectedOption) => {
+  const handleAmphureChange = (selectedOption: { value: number; label: string } | null) => {
     if (!selectedOption) return;
+  
     setAmphureId(selectedOption.value);
     setAmphureName(selectedOption.label);
-
+  
     if (mode !== "edit") {
       setTambonId(null);
       setTambonName("");
       setZipCode("");
+  
+      setTambons([]);
     }
   };
 
   /** เลือกตำบล */
-  const handleTambonChange = (selectedOption) => {
+  const handleTambonChange =  (selectedOption: { value: number; label: string } | null) => {
     if (!selectedOption) return;
     const foundTambon = tambons.find((t) => t.id === selectedOption.value);
     setTambonId(selectedOption.value);

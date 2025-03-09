@@ -6,13 +6,24 @@ import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
 
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  createdAt: Date;
+}
+
 
 function NewUserBox() {
   const { themeColors } = useTheme();
   const router = useRouter();
   const [pagination, setPagination] = useState({
+    page: 1, 
+    totalPages: 1,
     pageSize: 5,
-  })
+    totalUsers: 0, 
+  });
+  
   const { users, loading, error } = useFetchUsers({
     pagination,
   });
@@ -29,8 +40,8 @@ function NewUserBox() {
     <div className="border border-gray-300  " style={{ backgroundColor: themeColors.base }}>
       <div className="p-3 border-b border-gray-300 font-medium text-[1.3rem]">NEW USERS</div>
       <div className="m-4 mt-5 flex flex-col gap-2">
-        {users && users.map((user) => (
-          <div className="border p-3 border-gray-300 rounded-[4px] flex flex-row justify-between">
+        {users && users.map((user:User,i) => (
+          <div className="border p-3 border-gray-300 rounded-[4px] flex flex-row justify-between" key={i}>
             <div className="flex flex-col">
               <div className="flex flex-row gap-2 items-center">
                 <div className="flex flex-row gap-1 text-[0.8rem]">

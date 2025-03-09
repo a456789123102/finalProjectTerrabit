@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { get } from "../../const";
 
-export async function GET(req: NextRequest, { params }) {
+export async function GET(req: NextRequest, { params }:{params:{id:string}}) {
   try {
     const { id } = params;
     const res = await get(`/api/career/${id}`);

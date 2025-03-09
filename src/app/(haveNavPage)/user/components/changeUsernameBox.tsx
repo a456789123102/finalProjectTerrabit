@@ -10,6 +10,11 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/zustand";
 
+interface dataProps {
+  oldPassword : string;
+  newUsername : string;
+}
+
 // ✅ Schema validation ด้วย zod
 const schema = z.object({
   oldPassword: z.string().min(1, "Required"),
@@ -30,7 +35,7 @@ function ChangeUsernameBox() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data:dataProps) => {
     try {
       await changeUsername(data.oldPassword, data.newUsername);
       Swal.fire({
@@ -46,7 +51,7 @@ function ChangeUsernameBox() {
       Swal.fire({
         icon: "error",
         title: "Failed to Change Username",
-        text: error.response?.data?.message || "Something went wrong!",
+        text: (error as any).response?.data?.message || "Something went wrong!",
       });
     }
   };

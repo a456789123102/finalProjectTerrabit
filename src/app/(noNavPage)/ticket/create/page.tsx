@@ -15,7 +15,7 @@ const CreateTicketForm = () => {
     });
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!topic.trim() || !details.trim()) {
             alert("Please fill in all fields.");

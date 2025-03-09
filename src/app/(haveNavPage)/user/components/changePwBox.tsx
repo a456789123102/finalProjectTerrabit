@@ -10,6 +10,12 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/zustand";
 
+interface DataProps {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
 
 
 const schema = z.object({
@@ -39,7 +45,7 @@ function ChangePwBox() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async(data: DataProps)  => {
     try {
       await changePassword(data.oldPassword, data.newPassword); 
       Swal.fire({
@@ -53,7 +59,7 @@ function ChangePwBox() {
       Swal.fire({
         icon: "error",
         title: "Failed to Change Password",
-        text: error.response?.data?.message || "Something went wrong!",
+        text: (error as any).response?.data?.message || "Something went wrong!",
       });
     }
   };

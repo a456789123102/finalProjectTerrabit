@@ -22,13 +22,13 @@ const RatingStarSelection: React.FC<RatingStarSelectionProps> = ({ maxStars, sel
         setSelectedStars(index + 1);
     };
 
-    const emoteIcons = {
-        0: <Angry className="w-8 h-8 text-red-600" />,   // หน้าโกรธ
-        1: <Angry className="w-8 h-8 text-orange-500" />, // หน้าบึ้ง
-        2: <Frown className="w-8 h-8 text-yellow-500" />,   // หน้านิ่ง
-        3: <Meh className="w-8 h-8 text-green-500" />,    // Meh
-        4: <Smile className="w-8 h-8 text-blue-500" />,   // หน้ายิ้ม
-        5: <Laugh className="w-8 h-8 text-purple-500" />  // หัวเราะ
+    const emoteIcons: Record<number, JSX.Element> = {
+        0: <Angry className="w-8 h-8 text-red-600" />,   
+        1: <Angry className="w-8 h-8 text-orange-500" />,
+        2: <Frown className="w-8 h-8 text-yellow-500" />,  
+        3: <Meh className="w-8 h-8 text-green-500" />,   
+        4: <Smile className="w-8 h-8 text-blue-500" />,   
+        5: <Laugh className="w-8 h-8 text-purple-500" />
       };
     return (
 <div className="flex flex-row items-center gap-2">

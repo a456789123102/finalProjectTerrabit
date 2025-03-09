@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
 
-function NewTicketBox() {
+interface Ticket {
+    id: number;
+    topic: string;
+    createdAt: string;
+    isSolved: boolean;
+  }
+
+  const NewTicketBox = () => {
     const router = useRouter();
     const { themeColors } = useTheme();
 
@@ -23,8 +30,8 @@ function NewTicketBox() {
         <div className="border border-gray-300  " style={{ backgroundColor: themeColors.base }}>
             <div className="p-3 border-b border-gray-300 font-medium text-[1.3rem]">NEW Tickets</div>
             <div className="m-4 mt-5 flex flex-col gap-2">
-                {tickets && tickets.map((ticket) => (
-                    <div className="border p-3 border-gray-300 rounded-[4px] flex flex-row justify-between">
+                {tickets && tickets.map((ticket:Ticket,i) => (
+                    <div className="border p-3 border-gray-300 rounded-[4px] flex flex-row justify-between" key={i}>
                         <div className="flex flex-col">
                             <div className="flex flex-row gap-2 items-center">
                                 <div className="flex flex-row gap-1 text-[0.8rem]">

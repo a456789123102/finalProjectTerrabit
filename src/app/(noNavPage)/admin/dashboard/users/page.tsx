@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ChartFiltersPanel from "../../components/ChartFiltersPanel";
 import LineChartComponent from "../../components/charts/LineChartComponent";
 import { useTheme } from "@/app/context/themeContext";
@@ -23,7 +23,7 @@ function IncomeCharts() {
     const [errMessages, setErrMessages] = useState("");
 
 
-    const checkIntervalLength = (): boolean => {
+    const checkIntervalLength = useCallback((): boolean => {
         const maxEndDate = new Date(tempStartDate);
         let errorMessage = "";
 
@@ -46,11 +46,11 @@ function IncomeCharts() {
 
         setErrMessages(errorMessage);
         return errorMessage === "";
-    };
+    },[tempStartDate, tempEndDate, tempInterval]);
     useEffect(() => {
         checkIntervalLength()
         console.log("error msg: " + errMessages)
-    }, [tempEndDate, tempStartDate, tempInterval])
+    }, [tempEndDate, tempStartDate, tempInterval,checkIntervalLength,errMessages])
 
 
 
@@ -66,7 +66,8 @@ function IncomeCharts() {
         console.log(` Confirmed! startDate: ${tempStartDate}, endDate: ${tempEndDate}, interval: ${tempInterval}`);
     };
 
-    const{ chartsData,totalActiveUsers,totalinActiveUsers,loading,error } = useFetchUsersForCharts(interval, startDate, endDate);
+    const { chartsData, totalActiveUsers, totalInactiveUsers, loading, error } = useFetchUsersForCharts(interval, startDate, endDate);
+
 
 
     if (loading) return <p>Loading...</p>;
@@ -107,7 +108,7 @@ function IncomeCharts() {
         headerText="Total Orders"
         amount={chartKeys.reduce((acc, key) => {
             if (key === "activeUsers") return acc + totalActiveUsers;
-            if (key === "inactiveUsers") return acc + totalinActiveUsers;
+            if (key === "inactiveUsers") return acc + totalInactiveUsers;
             return acc;
           }, 0)}
           

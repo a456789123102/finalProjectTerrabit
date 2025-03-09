@@ -6,18 +6,41 @@ import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation"
+import Select, { SingleValue } from "react-select"; 
+
+
+interface Ticket {
+  id: number;
+  topic: string;
+  updatedAt: string;
+  isSolved: boolean;
+}
+
+
+interface PaginationState {
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  totalItems: number;
+}
+
+
+interface SortOption {
+  orderBy: string;
+  orderWith: string;
+  label: string;
+}
+
+interface StatusOption {
+  value: string;
+  label: string;
+}
 
 
 interface TicketResponse {
-  data: any[];
-  pagination: {
-    page: number;
-    pageSize: number;
-    totalPages: number;
-    totalItems: number;
-  };
+  tickets: Ticket[];
+  pagination: PaginationState;
 }
-
 function Page() {
  
   const [pagination, setPagination] = useState({
@@ -55,8 +78,7 @@ function Page() {
     }
   }, [searchParams]);
 
-  const handleSearch = (e) => {
-    if (e) e.preventDefault(); 
+  const handleSearch = () => {
     setSearch(tempSearch);
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
@@ -85,14 +107,14 @@ function Page() {
 
 
 
-  const sortByOptions = [
+  const sortByOptions: SortOption[] = [
     { orderBy: "desc", orderWith: "createdAt", label: "Creation Date: Newest First" },
     { orderBy: "asc", orderWith: "createdAt", label: "Creation Date: Oldest First" },
     { orderBy: "desc", orderWith: "updatedAt", label: "Last Activity: Most Recent First" },
     { orderBy: "asc", orderWith: "updatedAt", label: "Last Activity: Oldest First" },
   ];
 
-  const statusOptions = [
+  const statusOptions: StatusOption[] = [
     { value: "false", label: "Open" },
     { value: "true", label: "Closed" },
     { value: "", label: "All" },
@@ -110,32 +132,37 @@ function Page() {
       {/* Controls */}
       <div className="w-full flex flex-row justify-between items-center px-10 my-3 gap-2">
         <div className="flex flex-row justify-between items-center gap-4">
-          <SelectNoSSR
-            className="text-[0.8rem] w-52"
-            placeholder="Sort by..."
-            options={sortByOptions}
-            getOptionLabel={(e) => e.label}
-            getOptionValue={(e) => `${e.orderBy}-${e.orderWith}`}
-            value={sortByOptions.find(
-              (option) => option.orderBy === orderBy && option.orderWith === orderWith
-            )}
-            onChange={(selectedOption) => {
-              if (selectedOption) {
-                setOrderBy(selectedOption.orderBy);
-                setOrderWith(selectedOption.orderWith);
-              }
-            }}
-          />
-          <SelectNoSSR
-            className="text-[0.8rem] w-36"
-            placeholder="Ticket Status"
-            defaultValue={statusOptions[0]}
-            options={statusOptions}
-            value={statusOptions.find((option) => option.value === isSolved)}
-            onChange={(selectedOption) =>
-              setIssolved(selectedOption ? selectedOption.value : "")
-            }
-          />
+        <Select
+  className="text-[0.8rem] w-52"
+  placeholder="Sort by..."
+  options={sortByOptions}
+  getOptionLabel={(e) => (e as SortOption).label} 
+  getOptionValue={(e) => (e as SortOption).orderBy + "-" + (e as SortOption).orderWith}
+  value={sortByOptions.find(
+    (option) => option.orderBy === orderBy && option.orderWith === orderWith
+  )}
+  onChange={(selectedOption: SingleValue<SortOption>) => {
+    if (selectedOption) {
+      setOrderBy(selectedOption.orderBy);
+      setOrderWith(selectedOption.orderWith);
+    }
+  }}
+/>
+
+<Select
+  className="text-[0.8rem] w-36"
+  placeholder="Ticket Status"
+  defaultValue={statusOptions[0]}
+  options={statusOptions}
+  getOptionLabel={(e) => (e as StatusOption).label} 
+  getOptionValue={(e) => (e as StatusOption).value}
+  value={statusOptions.find((option) => option.value === isSolved)}
+  onChange={(selectedOption: SingleValue<StatusOption>) => {
+    setIssolved(selectedOption ? selectedOption.value : "");
+  }}
+/>
+
+
         </div>
         <div className="flex flex-row justify-between items-center gap-4">
           <div className="text-slate-700 flex flex-row relative">
@@ -148,16 +175,14 @@ function Page() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault(); 
-                  handleSearch(e);
+                  handleSearch();
                 }
               }}
             />
             <Search
               className="absolute top-2 right-2 text-gray-400 cursor-pointer hover:text-yellow-500"
-              onClick={handleSearch}
+              onClick={() => handleSearch()}
             />
-
-
           </div>
           <div className="border rounded-sm flex flex-row gap-1 items-center bg-blue-500 text-[0.9rem] text-white p-2 hover:text-yellow-300 hover:bg-blue-600 cursor-pointer">
            <Ticket size={17} />
@@ -179,7 +204,7 @@ function Page() {
 
         {/* Data Rows */}
         {tickets && tickets.length > 0 ? (
-          tickets.map((ticket) => (
+          tickets.map((ticket:Ticket) => (
             <div
               key={ticket.id}
               className="w-full grid grid-cols-8 text-[0.9rem] font-light px-10 py-3 pt-4 border-b border-gray-300 text-gray-700 hover:bg-gray-200 cursor-pointer"

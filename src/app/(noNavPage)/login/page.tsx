@@ -11,6 +11,12 @@ import { loginSchema } from '../schemas/loginSchema';
 import {useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+interface LoginData {
+  username: string;
+  password: string;
+}
+
+
 function Login() {
   const router = useRouter();
   const { id, setUser } = useUserStore();
@@ -33,10 +39,14 @@ function Login() {
 
   
 
-  const handleLogin = async (data) => {
+  const handleLogin = async (data:LoginData) => {
     try {
       const userData = await login(data.username, data.password);
-      setUser({ id: userData.id, username: userData.username });
+      setUser({
+        id: userData.id,
+        username: userData.username,
+        isAdmin: userData.isAdmin,
+      });
   
       console.log("Login Success, Redirecting to:", redirectPath); 
       router.push(redirectPath || "/"); // 
@@ -61,9 +71,14 @@ function Login() {
   }, [id, router, redirectPath]);
 
   return (
-<div className="w-full h-screen flex flex-col items-center justify-center font-pixelify"   style={{
+<div className="w-full h-screen flex flex-col items-center justify-center font-pixelify"     style={{
     backgroundImage: `url('https://firebasestorage.googleapis.com/v0/b/terrabit-5d129.appspot.com/o/decorative%2Fthumb-1920-1205979.png?alt=media')`,
-  }}>
+    backgroundSize: "cover",      
+    backgroundRepeat: "no-repeat", 
+    backgroundPosition: "center",  
+    backgroundAttachment: "fixed",
+  }}
+>
   <div className="bg-white p-5 pb-12 px-16 flex justify-center flex-col items-center w-[50vh] min-w-80">
     <div className="w-full">
       <h2 className="justify-center flex py-3 text-4xl font-bold">LOGIN</h2>

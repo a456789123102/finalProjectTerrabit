@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { post } from "../../../const";
 
-export const config = {
-  runtime: "nodejs", 
-};
 
   
   export async function POST(req: NextRequest, { params }: { params: { id: number } }) {

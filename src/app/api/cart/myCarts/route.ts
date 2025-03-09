@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import {get} from "../../const";
-export const config = {
-    runtime: "edge", 
-  };
+
   export async function GET(req: NextRequest) {
     try {
         const token = req.cookies.get("token")?.value;

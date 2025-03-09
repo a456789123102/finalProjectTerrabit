@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ChartFiltersPanel from "../../components/ChartFiltersPanel";
 import useFetchOrderForCharts from "../../hooks/orders/useFetchgetOrderForCharts";
 import LineChartComponent from "../../components/charts/LineChartComponent";
@@ -8,7 +8,7 @@ import PieChartComponent from "../../components/charts/PieChartComponent";
 import RadialBarChartComponents from "../../components/charts/RadialBarChartComponents";
 import TotalBox from "../components/totalBox";
 
-function orderCharts() {
+function OrderCharts() {
   const { themeColors } = useTheme();
   const [interval, setInterval] = useState<string>("weekly");
   const [tempInterval, setTempInterval] = useState<string>(interval);
@@ -26,7 +26,8 @@ function orderCharts() {
 
   const colorsPie = ["#82ca9d", "#8884d8", "#ffc658", "#ff7300"];
 
-  const checkIntervalLength = (): boolean => {
+
+  const checkIntervalLength = useCallback((): boolean => { 
     const maxEndDate = new Date(tempStartDate);
     let errorMessage = "";
 
@@ -49,14 +50,14 @@ function orderCharts() {
 
     setErrMessages(errorMessage);
     return errorMessage === "";
-  };
+  }, [tempStartDate, tempEndDate, tempInterval]);
+
   useEffect(() => {
     if (errMessages) {
       checkIntervalLength();
     }
-  }, [tempEndDate, tempStartDate, tempInterval, errMessages]);
+  }, [tempEndDate, tempStartDate, tempInterval, errMessages, checkIntervalLength]);
   
-
   const handleConfirm = () => {
     const isValid = checkIntervalLength(); 
     if (!isValid) {
@@ -174,4 +175,4 @@ function orderCharts() {
   )
 }
 
-export default orderCharts;
+export default OrderCharts;

@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { getAllReviews } from "@/app/apis/review";
 
 interface PaginationType {
@@ -11,7 +10,7 @@ interface PaginationType {
 
 interface FetchReviewsParams {
   search?: string;
-  orderBy?: "asc" | "desc" | undefined;
+  orderBy?: string; 
   orderWith?: string;
   isPublished?: boolean | null;
   pagination: PaginationType;
@@ -21,8 +20,8 @@ interface FetchReviewsParams {
 
 function useFetchgetAllReviews({
   search,
-  orderBy,
-  orderWith,
+  orderBy = "desc", 
+  orderWith = "createdAt",
   isPublished,
   pagination,
   forceFetch,
@@ -32,47 +31,40 @@ function useFetchgetAllReviews({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchReviews = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const validOrderBy: "asc" | "desc" = orderBy === "asc" ? "asc" : "desc";
+
+      const response = await getAllReviews(
+        search ?? "",
+        validOrderBy,
+        orderWith,
+        isPublished !== undefined ? String(isPublished) : "",
+        pagination.page.toString(),
+        pagination.pageSize.toString()
+      );
+
+      setReviews(response.reviews ?? []);
+      setError(null);
+
+      setPagination((prev) => ({
+        ...prev,
+        page: response.pagination?.page ?? prev.page,
+        totalPages: response.pagination?.totalPages ?? prev.totalPages,
+        totalReviews: response.pagination?.totalReviews ?? prev.totalReviews,
+      }));
+    } catch (err) {
+      setError("Failed to fetch reviews");
+    }
+
+    setLoading(false);
+  }, [search, orderBy, orderWith, isPublished, pagination.page, pagination.pageSize, setPagination]);
+
   useEffect(() => {
-    const fetchReviews = async () => {
-      setLoading(true);
-
-      // ✅ Log ค่าที่กำลังส่งไป API
-      console.log("🔹 Sending pagination to API:", pagination);
-
-      try {
-        const response = await getAllReviews(
-          search ?? "",
-          orderBy ?? "desc",
-          orderWith ?? "createdAt",
-          isPublished !== undefined ? String(isPublished) : "",
-          pagination.page.toString(),
-          pagination.pageSize.toString()
-        );
-
-        // ✅ Log ค่าที่ได้รับกลับจาก API
-        console.log("✅ Received response from API:", response);
-
-        setReviews(response.reviews);
-        setError(null);
-
-        // ✅ Log ค่าของ pagination ที่จะอัปเดต
-        console.log("🔄 Updating pagination state:", response.pagination);
-
-        setPagination((prev) => ({
-          ...prev,
-          page: response.pagination.page,
-          totalPages: response.pagination.totalPages,
-          totalReviews: response.pagination.totalReviews,
-        }));
-      } catch (err) {
-        setError("Failed to fetch reviews");
-      }
-
-      setLoading(false);
-    };
-
     fetchReviews();
-  }, [search, orderBy, orderWith, isPublished, pagination.page, pagination.pageSize, forceFetch]);
+  }, [fetchReviews, forceFetch]);
 
   return { reviews, loading, error };
 }

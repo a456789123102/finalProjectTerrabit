@@ -35,7 +35,7 @@ export const myTickets = async (
   }
 };
 
-export const getTicketById = async(id:string) => {
+export const getTicketById = async(id:number) => {
 try {
   const res = await axios.get(`/api/ticket/${id}/info`);
   return res.data;
@@ -44,7 +44,7 @@ try {
 }
 }
 
-export const createReply = async(id:string,content:string) => {
+export const createReply = async(id:number,content:string) => {
   try {
     const res = await axios.post(`/api/ticket/${id}/reply`,{content});
     return res.data;

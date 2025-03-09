@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@/app/context/themeContext';
 import PaginationControls from '../../components/PaginationControls';
-import useFetchOrders from '../../hooks/orders/useFetchOrders';
+import {useFetchOrders} from '../../hooks/orders/useFetchOrders';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import DataTable from '../../components/dataTable';
 import Image from 'next/image';
@@ -356,13 +356,13 @@ const handleModelClose = () => {
         getCoreRowModel: getCoreRowModel(),
     });
 
-    const handleSearchQuery = (e) => {
+    const handleSearchQuery = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSearchQuery(tempSearchQuery);
         setPagination(prev => ({ ...prev, page: 1 }));
     };
 
-    const handleColumnToggle = (column) => {
+    const handleColumnToggle = (column : string) => {
         setColumnKeysFiltered(prev => {
             let updatedColumns = prev.includes(column)
                 ? prev.filter(item => item !== column) // ถ้าเลือกซ้ำให้ลบออก
@@ -457,8 +457,8 @@ const handleModelClose = () => {
 
             </div>
             <PaginationControls
-                pagination={pagination}
-                setPagination={setPagination}
+                pagination={pagination as any}
+                setPagination={setPagination as any}
             />
             {isModalOpen && selectedImage && (
     <div 

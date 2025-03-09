@@ -21,7 +21,7 @@ export default function UserMenu() {
   const items = [
     {
       key: "profile",
-      label: "Profile (not done)",
+      label: "Profile",
       path: "/user/profile" 
     },
     {

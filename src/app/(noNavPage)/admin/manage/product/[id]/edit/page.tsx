@@ -13,7 +13,9 @@ const EditProductPage = () => {
   const router = useRouter();
   const {themeColors } = useTheme();
 
-  const productId = parseInt(id, 10);
+  const idParam = Array.isArray(id) ? id[0] : id; 
+  const productId = idParam ? parseInt(idParam, 10) : NaN; 
+
   console.log("Product ID from URL params:", productId);
 
   useEffect(() => {

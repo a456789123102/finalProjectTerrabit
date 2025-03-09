@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { patch } from '@/app/api/const';
 
-export const config = {
-    runtime: "nodejs", 
-  };
 
   export async function PATCH(req: NextRequest, { params }: { params: { id: number } }) {
 
