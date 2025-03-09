@@ -11,6 +11,5 @@ export async function GET(req: NextRequest) {
         console.error("Server error:", error);
         return NextResponse.json({ error: "Failed to get contact" }, { status: 500 });
     }
-
-
 }
+export const dynamic = 'force-dynamic';

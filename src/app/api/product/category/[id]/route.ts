@@ -10,10 +10,10 @@ export async function GET(req: NextRequest,{params}:{params:{id:string}}) {
       }
       const data = await res.json();
 
-      // ส่งข้อมูลกลับโดยไม่ใช้แคช
+     
       return NextResponse.json(data, {
         headers: {
-          'Cache-Control': 'no-store',  // ป้องกันไม่ให้เก็บแคช
+          'Cache-Control': 'no-store',  
         },
       });
     } catch (error) {

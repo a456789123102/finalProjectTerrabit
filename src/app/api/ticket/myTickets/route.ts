@@ -13,5 +13,5 @@ export async function GET(req: NextRequest) {
         console.error(error);
         return NextResponse.json({ error: "Failed to get myTickets" }, { status: 500 });
     }
- 
 }
+export const dynamic = 'force-dynamic';

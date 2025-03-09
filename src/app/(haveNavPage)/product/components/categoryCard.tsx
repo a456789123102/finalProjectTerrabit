@@ -23,7 +23,6 @@ const CategorySelect: React.FC<CategorySelectProps> = ({ setCategory, isMulti, s
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedOptions, setSelectedOptions] = useState<CategoryOption[]>([]);
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       setPortalTarget(document.body);

@@ -15,3 +15,4 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error:" fetch notification failed" }, { status: 500 });
     }
 }
+export const dynamic = 'force-dynamic';

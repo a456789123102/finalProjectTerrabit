@@ -57,7 +57,7 @@ const useFetchUsers = ({
     } finally {
       setLoading(false);
     }
-  }, [search, orderBy, orderWith, isActive, pagination, setPagination, ]);
+  }, [search, orderBy, orderWith, isActive, pagination?.page,pagination?.pageSize]);
 
   useEffect(() => {
     fetchUserList();
